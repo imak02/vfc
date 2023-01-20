@@ -1,0 +1,15 @@
+.form__container {
+  background-color: rgb(212, 175, 175);
+  border: 2px solid greenyellow;
+  margin-top: 5%;
+  padding: 10px;
+  width: 100%;
+
+  .form {
+    padding: 60px;
+  }
+
+  .error-message {
+    color: red;
+  }
+}
