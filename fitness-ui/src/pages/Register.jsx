@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Col, Container, Image, Row } from "react-bootstrap";
+import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import "./Register.scss";
@@ -17,8 +17,7 @@ const Register = () => {
     }
   };
 
-  const nameRegExp =
-    /(^[A-Za-z]{2,16})([ ]{0,1})([A-Za-z]{2,16})?([ ]{0,1})?([A-Za-z]{2,16})?([ ]{0,1})?([A-Za-z]{2,16})/;
+  const nameRegExp = /(^[A-Za-z]{2,16})/;
   // const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
   const phoneRegExp =
     /(\+)?(977)?-?(980|981|982|984|985|986|974|975|972|963|961|962|988)[0-9]{7}/;
@@ -95,9 +94,12 @@ const Register = () => {
     >
       <Container className="form__container">
         <Row>
-          <Col>
+          <Col className="left">
             <Form className="form">
               <Row className="form__group mb-2">
+                <label htmlFor="userType" className="form__label">
+                  Choose your role
+                </label>
                 <Field
                   as="select"
                   name="userType"
@@ -110,60 +112,73 @@ const Register = () => {
               </Row>
 
               <Row className="form__group mb-2">
-                <label htmlFor="firstName">First Name</label>
+                <label htmlFor="firstName" className="form__label">
+                  First Name
+                </label>
                 <Field name="firstName" type="text" />
                 <ErrorMessage
                   component="div"
-                  className="error-message"
+                  className="error-message text-danger"
                   name="firstName"
                 />
               </Row>
 
               <Row className="form__group mb-2">
-                <label htmlFor="lastName">Last Name</label>
+                <label htmlFor="lastName" className="form__label">
+                  Last Name
+                </label>
                 <Field name="lastName" type="text" />
                 <ErrorMessage
                   component="div"
-                  className="error-message"
+                  className="error-message text-danger"
                   name="lastName"
                 />
               </Row>
 
               <Row className="form__group mb-2">
-                <label htmlFor="userName">Username</label>
+                <label htmlFor="userName" className="form__label">
+                  Username
+                </label>
                 <Field name="userName" type="text" />
                 <ErrorMessage
                   component="div"
-                  className="error-message"
+                  className="error-message text-danger"
                   name="userName"
                 />
               </Row>
 
               <Row className="form__group mb-2">
-                <label htmlFor="email">Email Address</label>
+                <label htmlFor="email" className="form__label">
+                  Email Address
+                </label>
                 <Field name="email" type="email" />
                 <ErrorMessage
                   component="div"
-                  className="error-message"
+                  className="error-message text-danger"
                   name="email"
                 />
               </Row>
 
               <Row className="form__group mb-2">
-                <label htmlFor="phone">Phone</label>
+                <label htmlFor="phone" className="form__label">
+                  Phone
+                </label>
                 <Field name="phone" type="text" />
                 <ErrorMessage
                   component="div"
-                  className="error-message"
+                  className="error-message text-danger"
                   name="phone"
                 />
               </Row>
 
               <Row className="form__group mb-2">
-                <div id="gender-radio-group">Gender</div>
+                <div id="gender-radio-group" className="form__label">
+                  Gender
+                </div>
                 <div
-                  role="group d-flex p-2"
+                  role="group "
                   aria-labelledby="gender-radio-group"
+                  className="d-flex flex-row justify-content-between gap-2"
                 >
                   <label>
                     <Field type="radio" name="gender" value="male" />
@@ -179,45 +194,61 @@ const Register = () => {
                   </label>
                   <ErrorMessage
                     component="div"
-                    className="error-message"
+                    className="error-message text-danger"
                     name="gender"
                   />
                 </div>
               </Row>
 
               <Row className="form__group mb-2">
-                <label htmlFor="password1">Password</label>
+                <label htmlFor="password1" className="form__label">
+                  Password
+                </label>
                 <Field name="password1" type="password" />
                 <ErrorMessage
                   component="div"
-                  className="error-message"
+                  className="error-message text-danger"
                   name="password1"
                 />
               </Row>
               <Row className="form__group mb-2">
-                <label htmlFor="password2">Confirm Password</label>
+                <label htmlFor="password2" className="form__label">
+                  Confirm Password
+                </label>
                 <Field name="password2" type="password" />
                 <ErrorMessage
                   component="div"
-                  className="error-message"
+                  className="error-message text-danger"
                   name="password2"
                 />
               </Row>
 
-              {isCoach && <h1>Hi</h1>}
+              {isCoach && (
+                <Row className="form__group mb-3">
+                  <label htmlFor="file" className="form__label">
+                    Upload your certification
+                  </label>
+                  <Field name="file" type="file" />{" "}
+                </Row>
+              )}
 
-              <button type="submit">Submit</button>
+              <Row className="submitBtn">
+                <Button variant="warning" type="submit">
+                  Submit
+                </Button>
+                {/* <button type="submit">Submit</button> */}
+              </Row>
             </Form>
             <hr />
             Already have an account? <Link to="/login">Login</Link>
             or{" "}
-            <button>
+            <Button>
               {" "}
               <FcGoogle /> Signin With Google
-            </button>
+            </Button>
             <hr />
           </Col>
-          <Col>
+          <Col className="right d-none d-md-flex">
             <Image src="register.jpg" fluid></Image>
           </Col>
         </Row>

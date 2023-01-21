@@ -1,15 +1,23 @@
 .form__container {
   background-color: rgb(212, 175, 175);
   border: 2px solid greenyellow;
-  margin-top: 5%;
+  margin: 5% auto;
   padding: 10px;
   width: 100%;
 
-  .form {
-    padding: 60px;
+  .form__group {
+    padding-left: 0;
   }
 
-  .error-message {
-    color: red;
+  .left {
+    padding: 40px;
+
+    .form__label {
+      padding: 0;
+    }
+  }
+
+  .right {
+    padding: 40px;
   }
 }
