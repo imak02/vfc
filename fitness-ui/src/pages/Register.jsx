@@ -95,6 +95,15 @@ const Register = () => {
       <Container className="form__container">
         <Row>
           <Col className="left">
+            <Row className="logo__box text-center">
+              <Image
+                src="logo.png"
+                roundedCircle
+                fluid
+                alt="logo"
+                className="logo "
+              />{" "}
+            </Row>
             <Form className="form">
               <Row className="form__group mb-2">
                 <label htmlFor="userType" className="form__label">
@@ -234,7 +243,7 @@ const Register = () => {
 
               <Row className="submitBtn">
                 <Button variant="warning" type="submit">
-                  Submit
+                  Register me!
                 </Button>
                 {/* <button type="submit">Submit</button> */}
               </Row>
@@ -244,7 +253,7 @@ const Register = () => {
             or{" "}
             <Button>
               {" "}
-              <FcGoogle /> Signin With Google
+              <FcGoogle /> Sign Up With Google
             </Button>
             <hr />
           </Col>

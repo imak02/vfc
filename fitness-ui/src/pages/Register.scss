@@ -5,12 +5,22 @@
   padding: 10px;
   width: 100%;
 
-  .form__group {
-    padding-left: 0;
-  }
-
   .left {
     padding: 40px;
+
+    .logo__box {
+      display: flex;
+      justify-content: center;
+
+      .logo {
+        height: 100px;
+        width: 100px;
+      }
+    }
+
+    .form__group {
+      padding-left: 0;
+    }
 
     .form__label {
       padding: 0;
