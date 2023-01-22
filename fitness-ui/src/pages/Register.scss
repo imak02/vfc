@@ -1,4 +1,4 @@
-.form__container {
+.register__container {
   background-color: rgb(212, 175, 175);
   border: 2px solid greenyellow;
   margin: 5% auto;
@@ -17,13 +17,14 @@
         width: 100px;
       }
     }
+    .form {
+      .form__group {
+        padding-left: 0;
 
-    .form__group {
-      padding-left: 0;
-    }
-
-    .form__label {
-      padding: 0;
+        .form__label {
+          padding: 0;
+        }
+      }
     }
   }
 
