@@ -8,6 +8,9 @@ import Error from "./pages/Error";
 import About from "./pages/About";
 import Layout from "./layout/Layout";
 import PageNotFound from "./pages/PageNotFound";
+import Profile from "./pages/Profile";
+import Diet from "./pages/Diet";
+import Blog from "./pages/Blog";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,18 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/diet",
+        element: <Diet />,
+      },
+      {
+        path: "/blog",
+        element: <Blog />,
+      },
+      {
+        path: "/profile/:id",
+        element: <Profile />,
       },
     ],
   },
