@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Error from "./pages/Error";
 import About from "./pages/About";
 import Layout from "./layout/Layout";
+import PageNotFound from "./pages/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <About />,
+    element: <PageNotFound />,
   },
 ]);
 
