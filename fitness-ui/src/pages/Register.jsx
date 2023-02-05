@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
@@ -7,8 +7,6 @@ import { FcGoogle } from "react-icons/fc";
 import "./Register.scss";
 
 const Register = () => {
-  const [isCoach, setIsCoach] = useState(false);
-
   const nameRegExp = /(^[A-Za-z]{2,16})/;
   // const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/
   const phoneRegExp =
@@ -65,25 +63,20 @@ const Register = () => {
       .oneOf(["male", "female", "others"])
       .required("Please select an option"),
   });
+  // {(values, { setSubmitting }) => {
+  //   setTimeout(() => {
+  //     alert(JSON.stringify(values, null, 2));
+  //     setSubmitting(false);
+  //   }, 400);
+  // }}
 
-  const handleSubmit = (values) => {
-    const formData = new FormData();
-    formData.set("userType", values.userType);
-    formData.set("firstName", values.firstName);
-    formData.set("lastName", values.lastName);
-    formData.set("userName", values.userName);
-    formData.set("email", values.email);
-    formData.set("phone", values.phone);
-    formData.set("gender", values.gender);
-    formData.set("password1", values.password1);
-    formData.set("certification", values.certification);
+  const handleSubmit = (values, { setSubmitting }) => {
+    setTimeout(() => {
+      alert(JSON.stringify(values, null, 2));
+      setSubmitting(false);
+    }, 400);
 
     console.log(values);
-    if (values.userType === "coach") {
-      setIsCoach(true);
-    }
-
-    mutate(formData);
   };
 
   return (
@@ -99,18 +92,10 @@ const Register = () => {
         gender: "",
         password1: "",
         password2: "",
-        certification: "",
       }}
       validationSchema={myValidationSchema}
       onSubmit={handleSubmit}
       enableReinitialize
-
-      // {(values, { setSubmitting }) => {
-      //   setTimeout(() => {
-      //     alert(JSON.stringify(values, null, 2));
-      //     setSubmitting(false);
-      //   }, 400);
-      // }}
     >
       {({ values, setFieldValue }) => (
         <Container className="register__container">
@@ -276,15 +261,6 @@ const Register = () => {
                     name="password2"
                   />
                 </Row>
-
-                {isCoach && (
-                  <Row className="form__group mb-3">
-                    <label htmlFor="certification" className="form__label">
-                      Upload your certification
-                    </label>
-                    <Field name="certification" type="file" />{" "}
-                  </Row>
-                )}
 
                 <Row className="submitBtn">
                   <Button variant="warning" type="submit">
