@@ -7,7 +7,7 @@ const PageNotFound = () => {
     <>
       <Container>
         <Row>
-          <Image src="Page.webp" height="80%" fluid />
+          <Image src="PageNotFound.webp" height="80%" fluid />
         </Row>
         <Row>
           <Col className="text-center">
