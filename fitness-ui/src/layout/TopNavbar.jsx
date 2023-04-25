@@ -11,7 +11,7 @@ import { NavLink, Link } from "react-router-dom";
 
 import "./TopNavbar.scss";
 
-let isLoggedIn = true;
+let isLoggedIn = false;
 
 const TopNavbar = () => {
   return (

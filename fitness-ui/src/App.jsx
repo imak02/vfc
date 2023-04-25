@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
 //pages
 import Home from "./pages/Home";
@@ -11,6 +15,15 @@ import PageNotFound from "./pages/PageNotFound";
 import Profile from "./pages/Profile";
 import Diet from "./pages/Diet";
 import Blog from "./pages/Blog";
+
+const isLoggedIn = true;
+
+const ProtectedRoute = ({ children }) => {
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
 
 const router = createBrowserRouter([
   {
@@ -28,7 +41,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/diet",
-        element: <Diet />,
+        element: (
+          <ProtectedRoute>
+            <Diet />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/blog",
@@ -36,7 +53,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile/:id",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
