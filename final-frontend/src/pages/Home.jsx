@@ -52,14 +52,7 @@ export default function Home() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "left",
-            // backgroundColor: "yellow",
             textAlign: "left",
-            // md: {
-            //   top: "40%",
-            //   width: "40%",
-            //   alignItems: "flex-start",
-            //   textAlign: "left",
-            // },
           }}
         >
           <Typography
@@ -90,48 +83,24 @@ export default function Home() {
             Learn More
           </Button>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 3,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-          <DietCard />
-
-          <Box>
-            <MediaContentBox
-              height="100%"
-              width="100%"
-              source="food1.mp4"
-              videoType="video/mp4"
-              title="Eating food the right way..."
-              description="Many of our health recommendations boil down to reducing certain nutrients and emphasizing others but you don’t eat a nutrient — say fiber — in isolation. Health recommendations based on these reductionist principles can be very misleading. Sticking with the fiber example, there’s a tremendous difference between a fiber-rich quinoa and vegetable nourish bowl and a fiber-enhanced powdered supplement drink taken with a fast-food meal. Both meals might provide the same amount of an individual nutrient (fiber), but other than that, these two meals aren’t comparable."
-            />
-            <MediaContentBox
-              height="100%"
-              width="100%"
-              source="food1.mp4"
-              videoType="video/mp4"
-              title="Nutrients and health- human body needs"
-              description="Nutrients give your body energy and enable bodily functions. They are usually classified in two major groups: Macronutrients, in the form of protein, carbohydrate, or fat, primarily provide energy to your body. The different macronutrients serve different energy pathways and functions in the body."
-            />
-          </Box>
-        </Box>
+        {/* <Box>
+          <MediaContentBox
+            height="100%"
+            width="100%"
+            source="food1.mp4"
+            videoType="video/mp4"
+            title="Eating food the right way..."
+            description="Many of our health recommendations boil down to reducing certain nutrients and emphasizing others but you don’t eat a nutrient — say fiber — in isolation. Health recommendations based on these reductionist principles can be very misleading. Sticking with the fiber example, there’s a tremendous difference between a fiber-rich quinoa and vegetable nourish bowl and a fiber-enhanced powdered supplement drink taken with a fast-food meal. Both meals might provide the same amount of an individual nutrient (fiber), but other than that, these two meals aren’t comparable."
+          />
+          <MediaContentBox
+            height="100%"
+            width="100%"
+            source="food1.mp4"
+            videoType="video/mp4"
+            title="Nutrients and health- human body needs"
+            description="Nutrients give your body energy and enable bodily functions. They are usually classified in two major groups: Macronutrients, in the form of protein, carbohydrate, or fat, primarily provide energy to your body. The different macronutrients serve different energy pathways and functions in the body."
+          />
+        </Box> */}
       </Box>
     </Box>
   );
