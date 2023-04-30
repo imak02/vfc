@@ -14,7 +14,15 @@ const MediaContentBox = ({
   return (
     <Paper elevation={2} sx={{ p: 2, my: 2 }}>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6} maxHeight={500}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          maxHeight={500}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
           <Box
             sx={{
               height: height,
@@ -27,7 +35,12 @@ const MediaContentBox = ({
               loop
               muted
               poster="foodPoster.jpg"
-              style={{ height: "100%", width: "100%", objectFit: "cover" }}
+              style={{
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
+                borderRadius: "5px",
+              }}
             >
               <source src={source} type={videoType} />
               Your browser does not support the video tag

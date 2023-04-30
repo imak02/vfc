@@ -16,6 +16,11 @@ const MyThemeProvider = ({ children }) => {
         main: "#0000ff",
       },
     },
+    typography: {
+      button: {
+        textTransform: "none",
+      },
+    },
   });
   theme = responsiveFontSizes(theme);
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;

@@ -2,13 +2,101 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Button } from "@mui/material";
+import { Button, Container, Paper } from "@mui/material";
 import DietCard from "../components/DietCard";
 import MediaContentBox from "../components/MediaContentBox";
+import Banner from "../components/Banner";
+import Quotes from "../components/Quotes";
+import DescriptionCard from "../components/DescriptionCard";
+import NumbersCard from "../components/NumbersCard";
+import {
+  Diversity1,
+  Group,
+  LunchDining,
+  RunCircleOutlined,
+} from "@mui/icons-material";
 
 export default function Home() {
   return (
     <Box>
+      <Banner />
+      <Quotes />
+      <Container maxWidth="xl">
+        <Paper elevation={0} sx={{ padding: 2 }}>
+          <Typography
+            variant="h3"
+            sx={{ fontWeight: "bold", color: "lightcoral", mb: 2 }}
+          >
+            Why Us?
+          </Typography>
+          <DescriptionCard
+            image="bg.jpg"
+            title=" Virtual Fitness Coach brings you your own personal diet plan."
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          />
+          <DescriptionCard
+            image="bg.jpg"
+            title=" Virtual Fitness Coach suggests the best exercises for you."
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          />
+          <DescriptionCard
+            image="bg.jpg"
+            title=" Virtual Fitness Coach brings live posture detector."
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          />
+          <DescriptionCard
+            image="bg.jpg"
+            title=" Virtual Fitness Coach helps you monitor your progress."
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          />
+        </Paper>
+      </Container>
+      <Container
+        maxWidth="xl"
+        // sx={{
+        //   display: "flex",
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        //   flexDirection: { xs: "column", md: "row" },
+        //   gap: 2,
+        // }}
+      >
+        <Typography variant="h3" textAlign="center" sx={{ fontWeight: "bold" }}>
+          We deliver the best.
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 2,
+            my: 5,
+          }}
+        >
+          <NumbersCard
+            number="10"
+            title="Professional Trainers"
+            icon={<Group fontSize="inherit" />}
+          />
+          <NumbersCard
+            number="100+"
+            title="Diet Plans"
+            icon={<LunchDining fontSize="inherit" />}
+          />
+          <NumbersCard
+            number="1000+"
+            title="Exercises"
+            icon={<RunCircleOutlined fontSize="inherit" />}
+          />
+          <NumbersCard
+            number="10 Lakhs"
+            title="Happy Customers"
+            icon={<Diversity1 fontSize="inherit" />}
+          />
+        </Box>
+      </Container>
+
       <Box
         sx={{
           height: "100vh",
