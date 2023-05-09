@@ -12,6 +12,7 @@ import NumbersCard from "../components/NumbersCard";
 import {
   Diversity1,
   Group,
+  Info,
   LunchDining,
   RunCircleOutlined,
 } from "@mui/icons-material";
@@ -19,7 +20,16 @@ import {
 export default function Home() {
   return (
     <Box>
-      <Banner />
+      <Banner
+        title="What is fitness?"
+        description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nam
+            vitae, veniam, illum voluptates similique officia adipisci optio
+            nesciunt recusandae dolorum deleniti obcaecati nulla maxime est
+            aliquid assumenda. Quia, fugit?"
+        button="Learn More"
+        btnIcon={<Info />}
+        bgImage="/bg.jpg"
+      />
       <Quotes />
       <Container maxWidth="xl">
         <Paper elevation={0} sx={{ padding: 2 }}>

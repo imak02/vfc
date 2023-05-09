@@ -2,13 +2,12 @@ import { ContactSupport, Info, Message } from "@mui/icons-material";
 import { Box, Button, Fab, Typography } from "@mui/material";
 import React from "react";
 
-const Banner = () => {
+const Banner = ({ title, description, button, btnIcon, bgImage }) => {
   return (
     <Box>
       <Box
         sx={{
-          backgroundImage:
-            "url(bg.jpg), linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))",
+          backgroundImage: `url(${bgImage}), linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))`,
           minHeight: "100vh",
           width: "100%",
           backgroundSize: "cover",
@@ -40,24 +39,23 @@ const Banner = () => {
             color="white"
             sx={{ fontWeight: "bold" }}
           >
-            What is fitness?
+            {title}
           </Typography>
           <Typography variant="body1" sx={{ color: "white", fontSize: "20px" }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nam
-            vitae, veniam, illum voluptates similique officia adipisci optio
-            nesciunt recusandae dolorum deleniti obcaecati nulla maxime est
-            aliquid assumenda. Quia, fugit?
+            {description}
           </Typography>
-          <Box sx={{ mt: 3 }}>
-            <Button
-              variant="contained"
-              size="large"
-              color="primary"
-              endIcon={<Info />}
-            >
-              Learn More
-            </Button>
-          </Box>
+          {button && (
+            <Box sx={{ mt: 3 }}>
+              <Button
+                variant="contained"
+                size="large"
+                color="primary"
+                endIcon={btnIcon}
+              >
+                {button}
+              </Button>
+            </Box>
+          )}
         </Box>
       </Box>
 
