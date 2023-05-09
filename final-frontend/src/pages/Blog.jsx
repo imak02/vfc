@@ -176,13 +176,14 @@ const Blog = () => {
           <BlogCard />
           <BlogCard />
         </Box>
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1, display: { xs: "none", xl: "flex" } }}>
           <Paper
             component="form"
             sx={{
               display: "flex",
               alignItems: "center",
-              // width: "100%",
+              height: "50px",
+              width: "100%",
               mx: 2,
             }}
           >
