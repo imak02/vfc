@@ -2,7 +2,7 @@ import { NavigateNext } from "@mui/icons-material";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 
-const DescriptionCard = ({ title, description, image }) => {
+const DescriptionCard = ({ title, description, image, video }) => {
   return (
     <Box sx={{ my: 6 }}>
       <Grid container gap={2} justifyContent="center" alignItems="center">
@@ -34,15 +34,35 @@ const DescriptionCard = ({ title, description, image }) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Box sx={{ maxHeight: "400", maxWidth: 300 }}>
-            <Box
-              component="img"
-              height="100%"
-              width="100%"
-              src={image}
-              alt="Why us"
-              borderRadius={1}
-            />
+          <Box sx={{ maxHeight: 500, maxWidth: 500 }}>
+            {image && (
+              <Box
+                component="img"
+                height="100%"
+                width="100%"
+                src={image}
+                alt="Why us"
+                borderRadius={1}
+              />
+            )}
+
+            {video && (
+              <video
+                autoPlay
+                loop
+                muted
+                poster="foodPoster.jpg"
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  objectFit: "cover",
+                  borderRadius: "5px",
+                }}
+              >
+                <source src={video?.src} type={video?.type} />
+                Your browser does not support the video tag
+              </video>
+            )}
           </Box>
         </Grid>
       </Grid>
