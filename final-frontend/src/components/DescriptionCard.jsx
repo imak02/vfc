@@ -4,21 +4,28 @@ import React from "react";
 
 const DescriptionCard = ({ title, description, image, video }) => {
   return (
-    <Box sx={{ my: 6 }}>
+    <Box sx={{ my: 10, py: 2 }}>
       <Grid container gap={2} justifyContent="center" alignItems="center">
         <Grid item xs={12} sm={10} md={5}>
           <Box
             display="flex"
             flexDirection="column"
             gap={2}
-            sx={{ width: "90%" }}
+            // sx={{ width: "90%" }}
           >
-            <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: "bold", textAlign: "left" }}
+            >
               {title}
             </Typography>
-            <Typography>{description}</Typography>
+            <Typography sx={{ textAlign: "justify" }}>{description}</Typography>
             <Box>
-              <Button variant="contained" endIcon={<NavigateNext />}>
+              <Button
+                variant="contained"
+                color="info"
+                endIcon={<NavigateNext />}
+              >
                 Try Now
               </Button>
             </Box>

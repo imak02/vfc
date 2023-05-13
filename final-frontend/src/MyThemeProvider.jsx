@@ -7,10 +7,10 @@ const MyThemeProvider = ({ children }) => {
     palette: {
       mode: themeMode,
       primary: {
-        main: "#7286d3",
+        main: "#ffa500",
       },
       secondary: {
-        main: "#F1F7B5",
+        main: "#ff4500",
       },
       focusInput: {
         main: "#0000ff",

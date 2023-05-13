@@ -89,7 +89,13 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <Box bgcolor={"background.default"} color={"text.primary"}>
+    <Box
+      sx={{
+        bgcolor: (theme) =>
+          theme.palette.mode === "light" ? "lightgreen" : "background.default",
+      }}
+      color={"text.primary"}
+    >
       <RouterProvider router={router} />
     </Box>
   );

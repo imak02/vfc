@@ -48,7 +48,10 @@ const Banner = ({
           >
             {title}
           </Typography>
-          <Typography variant="body1" sx={{ color: "white", fontSize: "20px" }}>
+          <Typography
+            variant="body1"
+            sx={{ color: "white", fontSize: "20px", mr: 1 }}
+          >
             {description}
           </Typography>
           {button && (

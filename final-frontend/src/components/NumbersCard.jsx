@@ -5,7 +5,17 @@ import React from "react";
 const NumbersCard = ({ number, title, icon }) => {
   return (
     <Box>
-      <Card sx={{ width: 350, bgcolor: "lightgreen" }}>
+      <Card
+        sx={{
+          width: 350,
+          bgcolor: "orange",
+          "&:hover": {
+            bgcolor: "pink",
+            transform: "scale(1.1)",
+            transition: "0.7s ease-out",
+          },
+        }}
+      >
         <CardContent sx={{ textAlign: "center" }}>
           <Box sx={{ fontSize: "80px" }}>{icon}</Box>
           <Typography variant="h3" sx={{ fontWeight: "bold" }}>
