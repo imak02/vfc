@@ -28,8 +28,13 @@ import { Link, NavLink } from "react-router-dom";
 import {
   DarkMode,
   Fitbit,
+  Home,
+  Info,
   LightMode,
   Logout,
+  LunchDining,
+  MenuBook,
+  MonitorHeart,
   PersonAdd,
   PersonPin,
   Settings,
@@ -44,10 +49,10 @@ import { useQuery } from "@tanstack/react-query";
 
 const pages = ["Home", "About", "Diet", "Blog"];
 const pageList = [
-  { name: "Home", id: "home", icon: <InboxIcon />, destination: "/" },
-  { name: "About", id: "about", icon: <InboxIcon />, destination: "/about" },
-  { name: "Diet", id: "diet", icon: <InboxIcon />, destination: "/diet" },
-  { name: "Blog", id: "blog", icon: <InboxIcon />, destination: "/blog" },
+  { name: "Home", id: "home", icon: <Home />, destination: "/" },
+  { name: "About", id: "about", icon: <Info />, destination: "/about" },
+  { name: "Diet", id: "diet", icon: <LunchDining />, destination: "/diet" },
+  { name: "Blog", id: "blog", icon: <MenuBook />, destination: "/blog" },
 ];
 
 const pagesIcons = [<InboxIcon />, <MailIcon />, <InboxIcon />];
@@ -60,7 +65,6 @@ const settingsList = [
 ];
 
 function NavBar() {
-  //   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [leftSideBar, setLeftSideBar] = useState({
     left: false,
@@ -109,10 +113,12 @@ function NavBar() {
       <List>
         {pageList.map((page, index) => (
           <ListItem key={page.id} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{page.icon}</ListItemIcon>
-              <ListItemText primary={page.name} />
-            </ListItemButton>
+            <NavLink to={page.destination} className="links mobile_active">
+              <ListItemButton>
+                <ListItemIcon>{page.icon}</ListItemIcon>
+                <ListItemText primary={page.name} sx={{ fontWeight: "bold" }} />
+              </ListItemButton>
+            </NavLink>
           </ListItem>
         ))}
       </List>
@@ -132,14 +138,6 @@ function NavBar() {
     </Box>
   );
 
-  //   const handleOpenNavMenu = (event) => {
-  //     setAnchorElNav(event.currentTarget);
-  //   };
-
-  //   const handleCloseNavMenu = () => {
-  //     setAnchorElNav(null);
-  //   };
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -155,99 +153,10 @@ function NavBar() {
           disableGutters
           sx={{ display: "flex", justifyContent: "space-between" }}
         >
-          {/* <Link to="/">
-            <MonitorHeart
-              sx={{
-                display: { xs: "none", md: "flex" },
-                mr: 1,
-                color: "black",
-              }}
-            />
-          </Link> */}
-          {/* <Link to="/"> */}
-          {/* <Typography
-            variant="h6"
-            component="a"
-            noWrap
-            sx={{
-              mr: 2,
-              display: {
-                xs: "none",
-                md: "flex",
-              },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            {" "}
-            eat-N-fit
-          </Typography> */}
-          {/* </Link> */}
-          {/* Large Screen View */}
-          <Link to="/" className="logo__link">
-            <Box
-              sx={{
-                display: { xs: "none", md: "flex" },
-              }}
-            >
-              <Box
-                // sx={{
-                //   transition: "1s",
-                //   "&:hover": { transform: "rotate(360deg)" },
-                // }}
-                className="logo__img"
-              >
-                <Box component="img" src="logo.png" height={50} />
-              </Box>
-              <Typography
-                alignSelf="center"
-                variant="h5"
-                sx={{
-                  fontWeight: "bold",
-                  ml: 3,
-                  transitionDuration: "1s",
-                  "&:hover": { transform: "scale(1.2)" },
-                }}
-              >
-                Virtual Fitness Coach
-              </Typography>
-            </Box>
-          </Link>
-          {/* <Typography
-            variant="h6"
-            noWrap
-            sx={{
-              mr: 1,
-              display: {
-                xs: "none",
-                md: "flex",
-              },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-
-              "&:hover": {
-                color: "green",
-              },
-            }}
-          >
-            {" "}
-            <Link to="/" className="logo__link">
-              <Box sx={{ display: { xs: "none", md: "flex", height: "50px" } }}>
-                <Box component="img" src="logo.png" />
-              </Box>
-              eat-N-fit
-            </Link>
-          </Typography> */}
+          {/* For mobile view */}
           <Box
             sx={{
               display: { xs: "flex", md: "none" },
-              justifyContent: "start",
             }}
           >
             <IconButton
@@ -270,39 +179,51 @@ function NavBar() {
               {list("left")}
             </SwipeableDrawer>
           </Box>
-          {/* For mobile view */}
-          {/* <Link to="/" className="logo__link"> */} {/* </Link> */}
-          <Link to="/" className="links logo__link">
-            <Typography
-              variant="h5"
-              noWrap
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
 
-                "&:hover": {
-                  color: "green",
-                },
-              }}
-            >
-              {" "}
-              <Fitbit
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <Link to="/" className="links logo__link">
+              <Box sx={{ display: "flex" }}>
+                <Box className="logo__img">
+                  <Box component="img" src="logo.png" height={30} />
+                </Box>
+              </Box>
+            </Link>
+          </Box>
+
+          {/* Large Screen View */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+            }}
+          >
+            <Link to="/" className="logo__link">
+              <Box
                 sx={{
-                  display: { xs: "flex", md: "none" },
-
-                  mr: 1,
-                  color: "inherit",
+                  display: "flex",
+                  transitionDuration: "1s",
+                  "&:hover": {
+                    transform: "scale(1.2) translateX(20px)",
+                  },
                 }}
-              />
-              eat-N-fit
-            </Typography>
-          </Link>
+              >
+                <Box className="logo__img">
+                  <Box component="img" src="logo.png" height={30} />
+                </Box>
+
+                <Typography
+                  alignSelf="center"
+                  variant="h5"
+                  sx={{
+                    fontWeight: "bold",
+                    ml: 1,
+                    display: { xs: "none", lg: "flex" },
+                  }}
+                >
+                  Virtual Fitness Coach
+                </Typography>
+              </Box>
+            </Link>
+          </Box>
           <Box
             sx={{
               flexGrow: 1,
@@ -316,10 +237,10 @@ function NavBar() {
           >
             {pageList.map((page) => (
               <Box key={page.id}>
-                {" "}
-                <NavLink to={page.destination} className="links pages__link ">
+                <NavLink to={page.destination} className="links pages__link">
                   <Typography
                     variant="h6"
+                    className="myText"
                     sx={{
                       fontWeight: "bold",
                       "&:after": {
@@ -331,10 +252,13 @@ function NavBar() {
                         background: "transparent",
                         transition: "all 0.5s ease",
                       },
-                      "&:hover:after": {
+
+                      "&:hover:after, &.active:after": {
+                        display: "block",
+
                         width: "100%",
                         background: (theme) =>
-                          theme.palette.mode === "light" ? "black" : "white",
+                          theme.palette.mode === "light" ? "brown" : "brown",
                       },
                     }}
                   >
@@ -345,7 +269,7 @@ function NavBar() {
             ))}
           </Box>
           <Box sx={{ display: "flex", gap: 2 }}>
-            <Box sx={{ mr: { md: 4 } }}>
+            <Box>
               {themeMode === "light" ? (
                 <Tooltip arrow title="Dark mode">
                   <Fab
@@ -475,35 +399,3 @@ function NavBar() {
   );
 }
 export default NavBar;
-
-//314
-// {settingsList.map((setting) => (
-//   <MenuItem
-//     key={setting.id}
-//     onClick={handleCloseUserMenu}
-//     sx={{
-//       ":hover": {
-//         backgroundColor: "#7286d3",
-//         color: "#cde990",
-//       },
-//     }}
-//   >
-//     <Typography
-//       sx={{
-//         mx: 3,
-//         my: 1,
-//         color: "inherit",
-//       }}
-//     >
-//       {" "}
-//       <NavLink
-//         to={setting.destination}
-//         className="links settings__link"
-//       >
-//         {setting.name}
-//       </NavLink>
-//     </Typography>
-
-//     {/* <Typography textAlign="center">{setting.name}</Typography> */}
-//   </MenuItem>
-// ))}

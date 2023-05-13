@@ -8,27 +8,35 @@
   text-decoration: none;
 }
 
+.pages__link.active {
+  display: block;
+  transform: skewY(-7deg);
+  border-bottom: 4px solid brown;
+}
+
+.mobile_active.active {
+  background: orange;
+  width: 100%;
+}
+
 // .logo__img {
-//   animation: infiniteRotation 1s infinite;
+//   animation: infiniteRotation 5s infinite;
 // }
+
 @keyframes infiniteRotation {
   0% {
     transform: rotate(0);
   }
-
-  100% {
-    transform: rotate(360deg);
+  25% {
+    transform: rotate(60deg);
   }
-}
-
-@keyframes pageBorder {
-  0% {
-    display: block;
-    border-bottom: none;
+  50% {
+    transform: rotate(0);
   }
-
+  75% {
+    transform: rotate(-60deg);
+  }
   100% {
-    display: block;
-    border-bottom: 4px solid black;
+    transform: rotate(0);
   }
 }
