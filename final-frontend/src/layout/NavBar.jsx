@@ -187,7 +187,36 @@ function NavBar() {
           </Typography> */}
           {/* </Link> */}
           {/* Large Screen View */}
-          <Typography
+          <Link to="/" className="logo__link">
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+              }}
+            >
+              <Box
+                // sx={{
+                //   transition: "1s",
+                //   "&:hover": { transform: "rotate(360deg)" },
+                // }}
+                className="logo__img"
+              >
+                <Box component="img" src="logo.png" height={50} />
+              </Box>
+              <Typography
+                alignSelf="center"
+                variant="h5"
+                sx={{
+                  fontWeight: "bold",
+                  ml: 3,
+                  transitionDuration: "1s",
+                  "&:hover": { transform: "scale(1.2)" },
+                }}
+              >
+                Virtual Fitness Coach
+              </Typography>
+            </Box>
+          </Link>
+          {/* <Typography
             variant="h6"
             noWrap
             sx={{
@@ -209,17 +238,12 @@ function NavBar() {
           >
             {" "}
             <Link to="/" className="logo__link">
-              <Fitbit
-                sx={{
-                  display: { xs: "none", md: "flex" },
-                  mr: 1,
-                  mt: 0.5,
-                  color: "inherit",
-                }}
-              />{" "}
+              <Box sx={{ display: { xs: "none", md: "flex", height: "50px" } }}>
+                <Box component="img" src="logo.png" />
+              </Box>
               eat-N-fit
             </Link>
-          </Typography>
+          </Typography> */}
           <Box
             sx={{
               display: { xs: "flex", md: "none" },
@@ -283,25 +307,41 @@ function NavBar() {
             sx={{
               flexGrow: 1,
               justifyContent: "center",
-              display: { xs: "none", md: "flex" },
+              display: {
+                xs: "none",
+                md: "flex",
+              },
+              gap: 10,
             }}
           >
             {pageList.map((page) => (
-              <Button
-                // disableRipple
-                key={page.id}
-                sx={{
-                  mx: 3,
-                  my: 1,
-                  color: "inherit",
-                  display: "block",
-                }}
-              >
+              <Box key={page.id}>
                 {" "}
-                <NavLink to={page.destination} className="links pages__link">
-                  {page.name}
+                <NavLink to={page.destination} className="links pages__link ">
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: "bold",
+                      "&:after": {
+                        content: '""',
+                        display: "block",
+                        margin: "auto",
+                        height: 5,
+                        width: 0,
+                        background: "transparent",
+                        transition: "all 0.5s ease",
+                      },
+                      "&:hover:after": {
+                        width: "100%",
+                        background: (theme) =>
+                          theme.palette.mode === "light" ? "black" : "white",
+                      },
+                    }}
+                  >
+                    {page.name}
+                  </Typography>
                 </NavLink>
-              </Button>
+              </Box>
             ))}
           </Box>
           <Box sx={{ display: "flex", gap: 2 }}>

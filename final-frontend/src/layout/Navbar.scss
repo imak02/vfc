@@ -4,21 +4,31 @@
 }
 
 .logo__link {
-  display: inline-flex;
   color: inherit;
   text-decoration: none;
 }
 
-.logo__link:hover {
-  color: #cde990;
+// .logo__img {
+//   animation: infiniteRotation 1s infinite;
+// }
+@keyframes infiniteRotation {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.pages__link.active,
-.pages__link:hover {
-  display: block;
-  border-bottom: 2px dashed red;
-  padding-bottom: 10px;
-  border-radius: 15px;
-  background-color: transparent;
-  color: #cde990;
+@keyframes pageBorder {
+  0% {
+    display: block;
+    border-bottom: none;
+  }
+
+  100% {
+    display: block;
+    border-bottom: 4px solid black;
+  }
 }
