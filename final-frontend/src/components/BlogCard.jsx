@@ -16,6 +16,7 @@ import {
   CardContent,
   CardHeader,
   Chip,
+  Collapse,
   Divider,
   Fab,
   IconButton,
@@ -45,7 +46,7 @@ const BlogCard = () => {
   const [showComments, setShowComments] = useState(false);
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
-      <Paper elevation={5} sx={{ width: 900 }}>
+      <Paper elevation={5} sx={{ maxWidth: 900 }}>
         <Card
           sx={{
             width: "100%",
@@ -133,6 +134,7 @@ const BlogCard = () => {
                         borderRadius: "30px",
                         boxShadow: "none",
                         mt: { xs: 2, md: 1 },
+                        "&:hover": { bgcolor: "red", boxShadow: "none" },
                       }}
                     >
                       Read More
@@ -208,14 +210,16 @@ const BlogCard = () => {
               </Box>
             </Box>
 
-            {showComments && (
+            {/* {showComments && ( */}
+            <Collapse in={showComments} timeout={1000}>
               <Box sx={{ mt: 4 }}>
                 <Divider>
                   <Chip label="COMMENTS" />
                 </Divider>
                 <CommentBox />
               </Box>
-            )}
+            </Collapse>
+            {/* )} */}
           </CardContent>
         </Card>
       </Paper>
