@@ -21,6 +21,7 @@ import {
   YouTube,
 } from "@mui/icons-material";
 import SingleListItem from "../components/SingleListItem";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -38,7 +39,10 @@ export default function Footer() {
         component="footer"
         sx={{
           pt: "500px",
-          backgroundColor: "lightgreen",
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.primary.main
+              : "background.default",
           clipPath: {
             xs: "polygon(0% 40%, 100% 30%, 100% 100%, 0% 100%)",
             md: "polygon(0% 60%, 100% 30%, 100% 100%, 0% 100%)",
@@ -60,37 +64,47 @@ export default function Footer() {
             sx={{ padding: { xs: 2, md: 5, lg: 6 } }}
           >
             <Box>
-              <Box>
-                <SportsGymnastics />
-                <Fab
-                  size="large"
-                  color="secondary"
-                  aria-label="add"
-                  variant="extended"
-                >
-                  <SportsGymnastics />
-                  Virtual Fitness
-                </Fab>
-              </Box>
+              <Link className="links" to="/">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box component="img" src="logo.png" height="70px" />
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: "bold",
+                      "&:hover": { color: "orangered" },
+                    }}
+                  >
+                    Virtual Fitness Coach
+                  </Typography>
+                </Box>
+              </Link>
               <Typography paddingY={3}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi
-                excepturi, distinctio totam consectetur eligendi autem,
-                veritatis sequi libero voluptatem dicta natus optio et,
-                assumenda inventore! At dicta assumenda vel amet?
+                Embark on a transformative fitness journey with our virtual
+                fitness coach. With personalized workout plans, expert guidance,
+                and a supportive community, you'll have all the tools necessary
+                to achieve your fitness goals.
               </Typography>
               <Box display="flex" gap={1}>
-                <Fab size="small" color="secondary" aria-label="facebook">
-                  <Facebook />
-                </Fab>
-                <Fab size="small" color="secondary" aria-label="twitter">
-                  <Twitter />
-                </Fab>
-                <Fab size="small" color="secondary" aria-label="instagram">
-                  <Instagram />
-                </Fab>
-                <Fab size="small" color="secondary" aria-label="youtube">
-                  <YouTube />
-                </Fab>
+                <Link to="https://www.facebook.com">
+                  <Fab size="small" color="secondary" aria-label="facebook">
+                    <Facebook />
+                  </Fab>
+                </Link>
+                <Link to="https://www.twitter.com">
+                  <Fab size="small" color="secondary" aria-label="twitter">
+                    <Twitter />
+                  </Fab>
+                </Link>
+                <Link to="https://www.instagram.com">
+                  <Fab size="small" color="secondary" aria-label="instagram">
+                    <Instagram />
+                  </Fab>
+                </Link>
+                <Link to="https://www.youtube.com">
+                  <Fab size="small" color="secondary" aria-label="youtube">
+                    <YouTube />
+                  </Fab>
+                </Link>
               </Box>
             </Box>
           </Grid>
@@ -100,19 +114,29 @@ export default function Footer() {
                 Services
               </Typography>
 
-              <SingleListItem icon={<LunchDining />} primaryText="Diet Plan" />
+              <SingleListItem
+                icon={<LunchDining />}
+                primaryText="Diet Plan"
+                to="/diet"
+              />
 
               <SingleListItem
                 icon={<RunCircleOutlined />}
                 primaryText="Exercise Plan"
+                to="/"
               />
 
               <SingleListItem
                 icon={<SportsHandball />}
                 primaryText="Posture Detection"
+                to="/"
               />
 
-              <SingleListItem icon={<Score />} primaryText="Monitor Progress" />
+              <SingleListItem
+                icon={<Score />}
+                primaryText="Monitor Progress"
+                to="/"
+              />
             </List>
           </Grid>
           <Grid item md={2} padding={6} display={{ xs: "none", lg: "flex" }}>
@@ -124,16 +148,26 @@ export default function Footer() {
               <SingleListItem
                 icon={<CorporateFare />}
                 primaryText="Organization"
+                to="/"
               />
 
-              <SingleListItem icon={<Engineering />} primaryText="Trainers" />
+              <SingleListItem
+                icon={<Engineering />}
+                primaryText="Trainers"
+                to="/"
+              />
 
               <SingleListItem
                 icon={<MonitorHeart />}
                 primaryText="Nutritionist"
+                to="/"
               />
 
-              <SingleListItem icon={<LiveHelp />} primaryText="Why Us?" />
+              <SingleListItem
+                icon={<LiveHelp />}
+                primaryText="Why Us?"
+                to="/"
+              />
             </List>
           </Grid>
           <Grid
@@ -152,12 +186,14 @@ export default function Footer() {
                 icon={<Place />}
                 primaryText="Location"
                 secondaryText="Kathmandu,Nepal"
+                to="/"
               />
 
               <SingleListItem
                 icon={<Phone />}
                 primaryText="Contact"
                 secondaryText="9846060606"
+                to="/"
               />
             </List>
           </Grid>
