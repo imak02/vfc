@@ -2,7 +2,14 @@ import { ContactSupport, Info, Message } from "@mui/icons-material";
 import { Box, Button, Fab, Typography } from "@mui/material";
 import React from "react";
 
-const Banner = ({ title, description, button, btnIcon, bgImage }) => {
+const Banner = ({
+  title,
+  description,
+  button,
+  btnIcon,
+  bgImage,
+  focusText,
+}) => {
   return (
     <Box>
       <Box
@@ -26,7 +33,7 @@ const Banner = ({ title, description, button, btnIcon, bgImage }) => {
             maxWidth: 550,
             height: "100%",
             position: "absolute",
-            top: { xs: "40%", md: "50%" },
+            top: { xs: "30%", md: "50%" },
             left: "5%",
             display: "flex",
             flexDirection: "column",
@@ -59,18 +66,32 @@ const Banner = ({ title, description, button, btnIcon, bgImage }) => {
         </Box>
       </Box>
 
-      {/* <Box
+      <Box
         sx={{
-          bgcolor: "pink",
-          height: 100,
-          width: "40%",
+          bgcolor: "orange",
+          height: { xs: 40, md: 60 },
+          width: { xs: "50%", md: "30%", lg: "20%" },
           position: "absolute",
-          top: "86%",
-          right: "2%",
+          top: { xs: "99%", md: "87%", lg: "86%", xl: "86%" },
+          right: { xs: "10%", md: "2%" },
           zIndex: 5,
-          transform: "rotate(-5.8deg)",
+          transform: "skewY(-7deg)",
+          // transform: {
+          //   xs: "rotate(-10.5deg)",
+          //   sm: "rotate(-8.5deg)",
+          //   md: "rotate(-10deg)",
+          //   lg: "rotate(-7deg)",
+          //   xl: "rotate(-6.5deg)",
+          // },
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      /> */}
+      >
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+          {focusText}
+        </Typography>
+      </Box>
     </Box>
   );
 };
