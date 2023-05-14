@@ -37,17 +37,17 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const validationSchema = Yup.object({
-  firstName: Yup.string()
+  first_name: Yup.string()
     .min(2, "*Name must have at least 2 characters")
     .matches(nameRegex, "*Please enter a valid name")
     .max(100, "*Names can't be longer than 100 characters")
     .required("*First name is required"),
-  lastName: Yup.string()
+  last_name: Yup.string()
     .min(2, "*Name must have at least 2 characters")
     .matches(nameRegex, "*Please enter a valid name")
     .max(100, "*Names can't be longer than 100 characters")
     .required("*Last name is required"),
-  userName: Yup.string()
+  username: Yup.string()
     .min(3, "*Username must have 3-15 characters only")
     .max(15, "*Username must have 5-15 characters only")
     .matches(
@@ -63,7 +63,7 @@ const validationSchema = Yup.object({
     .matches(phoneRegex, "*Phone number is not valid")
     .required("*Phone number is required"),
 
-  password1: Yup.string()
+  password: Yup.string()
     .min(8, "*Password must contain minimum of 8 characters")
     .matches(
       passwordRegex,
@@ -71,24 +71,24 @@ const validationSchema = Yup.object({
     )
     .required("*Password required"),
   password2: Yup.string().oneOf(
-    [Yup.ref("password1"), null],
+    [Yup.ref("password"), null],
     "Both passwords do not match."
   ),
   gender: Yup.string().required("Select your gender"),
-  userRole: Yup.string().required("Select your role"),
+  category: Yup.string().required("Select your role"),
   terms: Yup.bool().required().oneOf([true], "*Terms must be accepted"),
 });
 
 const Register = () => {
-  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleClickShowPassword1 = () => setShowPassword1((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword1 = (event) => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
@@ -124,15 +124,15 @@ const Register = () => {
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      userName: "",
+      first_name: "",
+      last_name: "",
+      username: "",
       email: "",
       phone: "",
-      password1: "",
+      password: "",
       password2: "",
       gender: "",
-      userRole: "",
+      category: "",
       terms: false,
     },
     validationSchema: validationSchema,
@@ -229,18 +229,20 @@ const Register = () => {
               <TextField
                 fullWidth
                 size="small"
-                id="firstName"
-                name="firstName"
+                id="first_name"
+                name="first_name"
                 color="focusInput"
                 autoComplete="off"
                 label="First Name"
-                value={formik.values.firstName}
+                value={formik.values.first_name}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.firstName && Boolean(formik.errors.firstName)
+                  formik.touched.first_name && Boolean(formik.errors.first_name)
                 }
-                helperText={formik.touched.firstName && formik.errors.firstName}
+                helperText={
+                  formik.touched.first_name && formik.errors.first_name
+                }
                 sx={{
                   marginBottom: 2,
                   marginRight: "1%",
@@ -251,36 +253,36 @@ const Register = () => {
               <TextField
                 fullWidth
                 size="small"
-                id="lastName"
-                name="lastName"
+                id="last_name"
+                name="last_name"
                 color="focusInput"
                 autoComplete="off"
                 label="Last Name"
-                value={formik.values.lastName}
+                value={formik.values.last_name}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.lastName && Boolean(formik.errors.lastName)
+                  formik.touched.last_name && Boolean(formik.errors.last_name)
                 }
-                helperText={formik.touched.lastName && formik.errors.lastName}
+                helperText={formik.touched.last_name && formik.errors.last_name}
                 sx={{ marginBottom: 2, marginLeft: "1%", width: { md: "49%" } }}
               />
 
               <TextField
                 fullWidth
                 size="small"
-                id="userName"
-                name="userName"
+                id="username"
+                name="username"
                 color="focusInput"
                 autoComplete="off"
                 label="Username"
-                value={formik.values.userName}
+                value={formik.values.username}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.userName && Boolean(formik.errors.userName)
+                  formik.touched.username && Boolean(formik.errors.username)
                 }
-                helperText={formik.touched.userName && formik.errors.userName}
+                helperText={formik.touched.username && formik.errors.username}
                 sx={{ marginBottom: 2 }}
               />
 
@@ -320,19 +322,19 @@ const Register = () => {
               <TextField
                 fullWidth
                 size="small"
-                id="password1"
-                name="password1"
+                id="password"
+                name="password"
                 label="Password"
                 color="focusInput"
-                type={showPassword1 ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 variant="outlined"
-                value={formik.values.password1}
+                value={formik.values.password}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.password1 && Boolean(formik.errors.password1)
+                  formik.touched.password && Boolean(formik.errors.password)
                 }
-                helperText={formik.touched.password1 && formik.errors.password1}
+                helperText={formik.touched.password && formik.errors.password}
                 sx={{
                   marginBottom: 2,
                   marginRight: { xs: 0, md: "1%" },
@@ -343,11 +345,11 @@ const Register = () => {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword1}
-                        onMouseDown={handleMouseDownPassword1}
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {showPassword1 ? <VisibilityOff /> : <Visibility />}
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -413,17 +415,17 @@ const Register = () => {
 
               <TextField
                 size="small"
-                id="userRole"
-                name="userRole"
+                id="category"
+                name="category"
                 select
                 label="Role"
-                value={formik.values.userRole}
+                value={formik.values.category}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.userRole && Boolean(formik.errors.userRole)
+                  formik.touched.category && Boolean(formik.errors.category)
                 }
-                helperText={formik.touched.userRole && formik.errors.userRole}
+                helperText={formik.touched.category && formik.errors.category}
                 sx={{ marginBottom: 2, marginLeft: "1%", width: "49%" }}
               >
                 {["User", "Coach"].map((userOption) => (
