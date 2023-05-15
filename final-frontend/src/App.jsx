@@ -20,6 +20,7 @@ import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import EditProfile from "./pages/EditProfile";
 import DietDetails from "./pages/DietDetails";
+import ResetPassword from "./pages/ResetPassword";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
   },
   {
     path: "/register",
