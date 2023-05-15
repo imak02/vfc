@@ -6,7 +6,16 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { Chip, Container, Divider } from "@mui/material";
+import {
+  Chip,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -35,6 +44,32 @@ const validationSchema = Yup.object({
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const sendOTP = async (e) => {
+    e.preventDefault();
+    try {
+      setError(null);
+      const response = await axios.post("/user/forgot-password", { email });
+      console.log(response);
+      navigate("/reset-password", { state: { email } });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -231,7 +266,70 @@ export default function Login() {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link to="/">Forgot password?</Link>
+                    {/* <Link to="/forgot-password">Forgot password?</Link> */}
+                    <Button variant="text" color="info" onClick={handleOpen}>
+                      Forgot Password?
+                    </Button>
+                    <Dialog open={openModal} onClose={handleClose} fullWidth>
+                      <Box
+                        component="form"
+                        onSubmit={sendOTP}
+                        sx={{ backgroundColor: "skyblue" }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            m: 3,
+                          }}
+                        >
+                          <Box
+                            component="img"
+                            src="logo.png"
+                            height={50}
+                            width={50}
+                          />
+                        </Box>
+                        <DialogTitle>Forgot Password?</DialogTitle>
+
+                        <DialogContent>
+                          <DialogContentText>
+                            Please enter your email below. We will provide a
+                            code to reset your password.
+                          </DialogContentText>
+                          <TextField
+                            fullWidth
+                            size="small"
+                            id="email"
+                            type="email"
+                            name="email"
+                            color="focusInput"
+                            autoComplete="off"
+                            label="Email"
+                            value={email}
+                            onChange={handleEmailChange}
+                            sx={{ marginY: 2 }}
+                          />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            onClick={handleClose}
+                            color="error"
+                            variant="contained"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            type="submit"
+                            onClick={sendOTP}
+                            color="success"
+                            variant="contained"
+                          >
+                            Send OTP
+                          </Button>
+                        </DialogActions>
+                      </Box>
+                    </Dialog>
                   </Grid>
                   <Grid item>
                     New Here? <Link to="/register">Signup</Link>
