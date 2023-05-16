@@ -81,7 +81,7 @@ export default function Login() {
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("/users/login", values),
+    (values) => axios.post("/login", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Logging in..."));

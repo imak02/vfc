@@ -99,10 +99,12 @@ const Register = () => {
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("/users/register", values),
+    (values) => axios.post("/signup", values),
     {
       onMutate: () => {
+    
         dispatch(loadingToast("Registering user..."));
+
       },
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
@@ -138,10 +140,11 @@ const Register = () => {
     validationSchema: validationSchema,
 
     onSubmit: async (values, { resetForm }) => {
+
       let sendData = Object.assign({}, values);
       delete sendData.terms;
       delete sendData.password2;
-
+      console.log(sendData)
       mutate(sendData, {
         onSuccess: () => {
           resetForm();
@@ -406,7 +409,7 @@ const Register = () => {
                 helperText={formik.touched.gender && formik.errors.gender}
                 sx={{ marginBottom: 2, marginRight: "1%", width: "49%" }}
               >
-                {["Male", "Female", "Others"].map((genderOption) => (
+                {["male", "female", "others"].map((genderOption) => (
                   <MenuItem key={genderOption} value={genderOption}>
                     {genderOption}
                   </MenuItem>
