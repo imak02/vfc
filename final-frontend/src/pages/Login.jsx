@@ -34,7 +34,7 @@ import {
 import { login } from "../redux/slices/authSlice";
 
 const validationSchema = Yup.object({
-  user: Yup.string("Enter your email")
+  username: Yup.string("Enter your email or username")
     .min(2, "Username should be of minimum 2 characters length")
     .required("Username/Email is required"),
   password: Yup.string("Enter your password")
@@ -107,14 +107,17 @@ export default function Login() {
 
   const formik = useFormik({
     initialValues: {
-      user: "",
+      username: "",
       password: "",
       remember: false,
     },
     validationSchema: validationSchema,
 
     onSubmit: async (values, { resetForm }) => {
-      mutate(values, {
+      let sendData = Object.assign({}, values);
+      delete sendData.remember;
+      console.log(sendData);
+      mutate(sendData, {
         onSuccess: () => {
           resetForm();
         },
@@ -195,16 +198,18 @@ export default function Login() {
               >
                 <TextField
                   fullWidth
-                  id="user"
-                  name="user"
+                  id="username"
+                  name="username"
                   color="focusInput"
                   autoComplete="off"
                   label="Username/Email"
-                  value={formik.values.user}
+                  value={formik.values.username}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  error={formik.touched.user && Boolean(formik.errors.user)}
-                  helperText={formik.touched.user && formik.errors.user}
+                  error={
+                    formik.touched.username && Boolean(formik.errors.username)
+                  }
+                  helperText={formik.touched.username && formik.errors.username}
                   sx={{ marginY: 2 }}
                 />
 
@@ -267,9 +272,16 @@ export default function Login() {
                 <Grid container>
                   <Grid item xs>
                     {/* <Link to="/forgot-password">Forgot password?</Link> */}
-                    <Button variant="text" color="info" onClick={handleOpen}>
-                      Forgot Password?
-                    </Button>
+                    <Box
+                      onClick={handleOpen}
+                      sx={{
+                        cursor: "pointer",
+                        color: "blue",
+                        "&:hover": { textDecoration: "underline" },
+                      }}
+                    >
+                      <Typography variant="body1">Forgot Password?</Typography>
+                    </Box>
                     <Dialog open={openModal} onClose={handleClose} fullWidth>
                       <Box
                         component="form"

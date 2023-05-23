@@ -102,9 +102,7 @@ const Register = () => {
     (values) => axios.post("/signup", values),
     {
       onMutate: () => {
-    
         dispatch(loadingToast("Registering user..."));
-
       },
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
@@ -140,45 +138,14 @@ const Register = () => {
     validationSchema: validationSchema,
 
     onSubmit: async (values, { resetForm }) => {
-
       let sendData = Object.assign({}, values);
       delete sendData.terms;
       delete sendData.password2;
-      console.log(sendData)
       mutate(sendData, {
         onSuccess: () => {
           resetForm();
         },
       });
-      // try {
-      //   const response = await axios({
-      //     method: "post",
-      //     url: "/users/register",
-      //     data: sendData,
-      //   });
-      //   console.log(response);
-      //   dispatch(successToast(response?.data?.message));
-      //   setSubmitting(false);
-      //   resetForm();
-      //   navigate("/");
-
-      //   return response.data;
-      // } catch (error) {
-      //   console.log(error); // this is the main part. Use the response property from the error object
-      //   dispatch(errorToast(error?.response?.data?.message));
-      //   setSubmitting(false);
-      //   return error.response;
-      // }
-
-      // resetForm();
-      // navigate("/");
-      // setTimeout(() => {
-      //   // alert(JSON.stringify(values, null, 2));
-      //   // alert(sendData);
-      //   setSubmitting(false);
-      //   resetForm();
-      //   navigate("/");
-      // }, 2000);
     },
   });
 
@@ -409,8 +376,11 @@ const Register = () => {
                 helperText={formik.touched.gender && formik.errors.gender}
                 sx={{ marginBottom: 2, marginRight: "1%", width: "49%" }}
               >
-                {["male", "female", "others"].map((genderOption) => (
-                  <MenuItem key={genderOption} value={genderOption}>
+                {["Male", "Female", "Others"].map((genderOption) => (
+                  <MenuItem
+                    key={genderOption}
+                    value={genderOption.toLowerCase()}
+                  >
                     {genderOption}
                   </MenuItem>
                 ))}
