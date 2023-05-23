@@ -21,6 +21,7 @@ import BlogCard from "../components/BlogCard";
 import { Directions, Drafts, Inbox, Info, Search } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CurvePath from "../components/CurvePath";
+import { Link } from "react-router-dom";
 
 const Blog = () => {
   const [showCategories, setShowCategories] = useState(null);
@@ -64,6 +65,8 @@ const Blog = () => {
             mt: -2,
           }}
         >
+          <Link to="/create-blog">Create</Link>
+
           <Box
             sx={{
               display: { xs: "flex", xl: "none" },
