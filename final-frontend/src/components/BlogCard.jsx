@@ -27,6 +27,7 @@ import {
 import moment from "moment";
 import React, { useState } from "react";
 import CommentBox from "./CommentBox";
+import { Link } from "react-router-dom";
 
 const blog = {
   _id: "1234579",
@@ -126,19 +127,21 @@ const BlogCard = () => {
                   <>
                     {blog.description.substring(0, 500) + "..."}
                     <br />
-                    <Button
-                      endIcon={<OpenInNew />}
-                      size="small"
-                      variant="contained"
-                      sx={{
-                        borderRadius: "30px",
-                        boxShadow: "none",
-                        mt: { xs: 2, md: 1 },
-                        "&:hover": { bgcolor: "red", boxShadow: "none" },
-                      }}
-                    >
-                      Read More
-                    </Button>
+                    <Link to="/blog/23" className="links">
+                      <Button
+                        endIcon={<OpenInNew />}
+                        size="small"
+                        variant="contained"
+                        sx={{
+                          borderRadius: "30px",
+                          boxShadow: "none",
+                          mt: { xs: 2, md: 1 },
+                          "&:hover": { bgcolor: "red", boxShadow: "none" },
+                        }}
+                      >
+                        Read More
+                      </Button>
+                    </Link>
                   </>
                 ) : (
                   blog.description
@@ -211,7 +214,7 @@ const BlogCard = () => {
             </Box>
 
             {/* {showComments && ( */}
-            <Collapse in={showComments} timeout={1000}>
+            <Collapse in={showComments} timeout={800}>
               <Box sx={{ mt: 4 }}>
                 <Divider>
                   <Chip label="COMMENTS" />

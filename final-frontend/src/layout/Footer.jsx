@@ -66,7 +66,7 @@ export default function Footer() {
             <Box>
               <Link className="links" to="/">
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Box component="img" src="logo.png" height="70px" />
+                  <Box component="img" src="/logo.png" height="70px" />
                   <Typography
                     variant="h4"
                     sx={{

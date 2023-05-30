@@ -23,6 +23,7 @@ import DietDetails from "./pages/DietDetails";
 import ResetPassword from "./pages/ResetPassword";
 import AddBlog from "./pages/AddBlog";
 import EditBlog from "./pages/EditBlog";
+import BlogDetails from "./pages/BlogDetails";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -55,7 +56,11 @@ const router = createBrowserRouter([
         element: <Blog />,
       },
       {
-        path: "/blog/edit/:id",
+        path: "/blog/:blogId",
+        element: <BlogDetails />,
+      },
+      {
+        path: "/blog/edit/:blogId",
         element: <EditBlog />,
       },
       {

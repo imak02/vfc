@@ -184,7 +184,7 @@ function NavBar() {
             <Link to="/" className="links logo__link">
               <Box sx={{ display: "flex" }}>
                 <Box className="logo__img">
-                  <Box component="img" src="logo.png" height={30} />
+                  <Box component="img" src="/logo.png" height={30} />
                 </Box>
               </Box>
             </Link>
@@ -207,7 +207,7 @@ function NavBar() {
                 }}
               >
                 <Box className="logo__img">
-                  <Box component="img" src="logo.png" height={30} />
+                  <Box component="img" src="/logo.png" height={30} />
                 </Box>
 
                 <Typography
