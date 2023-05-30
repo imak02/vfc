@@ -61,7 +61,7 @@ const validationSchema = Yup.object({
   ),
 });
 
-export default function AddBlog() {
+export default function EditBlog() {
   const [image, setImage] = useState(null);
 
   const [focus, setFocus] = useState(false);
@@ -200,7 +200,7 @@ export default function AddBlog() {
                 variant="h4"
                 sx={{ fontWeight: "bold" }}
               >
-                Create a new blog
+                Update the blog
               </Typography>
 
               <Box

@@ -22,7 +22,7 @@ export const authSlice = createSlice({
     },
     logout: (state) => {
       Cookies.remove("token");
-      window.location.href = "/login";
+      window.location.href = "/";
       state.isAuthenticated = false;
       state.user = null;
       axios.defaults.headers.common["Authorization"] = null;
