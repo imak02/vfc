@@ -24,6 +24,8 @@ import ResetPassword from "./pages/ResetPassword";
 import AddBlog from "./pages/AddBlog";
 import EditBlog from "./pages/EditBlog";
 import BlogDetails from "./pages/BlogDetails";
+import UserProfileLayout from "./layout/UserProfileLayout";
+import UserDashboard from "./pages/UserDashboard";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -75,6 +77,7 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+
       {
         path: "/profile/edit/:id",
         element: (
@@ -104,6 +107,17 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/user/:id",
+    element: <UserProfileLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/user/:id/",
+        element: <UserDashboard />,
+      },
+    ],
   },
 ]);
 
