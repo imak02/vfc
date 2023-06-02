@@ -21,6 +21,7 @@ import {
   ListItemIcon,
   ListItemText,
   SwipeableDrawer,
+  styled,
 } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
@@ -63,6 +64,25 @@ const settingsList = [
   { name: "Dashboard", id: "dashboard", destination: "/Dashboard" },
   { name: "Logout", id: "logout", destination: "/" },
 ];
+
+const MyNavLink = styled(NavLink)(({ theme }) => ({
+  textDecoration: "none",
+  color: theme.palette.mode === "light" ? "black" : "white",
+  "&:after": {
+    content: '""',
+    display: "block",
+    margin: "auto",
+    height: 4,
+    width: 0,
+    background: "transparent",
+    transition: "all 0.5s ease",
+  },
+  "&:hover:after, &.active:after": {
+    display: "block",
+    width: "100%",
+    background: theme.palette.mode === "light" ? "black" : "white",
+  },
+}));
 
 function NavBar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -147,7 +167,7 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" color="primary">
       <Container maxWidth="false">
         <Toolbar
           disableGutters
@@ -196,7 +216,7 @@ function NavBar() {
               display: { xs: "none", md: "flex" },
             }}
           >
-            <Link to="/" className="logo__link">
+            <Link to="/" className="logo__link links">
               <Box
                 sx={{
                   display: "flex",
@@ -217,6 +237,7 @@ function NavBar() {
                     fontWeight: "bold",
                     ml: 1,
                     display: { xs: "none", lg: "flex" },
+                    color: "text.primary",
                   }}
                 >
                   Virtual Fitness Coach
@@ -237,34 +258,13 @@ function NavBar() {
           >
             {pageList.map((page) => (
               <Box key={page.id}>
-                <NavLink to={page.destination} className="links pages__link">
-                  <Typography
-                    variant="h6"
-                    className="myText"
-                    sx={{
-                      fontWeight: "bold",
-                      "&:after": {
-                        content: '""',
-                        display: "block",
-                        margin: "auto",
-                        height: 5,
-                        width: 0,
-                        background: "transparent",
-                        transition: "all 0.5s ease",
-                      },
-
-                      "&:hover:after, &.active:after": {
-                        display: "block",
-
-                        width: "100%",
-                        background: (theme) =>
-                          theme.palette.mode === "light" ? "brown" : "brown",
-                      },
-                    }}
-                  >
-                    {page.name}
-                  </Typography>
-                </NavLink>
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  <MyNavLink to={page.destination}>{page.name}</MyNavLink>
+                </Typography>
               </Box>
             ))}
           </Box>
