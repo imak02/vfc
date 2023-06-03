@@ -15,10 +15,11 @@ export const authSlice = createSlice({
   reducers: {
     login: (state, action) => {
       Cookies.set("token", action.payload);
+      console.log(action.payload);
       state.isAuthenticated = true;
       axios.defaults.headers.common[
         "Authorization"
-      ] = `Bearer ${action.payload}`;
+      ] = `Token ${action.payload}`;
     },
     logout: (state) => {
       Cookies.remove("token");

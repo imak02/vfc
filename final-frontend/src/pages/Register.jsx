@@ -99,7 +99,7 @@ const Register = () => {
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("/signup", values),
+    (values) => axios.post("signup/", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Registering user..."));

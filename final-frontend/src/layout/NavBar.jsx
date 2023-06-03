@@ -93,14 +93,15 @@ function NavBar() {
 
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
 
-  const getCurrentUser = async () => await axios.get("/users/current-user");
+  const getCurrentUser = async () => await axios.get("user-profile/");
 
   const userResult = useQuery({
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     onSuccess: (data) => {
+      console.log(data);
       if (data.status === 200) {
-        dispatch(setUser(data.data.data));
+        dispatch(setUser(data.data.payload));
       }
     },
     onError: (error) => {
@@ -312,7 +313,7 @@ function NavBar() {
                       <CircularProgress />
                     ) : (
                       <Avatar
-                        alt={user.firstName}
+                        alt={user.first_name}
                         src="profile.jpeg"
                         sx={{ bgcolor: "orange", color: "black" }}
                       />
@@ -361,8 +362,8 @@ function NavBar() {
                 >
                   <Link to={`/profile/${user._id}`} className="links">
                     <MenuItem onClick={handleCloseUserMenu}>
-                      <Avatar alt={user.firstName} src="profile.jpeg" />{" "}
-                      {user.firstName + " " + user.lastName}
+                      <Avatar alt={user.first_name} src="profile.jpeg" />{" "}
+                      {user.first_name + " " + user.last_name}
                     </MenuItem>
                   </Link>
 

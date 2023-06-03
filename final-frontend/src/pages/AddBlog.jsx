@@ -90,15 +90,16 @@ export default function AddBlog() {
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("/blog/new", values),
+    (values) => axios.post("add-blog/", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Posting..."));
       },
       onSuccess: (data) => {
+
         if (data.status === 200 || data.status === 201) {
+          console.log(data);
           dispatch(successToast(data?.data?.message));
-          dispatch(login(data.data.data.token));
           navigate("/blog");
         }
       },
@@ -125,10 +126,14 @@ export default function AddBlog() {
     validationSchema: validationSchema,
 
     onSubmit: async (values, { resetForm }) => {
-      let sendData = Object.assign({}, values);
-      delete sendData.remember;
-      console.log(sendData);
-      mutate(sendData, {
+      const formData = new FormData();
+      formData.set("title", values.title);
+      formData.set("description", values.description);
+      formData.set("content", values.content);
+      formData.set("image", values.image);
+      formData.set("category", values.category);
+
+      mutate(formData, {
         onSuccess: () => {
           resetForm();
         },

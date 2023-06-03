@@ -81,25 +81,26 @@ export default function Login() {
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("/login", values),
+    (values) => axios.post("login/", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Logging in..."));
       },
       onSuccess: (data) => {
+        console.log(data)
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          dispatch(login(data.data.data.token));
+          dispatch(login(data.data.token));
           navigate("/");
         }
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
           console.log(error.response.data);
-          dispatch(errorToast(error?.response?.data?.message));
+          dispatch(errorToast(error?.response?.data?.error));
         } else {
           console.log(error);
-          dispatch(errorToast(error?.response?.data?.message));
+          dispatch(errorToast(error?.response?.data?.error));
         }
       },
     }
