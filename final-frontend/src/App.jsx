@@ -78,14 +78,14 @@ const router = createBrowserRouter([
         ),
       },
 
-      {
-        path: "/profile/edit/:id",
-        element: (
-          <ProtectedRoute>
-            <EditProfile />
-          </ProtectedRoute>
-        ),
-      },
+      // {
+      //   path: "/profile/edit/:id",
+      //   element: (
+      //     <ProtectedRoute>
+      //       <EditProfile />
+      //     </ProtectedRoute>
+      //   ),
+      // },
       {
         path: "/example",
         element: <Example />,
@@ -116,6 +116,14 @@ const router = createBrowserRouter([
       {
         path: "/user/:id/",
         element: <UserDashboard />,
+      },
+      {
+        path: "/user/:id/profile",
+        element: <UserDashboard />,
+      },
+      {
+        path: "/user/:id/edit-profile",
+        element: <EditProfile />,
       },
     ],
   },
