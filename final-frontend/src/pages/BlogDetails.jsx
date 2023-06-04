@@ -31,8 +31,12 @@ import {
 } from "@mui/icons-material";
 import moment from "moment";
 import CommentBox from "../components/CommentBox";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import BlogGridCard from "../components/BlogGridCard";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { errorToast } from "../redux/slices/toastSlice";
+import { useDispatch } from "react-redux";
 
 const blog = {
   _id: "1234579",
@@ -52,6 +56,36 @@ const blog = {
 
 const BlogDetails = () => {
   const [showComments, setShowComments] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const params = useParams();
+  const blogId = params.blogId;
+
+  const fetchBlog = async () => await axios.get(`blog-details/${blogId}`);
+
+  const { data, isLoading, isError, error } = useQuery(
+    ["fetchblog", blogId],
+    fetchBlog,
+    {
+      onSuccess: (data) => {
+        if (data.status === 200) {
+          console.log(data.data);
+        }
+      },
+      onError: (error) => {
+        dispatch(errorToast(error?.response?.data?.error));
+      },
+    }
+  );
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   return (
     <Box>

@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, TextField } from "@mui/material";
 import { AddPhotoAlternate } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
@@ -69,6 +69,34 @@ export default function EditBlog() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const params = useParams();
+  const blogId = params.blogId;
+
+  const fetchBlog = async () => await axios.get(`blog-details/${blogId}`);
+
+  const { data, isLoading, isError, error } = useQuery(
+    ["fetchblog", blogId],
+    fetchBlog,
+    {
+      onSuccess: (data) => {
+        if (data.status === 200) {
+          console.log(data.data);
+        }
+      },
+      onError: (error) => {
+        dispatch(errorToast(error?.response?.data?.error));
+      },
+    }
+  );
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
   var toolbarOptions = [
     [{ header: [1, 2, false] }],
     ["bold", "italic", "underline", "blockquote"],
@@ -89,7 +117,7 @@ export default function EditBlog() {
     }
   };
 
-  const { mutate, isLoading } = useMutation(
+  const { mutate, isLoading: isSubmitting } = useMutation(
     (values) => axios.post("/blog/new", values),
     {
       onMutate: () => {
@@ -125,10 +153,14 @@ export default function EditBlog() {
     validationSchema: validationSchema,
 
     onSubmit: async (values, { resetForm }) => {
-      let sendData = Object.assign({}, values);
-      delete sendData.remember;
-      console.log(sendData);
-      mutate(sendData, {
+      const formData = new FormData();
+      formData.set("title", values.title);
+      formData.set("description", values.description);
+      formData.set("content", values.content);
+      formData.set("image", values.image);
+      formData.set("category", values.category);
+
+      mutate(formData, {
         onSuccess: () => {
           resetForm();
         },
@@ -403,9 +435,9 @@ export default function EditBlog() {
                     type="submit"
                     color="success"
                     variant="contained"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                   >
-                    {isLoading ? "Posting..." : "Post"}
+                    {isSubmitting ? "Posting..." : "Post"}
                   </Button>
                 </Box>
               </Box>

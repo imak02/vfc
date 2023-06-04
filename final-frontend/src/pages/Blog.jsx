@@ -22,10 +22,29 @@ import { Directions, Drafts, Inbox, Info, Search } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CurvePath from "../components/CurvePath";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const Blog = () => {
   const [showCategories, setShowCategories] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const fetchBlogs = async () => await axios.get("view-blog-list/");
+  const { data, isLoading, isError, error } = useQuery("blogs", fetchBlogs, {
+    onSuccess: (data) => {
+      if (data.status === 200) {
+        console.log(data.data);
+      }
+    },
+  });
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
