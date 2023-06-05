@@ -72,9 +72,9 @@ const router = createBrowserRouter([
       {
         path: "/profile/:id",
         element: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
+          //  <ProtectedRoute>
+          <Profile />
+          // </ProtectedRoute>
         ),
       },
 
@@ -119,7 +119,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/:id/profile",
-        element: <UserDashboard />,
+        element: <Profile />,
       },
       {
         path: "/user/:id/edit-profile",

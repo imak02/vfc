@@ -30,17 +30,17 @@ const pageList = [
     name: "Dashboard",
     id: "dashboard",
     icon: <Widgets color="inherit" />,
-    destination: "/",
+    destination: "/user/123",
   },
   {
     name: "Profile",
     id: "profile",
     icon: <AccountBox />,
-    destination: "/user/123",
+    destination: "/user/123/profile",
   },
+  { name: "Body", id: "body", icon: <Accessibility />, destination: "/body" },
   { name: "Diet", id: "diet", icon: <Fastfood />, destination: "/diet" },
   { name: "Blogs", id: "blog", icon: <Article />, destination: "/blog" },
-  { name: "Body", id: "body", icon: <Accessibility />, destination: "/body" },
   {
     name: "Exercises",
     id: "exercises",
@@ -133,7 +133,7 @@ const UserSideBar = () => {
         <List sx={{ pb: 5 }}>
           {pageList.map((page) => (
             <ListItem key={page.id}>
-              <MyNavLink to={page.destination} className="links">
+              <MyNavLink to={page.destination} className="links" end>
                 <ListItemButton>
                   <ListItemIcon sx={{ color: "inherit" }}>
                     {page.icon}
