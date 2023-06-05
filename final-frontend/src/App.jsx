@@ -26,6 +26,7 @@ import EditBlog from "./pages/EditBlog";
 import BlogDetails from "./pages/BlogDetails";
 import UserProfileLayout from "./layout/UserProfileLayout";
 import UserDashboard from "./pages/UserDashboard";
+import Body from "./pages/Body";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -124,6 +125,10 @@ const router = createBrowserRouter([
       {
         path: "/user/:id/edit-profile",
         element: <EditProfile />,
+      },
+      {
+        path: "/user/:id/body",
+        element: <Body />,
       },
     ],
   },

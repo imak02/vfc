@@ -38,7 +38,12 @@ const pageList = [
     icon: <AccountBox />,
     destination: "/user/123/profile",
   },
-  { name: "Body", id: "body", icon: <Accessibility />, destination: "/body" },
+  {
+    name: "Body",
+    id: "body",
+    icon: <Accessibility />,
+    destination: "/user/123/body",
+  },
   { name: "Diet", id: "diet", icon: <Fastfood />, destination: "/diet" },
   { name: "Blogs", id: "blog", icon: <Article />, destination: "/blog" },
   {
