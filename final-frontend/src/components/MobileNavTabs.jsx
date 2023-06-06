@@ -1,9 +1,6 @@
-import * as React from "react";
+import { useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import PhoneIcon from "@mui/icons-material/Phone";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
 import { Link } from "react-router-dom";
 import {
   Accessibility,
@@ -13,6 +10,7 @@ import {
   SelfImprovement,
   Widgets,
 } from "@mui/icons-material";
+import { Paper } from "@mui/material";
 
 const pageList = [
   {
@@ -43,8 +41,8 @@ const pageList = [
   },
 ];
 
-export default function Example() {
-  const [value, setValue] = React.useState(0);
+const MobileNavTabs = () => {
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -52,7 +50,8 @@ export default function Example() {
 
   return (
     <Tabs
-      textColor="inherit"
+      textColor="blue"
+      indicatorColor="secondary"
       value={value}
       onChange={handleChange}
       aria-label="icon label tabs example"
@@ -72,4 +71,6 @@ export default function Example() {
       ))}
     </Tabs>
   );
-}
+};
+
+export default MobileNavTabs;

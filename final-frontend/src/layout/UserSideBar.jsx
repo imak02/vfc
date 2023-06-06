@@ -23,7 +23,8 @@ import {
   styled,
 } from "@mui/material";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import MobileNavTabs from "../components/MobileNavTabs";
 
 const pageList = [
   {
@@ -66,94 +67,98 @@ const MyNavLink = styled(NavLink)(({ theme }) => ({
 
 const UserSideBar = () => {
   return (
-    <Paper elevation={2}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button variant="text" color="info">
-          Edit
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 3,
-        }}
-      >
-        <Avatar
-          sx={{ bgcolor: "blue", width: 80, height: 80 }}
-          alt="Profile"
-          src="/profile.jpeg"
-        >
-          A
-        </Avatar>
-        <Box sx={{ textAlign: "center" }}>
-          <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-            Shraddha Kapoor
-          </Typography>
-          <Typography color="GrayText">Female, 23 years</Typography>
+    <Box>
+      <Paper elevation={2}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+          <Link className="links" to="/user/123/edit-profile">
+            <Typography sx={{ color: "blueviolet", fontWeight: "bold" }}>
+              Edit
+            </Typography>
+          </Link>
         </Box>
-      </Box>
 
-      <Box sx={{ my: 3 }}>
-        <Divider />
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-around",
+            flexDirection: "column",
             alignItems: "center",
-            p: 1,
-            textAlign: "center",
+            justifyContent: "center",
+            gap: 3,
           }}
         >
-          <Box>
-            <Typography variant="h6" component="h3" color="blueviolet">
-              Height
+          <Avatar
+            sx={{ bgcolor: "blue", width: 80, height: 80 }}
+            alt="Profile"
+            src="/profile.jpeg"
+          >
+            A
+          </Avatar>
+          <Box sx={{ textAlign: "center" }}>
+            <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
+              Shraddha Kapoor
             </Typography>
-            <Typography variant="h5" component="h3">
-              185
-              <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-                cm
-              </Typography>
-            </Typography>
-          </Box>
-          <Divider orientation="vertical" variant="middle" flexItem />
-          <Box>
-            <Typography variant="h6" component="h3" color="blueviolet">
-              Weight
-            </Typography>
-            <Typography variant="h5" component="h3">
-              90
-              <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-                kg
-              </Typography>
-            </Typography>
+            <Typography color="GrayText">Female, 23 years</Typography>
           </Box>
         </Box>
-        <Divider />
-      </Box>
 
-      <Box>
-        <List sx={{ pb: 5 }}>
-          {pageList.map((page) => (
-            <ListItem key={page.id}>
-              <MyNavLink to={page.destination} className="links" end>
-                <ListItemButton>
-                  <ListItemIcon sx={{ color: "inherit" }}>
-                    {page.icon}
-                  </ListItemIcon>
-                  <ListItemText>
-                    <Typography variant="h6">{page.name}</Typography>
-                  </ListItemText>
-                </ListItemButton>
-              </MyNavLink>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+        <Box sx={{ my: 3, py: 3 }}>
+          <Divider />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              p: 1,
+              textAlign: "center",
+            }}
+          >
+            <Box>
+              <Typography variant="h6" component="h3" color="blueviolet">
+                Height
+              </Typography>
+              <Typography variant="h5" component="h3">
+                185
+                <Typography variant="caption" sx={{ fontWeight: "bold" }}>
+                  cm
+                </Typography>
+              </Typography>
+            </Box>
+            <Divider orientation="vertical" variant="middle" flexItem />
+            <Box>
+              <Typography variant="h6" component="h3" color="blueviolet">
+                Weight
+              </Typography>
+              <Typography variant="h5" component="h3">
+                90
+                <Typography variant="caption" sx={{ fontWeight: "bold" }}>
+                  kg
+                </Typography>
+              </Typography>
+            </Box>
+          </Box>
+          <Divider />
+        </Box>
 
-      {/* <Box>
+        <Box>
+          <List sx={{ pb: 5, display: { xs: "none", md: "block" } }}>
+            {pageList.map((page) => (
+              <ListItem key={page.id}>
+                <MyNavLink to={page.destination} className="links" end>
+                  <ListItemButton>
+                    <ListItemIcon sx={{ color: "inherit" }}>
+                      {page.icon}
+                    </ListItemIcon>
+                    <ListItemText>
+                      <Typography variant="h6">{page.name}</Typography>
+                    </ListItemText>
+                  </ListItemButton>
+                </MyNavLink>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+
+        {/* <Box>
         {pageList.map((page) => (
           <MyNavLink to={page.destination}>
             <Box
@@ -173,7 +178,12 @@ const UserSideBar = () => {
           </MyNavLink>
         ))}
       </Box> */}
-    </Paper>
+      </Paper>
+
+      <Paper sx={{ display: { xs: "block", md: "none" }, p: 1 }}>
+        <MobileNavTabs />
+      </Paper>
+    </Box>
   );
 };
 

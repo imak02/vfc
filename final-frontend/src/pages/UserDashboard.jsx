@@ -55,7 +55,7 @@ const data = [
 
 const UserDashboard = () => {
   return (
-    <Box elevation={2} sx={{ p: 2 }}>
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -76,6 +76,7 @@ const UserDashboard = () => {
           my: 3,
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
+          flexWrap: "wrap",
           gap: 5,
           justifyContent: "space-around",
           alignItems: "center",
