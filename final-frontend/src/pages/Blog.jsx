@@ -30,8 +30,9 @@ const Blog = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const fetchBlogs = async () => await axios.get("view-blog-list/");
-  const { data, isLoading, isError, error } = useQuery("blogs", fetchBlogs, {
+  const { data, isLoading, isError, error } = useQuery(["blogs"], fetchBlogs, {
     onSuccess: (data) => {
+      console.log(data);
       if (data.status === 200) {
         console.log(data.data);
       }
@@ -45,6 +46,8 @@ const Blog = () => {
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
+
+  const blogs = data.data.payload;
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -227,12 +230,10 @@ const Blog = () => {
                 gap: 2,
               }}
             >
-              <BlogCard />
-              <BlogCard />
-              <BlogCard />
-              <BlogCard />
-              <BlogCard />
-              <BlogCard />
+
+              {blogs.map((blog, index)=> <BlogCard blog={blog} key={index}/>)}
+           
+            
             </Box>
           </Box>
           <Box sx={{ flex: 1, display: { xs: "none", xl: "flex" } }}>

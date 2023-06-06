@@ -29,21 +29,24 @@ import React, { useState } from "react";
 import CommentBox from "./CommentBox";
 import { Link } from "react-router-dom";
 
-const blog = {
-  _id: "1234579",
-  author: {
-    profilePic: "profile.jpeg",
-    name: "John Smith",
-    username: "johnny",
-  },
-  createdAt: "2023-03-27T03:23:30.787+00:00",
-  image: "bg.jpg",
-  title: "This is a simple blog example ample",
-  description:
-    " Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.",
-};
+// const blog = {
+//   _id: "1234579",
+//   author: {
+//     profilePic: "profile.jpeg",
+//     name: "John Smith",
+//     username: "johnny",
+//   },
+//   createdAt: "2023-03-27T03:23:30.787+00:00",
+//   image: "bg.jpg",
+//   title: "This is a simple blog example ample",
+//   description:
+//     " Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.",
+// };
 
-const BlogCard = () => {
+
+const BlogCard = ({blog}) => {
+ console.log(blog.author);
+ 
   const [showComments, setShowComments] = useState(false);
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
@@ -60,9 +63,9 @@ const BlogCard = () => {
             avatar={
               <Avatar
                 src={`${blog?.author?.profilePic}`}
-                alt={blog?.author?.name}
+                alt={blog?.author?.first_name}
               >
-                {blog?.author?.name}
+                {blog?.author?.first_name}
               </Avatar>
             }
             action={
@@ -70,8 +73,8 @@ const BlogCard = () => {
                 <MoreVert />
               </IconButton>
             }
-            title={blog?.author?.name}
-            subheader={moment(blog?.createdAt).fromNow()}
+            title={blog?.author?.first_name}
+            subheader={moment(blog?.created_at).fromNow()}
             sx={{ display: { xs: "flex", md: "none" } }}
           />
           <Box
@@ -99,7 +102,7 @@ const BlogCard = () => {
               }}
             >
               <AccessTime sx={{ alignSelf: "center" }} fontSize="inherit" />{" "}
-              {moment(blog?.createdAt).fromNow()}
+              {moment(blog?.created_at).fromNow()}
             </Typography>
           </Box>
           <CardContent>
@@ -127,7 +130,7 @@ const BlogCard = () => {
                   <>
                     {blog.description.substring(0, 500) + "..."}
                     <br />
-                    <Link to="/blog/23" className="links">
+                    <Link to={`/blog/${blog.id}`} className="links">
                       <Button
                         endIcon={<OpenInNew />}
                         size="small"
@@ -144,7 +147,23 @@ const BlogCard = () => {
                     </Link>
                   </>
                 ) : (
-                  blog.description
+               <>   blog.description
+                 <br />
+                  <Link to={`/blog/${blog.id}`} className="links">
+                    <Button
+                      endIcon={<OpenInNew />}
+                      size="small"
+                      variant="contained"
+                      sx={{
+                        borderRadius: "30px",
+                        boxShadow: "none",
+                        mt: { xs: 2, md: 1 },
+                        "&:hover": { bgcolor: "red", boxShadow: "none" },
+                      }}
+                    >
+                      Read More
+                    </Button>
+                  </Link> </>
                 )}
               </Typography>
             </Box>
@@ -165,11 +184,11 @@ const BlogCard = () => {
                 <Avatar
                   sx={{ bgcolor: "red" }}
                   src={`${blog?.author?.profilePic}`}
-                  alt={blog?.author?.name}
+                  alt={blog?.author?.first_name}
                 >
-                  {blog?.author?.name}
+                  {blog?.author?.first_name}
                 </Avatar>
-                <Typography variant="body1">{blog.author.name}</Typography>
+                <Typography variant="body1">{blog.author.first_name}</Typography>
               </Box>
               <Box display="flex" gap={2}>
                 <Tooltip title="Like">
