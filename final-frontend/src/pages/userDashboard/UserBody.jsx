@@ -3,7 +3,7 @@ import { Box, Divider, Paper, Tooltip, Typography } from "@mui/material";
 import { DriveFileRenameOutline } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const Body = () => {
+const UserBody = () => {
   return (
     <Box>
       <Box
@@ -268,4 +268,4 @@ const Body = () => {
   );
 };
 
-export default Body;
+export default UserBody;

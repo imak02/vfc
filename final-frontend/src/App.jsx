@@ -14,19 +14,22 @@ import Layout from "./layout/Layout";
 import Diet from "./pages/Diet";
 import Blog from "./pages/Blog";
 import Template from "./pages/Template";
-import Profile from "./pages/Profile";
 import Example from "./pages/Example";
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
-import EditProfile from "./pages/EditProfile";
 import DietDetails from "./pages/DietDetails";
 import ResetPassword from "./pages/ResetPassword";
 import AddBlog from "./pages/AddBlog";
 import EditBlog from "./pages/EditBlog";
 import BlogDetails from "./pages/BlogDetails";
 import UserProfileLayout from "./layout/UserProfileLayout";
-import UserDashboard from "./pages/UserDashboard";
-import Body from "./pages/Body";
+import UserDashboard from "./pages/userDashboard/UserDashboard";
+import Profile from "./pages/userDashboard/Profile";
+import EditProfile from "./pages/userDashboard/EditProfile";
+import UserBody from "./pages/userDashboard/UserBody";
+import UserBlogs from "./pages/userDashboard/UserBlogs";
+import UserDiet from "./pages/userDashboard/UserDiet";
+import UserExercises from "./pages/userDashboard/UserExercises";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -128,7 +131,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/:id/body",
-        element: <Body />,
+        element: <UserBody />,
+      },
+      {
+        path: "/user/:id/blogs",
+        element: <UserBlogs />,
+      },
+      {
+        path: "/user/:id/diet",
+        element: <UserDiet />,
+      },
+      {
+        path: "/user/:id/exercises",
+        element: <UserExercises />,
       },
     ],
   },

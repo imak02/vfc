@@ -50,7 +50,7 @@ const MobileNavTabs = () => {
 
   return (
     <Tabs
-      textColor="blue"
+      textColor="inherit"
       indicatorColor="secondary"
       value={value}
       onChange={handleChange}

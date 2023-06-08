@@ -69,7 +69,6 @@ const BlogDetails = () => {
     fetchBlog,
     {
       onSuccess: (data) => {
-       
         if (data.status === 200) {
           console.log(data.data);
         }
@@ -87,7 +86,7 @@ const BlogDetails = () => {
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
-          const blog= data.data.payload;
+  const blog = data.data.payload;
 
   return (
     <Box>
@@ -151,6 +150,8 @@ const BlogDetails = () => {
               </Box>
               <Divider sx={{ borderColor: "black" }} />
 
+              <Link to={`/blog/edit/${blogId}`}>Edit</Link>
+
               <Box
                 component="img"
                 sx={{
@@ -198,7 +199,9 @@ const BlogDetails = () => {
                   >
                     {blog?.author?.first_name}
                   </Avatar>
-                  <Typography variant="body1">{blog.author.first_name}</Typography>
+                  <Typography variant="body1">
+                    {blog.author.first_name}
+                  </Typography>
                 </Box>
                 <Box display="flex" gap={2}>
                   <Tooltip title="Like">

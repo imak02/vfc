@@ -26,7 +26,7 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-import countries from "../data/countries";
+import countries from "../../data/countries";
 
 const nameRegex = /^[a-zA-Z-' ]+$/;
 const userNameRegex = /^[a-z0-9_-]{3,15}$/;
