@@ -7,7 +7,7 @@ const MyThemeProvider = ({ children }) => {
     palette: {
       mode: themeMode,
       primary: {
-        main: "#ffa500",
+        main: "#d7d3ff",
       },
       secondary: {
         main: "#ff4500",

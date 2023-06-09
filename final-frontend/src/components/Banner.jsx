@@ -22,10 +22,10 @@ const Banner = ({
           backgroundPosition: "center",
           position: "relative",
           //   mb: 100,
-          clipPath: {
-            xs: "polygon(0% 0%, 100% 0%, 100% 90%, 0% 100%)",
-            md: "polygon(0% 0%, 100% 0%, 100% 80%, 0% 100%)",
-          },
+          // clipPath: {
+          //   xs: "polygon(0% 0%, 100% 0%, 100% 90%, 0% 100%)",
+          //   md: "polygon(0% 0%, 100% 0%, 100% 90%, 0% 100%)",
+          // },
         }}
       >
         <Box
@@ -69,7 +69,7 @@ const Banner = ({
         </Box>
       </Box>
 
-      <Box
+      {/* <Box
         sx={{
           bgcolor: "orange",
           height: { xs: 40, md: 60 },
@@ -94,7 +94,7 @@ const Banner = ({
         <Typography variant="h4" sx={{ fontWeight: "bold" }}>
           {focusText}
         </Typography>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

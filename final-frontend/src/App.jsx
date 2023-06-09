@@ -163,7 +163,7 @@ function App() {
     <Box
       sx={{
         bgcolor: (theme) =>
-          theme.palette.mode === "light" ? "lightgrey" : "background.default",
+          theme.palette.mode === "light" ? "white" : "background.default",
       }}
       color={"text.primary"}
     >

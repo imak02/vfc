@@ -168,11 +168,20 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: (theme) =>
+          theme.palette.mode === "light" ? "#d7d3ff" : "black",
+      }}
+    >
       <Container maxWidth="false">
         <Toolbar
           disableGutters
-          sx={{ display: "flex", justifyContent: "space-between" }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
         >
           {/* For mobile view */}
           <Box
@@ -238,7 +247,6 @@ function NavBar() {
                     fontWeight: "bold",
                     ml: 1,
                     display: { xs: "none", lg: "flex" },
-                    color: "text.primary",
                   }}
                 >
                   Virtual Fitness Coach
@@ -249,7 +257,8 @@ function NavBar() {
           <Box
             sx={{
               flexGrow: 1,
-              justifyContent: "center",
+              justifyContent: "flex-end",
+              mr: 10,
               display: {
                 xs: "none",
                 md: "flex",

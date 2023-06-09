@@ -31,21 +31,35 @@ const Home = () => {
         bgImage="/bg.jpg"
         focusText="VFC Home"
       />
-      <Box sx={{ my: 5 }}>
-        <Quotes />
-      </Box>
 
       <Container maxWidth="xl">
-        <Paper
-          elevation={2}
+        <Box
           sx={{
-            padding: 1,
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light" ? "skyblue" : "background.paper",
+            my: 15,
+            bgcolor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.primary.main
+                : "action.hover",
+            p: { xs: 2, md: 5, lg: 10 },
+            borderRadius: 5,
           }}
         >
-          <Box sx={{ width: "100%", bgcolor: "black", mt: 5 }}>
-            <FlowText text="Why Us?" />
+          <Quotes />
+        </Box>
+        <Paper
+          elevation={10}
+          sx={{
+            padding: 1,
+          }}
+        >
+          <Box sx={{ width: "100%", mt: 5 }}>
+            <Typography
+              variant="h4"
+              component="h2"
+              sx={{ fontWeight: "bold", color: "blueviolet", ml: 14 }}
+            >
+              Why Us?
+            </Typography>
           </Box>
 
           <DescriptionCard
