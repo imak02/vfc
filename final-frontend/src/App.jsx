@@ -55,6 +55,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/diet",
+        element: <Diet />,
+      },
+      {
+        path: "/diet/:dietId",
         element: <DietDetails />,
       },
       {

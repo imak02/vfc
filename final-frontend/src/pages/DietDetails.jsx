@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Container,
@@ -5,70 +6,133 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
-
-const foodDetails = {
-  name: "CHyau",
-  image:
-    "https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  description:
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit    Cupiditate ratione pariatur odit earum ab fugiat voluptatem vero    repellendus vitae explicabo, temporibus mollitia laudantium    blanditiis molestiae voluptatibus animi sapiente ad eum.",
-  nutritionalValue: {
-    Calories: "23gm",
-    Fat: "23gm",
-    Protein: "23gm",
-    Carbs: "23gm",
-    Fiber: "23gm",
-  },
-};
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import { Button, CardActionArea, CardActions } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useLocation, useParams } from "react-router-dom";
+import foods from "../data/foods";
 
 const DietDetails = () => {
+  const { dietId } = useParams();
+  const getDietDetails = async () =>
+    await axios({
+      method: "get",
+      url: `https://api.nal.usda.gov/fdc/v1/food/${dietId}`,
+      params: {
+        api_key: "jkqY6wlwh7grUHYF6QyAKIQURSpsYopHyMNngP4J",
+      },
+    });
+
+  const location = useLocation();
+  const food = location.state;
+
+  const { isLoading, isError, data, error } = useQuery(
+    ["diet"],
+    getDietDetails
+  );
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
+  const foodNutrients = data?.data?.foodNutrients;
+
   return (
-    <Container maxWidth="lg">
-      <Box>
-        <Paper elevation={2} sx={{ display: "flex" }}>
+    <Container sx={{ p: 2 }}>
+      <Card>
+        <CardMedia
+          component="img"
+          height="500"
+          image={food.image}
+          alt="green iguana"
+        />
+        <CardContent>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="h3"
+            sx={{ fontWeight: "bold" }}
+          >
+            {data.data.description}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {food.description}
+          </Typography>
+
           <Box
-            component="img"
-            src={foodDetails.image}
-            alt="Food"
-            height={400}
-            width={400}
-            sx={{ border: "2px solid black", borderRadius: "3px", m: 1 }}
-          />
-          <Box sx={{ m: 1 }}>
-            <Typography variant="h4">{foodDetails.name}</Typography>
-            <Typography variant="body1">{foodDetails.description}</Typography>
-            <Typography variant="h6">Nutritional Value</Typography>
-            <List>
-              <ListItem>
-                <ListItemText
-                  primary="Calories"
-                  secondary={foodDetails.nutritionalValue.Calories}
-                />
-                <ListItemText
-                  primary="Fat"
-                  secondary={foodDetails.nutritionalValue.Fat}
-                />
-                <ListItemText
-                  primary="Protein"
-                  secondary={foodDetails.nutritionalValue.Protein}
-                />
-                <ListItemText
-                  primary="Carbs"
-                  secondary={foodDetails.nutritionalValue.Carbs}
-                />
-                <ListItemText
-                  primary="Fiber"
-                  secondary={foodDetails.nutritionalValue.Fiber}
-                />
-              </ListItem>
-              ,
-            </List>
+            sx={{
+              my: 5,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography
+              textAlign="center"
+              variant="h5"
+              component="h5"
+              sx={{ fontWeight: "bold", my: 2 }}
+            >
+              Nutritional Contents of {food.name}
+            </Typography>
+            <TableContainer
+              component={Paper}
+              sx={{
+                my: 2,
+                width: 600,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      <Typography>Name</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>Amount(per 100gm)</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {foodNutrients.map((nutrient) => (
+                    <TableRow>
+                      <TableCell>
+                        <Typography>{nutrient.nutrient.name}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        {" "}
+                        <Typography>
+                          {nutrient.amount}
+                          {nutrient.nutrient.unitName}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Box>
-        </Paper>
-      </Box>
+        </CardContent>
+      </Card>
     </Container>
   );
 };

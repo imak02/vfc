@@ -1,7 +1,16 @@
 import React from "react";
+import DietCard from "../components/DietCard";
+import { Box, Paper } from "@mui/material";
+import foods from "../data/foods";
 
 const Diet = () => {
-  return <div>Diet</div>;
+  return (
+    <Box sx={{ p: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
+      {foods.map((food, index) => (
+        <DietCard food={food} key={index} />
+      ))}
+    </Box>
+  );
 };
 
 export default Diet;

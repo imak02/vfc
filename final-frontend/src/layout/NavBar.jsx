@@ -91,7 +91,7 @@ function NavBar() {
   });
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
+  const isLoggedIn = useSelector((state) => state.auth.isAuthenticated) || true;
 
   const getCurrentUser = async () => await axios.get("user-profile/");
 
@@ -360,7 +360,7 @@ function NavBar() {
                     },
                   }}
                 >
-                  <Link to={`/profile/${user._id}`} className="links">
+                  <Link to={`/user/${user._id}`} className="links">
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Avatar alt={user.first_name} src="profile.jpeg" />{" "}
                       {user.first_name + " " + user.last_name}

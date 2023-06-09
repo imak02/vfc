@@ -6,34 +6,32 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export default function DietCard() {
+export default function DietCard({ food }) {
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <Link to="/diet" className="links">
+      <Link to={`/diet/${food.id}`} className="links" state={food}>
         <CardActionArea>
           <CardMedia
             component="img"
             height="140"
-            image="https://images.unsplash.com/photo-1551782450-a2132b4ba21d"
+            image={food.image}
             alt="mushroom"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              Mushroom
+              {food.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Mushroom are umbrella shaped food that is very tasty and popular.
-              It contains a variety of essential nutrients required for the
-              body.
+              {food.description}
             </Typography>
           </CardContent>
         </CardActionArea>
       </Link>
-      <CardActions>
+      {/* <CardActions>
         <Button size="small" color="primary">
           Share
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }

@@ -31,13 +31,23 @@ const pageList = [
     icon: <Accessibility />,
     destination: "/user/123/body",
   },
-  { name: "Diet", id: "diet", icon: <Fastfood />, destination: "/diet" },
-  { name: "Blogs", id: "blog", icon: <Article />, destination: "/blog" },
+  {
+    name: "Diet",
+    id: "diet",
+    icon: <Fastfood />,
+    destination: "/user/123/diet",
+  },
+  {
+    name: "Blogs",
+    id: "blog",
+    icon: <Article />,
+    destination: "/user/123/blogs",
+  },
   {
     name: "Exercises",
     id: "exercises",
     icon: <SelfImprovement />,
-    destination: "/exercises",
+    destination: "/user/123/exercises",
   },
 ];
 
