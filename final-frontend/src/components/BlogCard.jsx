@@ -43,10 +43,7 @@ import { Link } from "react-router-dom";
 //     " Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque recusandae repellendus porro, voluptatem corporis ad fuga neque aliquam non ut, eius molestias voluptatibus ratione temporibus odio et! Eos, explicabo laborum.",
 // };
 
-
-const BlogCard = ({blog}) => {
- console.log(blog.author);
- 
+const BlogCard = ({ blog }) => {
   const [showComments, setShowComments] = useState(false);
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
@@ -98,7 +95,7 @@ const BlogCard = ({blog}) => {
                 display: { xs: "none", md: "flex" },
                 alignItems: "center",
                 justifyContent: "flex-end",
-                width: 150,
+                maxWidth: 200,
               }}
             >
               <AccessTime sx={{ alignSelf: "center" }} fontSize="inherit" />{" "}
@@ -126,29 +123,11 @@ const BlogCard = ({blog}) => {
                   textOverflow: "ellipsis",
                 }}
               >
-                {blog.description.length > 500 ? (
-                  <>
-                    {blog.description.substring(0, 500) + "..."}
-                    <br />
-                    <Link to={`/blog/${blog.id}`} className="links">
-                      <Button
-                        endIcon={<OpenInNew />}
-                        size="small"
-                        variant="contained"
-                        sx={{
-                          borderRadius: "30px",
-                          boxShadow: "none",
-                          mt: { xs: 2, md: 1 },
-                          "&:hover": { bgcolor: "red", boxShadow: "none" },
-                        }}
-                      >
-                        Read More
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-               <>   blog.description
-                 <br />
+                {blog.description.length > 500
+                  ? blog.description.substring(0, 500) + "..."
+                  : blog.description}
+                <>
+                  <br />
                   <Link to={`/blog/${blog.id}`} className="links">
                     <Button
                       endIcon={<OpenInNew />}
@@ -163,8 +142,8 @@ const BlogCard = ({blog}) => {
                     >
                       Read More
                     </Button>
-                  </Link> </>
-                )}
+                  </Link>
+                </>
               </Typography>
             </Box>
 
@@ -188,7 +167,9 @@ const BlogCard = ({blog}) => {
                 >
                   {blog?.author?.first_name}
                 </Avatar>
-                <Typography variant="body1">{blog.author.first_name}</Typography>
+                <Typography variant="body1">
+                  {blog.author.first_name}
+                </Typography>
               </Box>
               <Box display="flex" gap={2}>
                 <Tooltip title="Like">

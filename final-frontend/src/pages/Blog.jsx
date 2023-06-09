@@ -15,6 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
   Grow,
+  Button,
 } from "@mui/material";
 import Banner from "../components/Banner";
 import BlogCard from "../components/BlogCard";
@@ -77,173 +78,185 @@ const Blog = () => {
           All Blogs
         </Typography>
       </Divider> */}
-      <CurvePath>
-        {" "}
+      {/* <CurvePath> */}
+      <Box
+        sx={{
+          display: { xl: "flex" },
+          px: 2,
+          mt: 10,
+          py: 5,
+        }}
+      >
         <Box
           sx={{
-            display: { xl: "flex" },
-            bgcolor: "orange",
-            px: 2,
-            mt: -2,
+            display: { xs: "flex", xl: "none" },
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Link to="/create-blog">Create</Link>
-
-          <Box
+          <Paper
+            component="form"
             sx={{
-              display: { xs: "flex", xl: "none" },
-              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              maxWidth: 900,
+              m: 2,
             }}
           >
-            <Paper
-              component="form"
-              sx={{
-                p: "2px 0",
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                maxWidth: 900,
-                m: 2,
+            <IconButton
+              sx={{ p: "10px" }}
+              aria-label="menu"
+              id="category-button"
+              aria-controls={open ? "category-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            <Menu
+              id="category-menu"
+              anchorEl={showCategories}
+              open={open}
+              transitionDuration={300}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "category-button",
               }}
             >
-              <IconButton
-                sx={{ p: "10px" }}
-                aria-label="menu"
-                id="category-button"
-                aria-controls={open ? "category-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-              >
-                <MenuIcon />
-              </IconButton>
-
-              <Menu
-                id="category-menu"
-                anchorEl={showCategories}
-                open={open}
-                transitionDuration={300}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "category-button",
-                }}
-              >
-                <MenuItem onClick={handleClose}>
-                  <Typography sx={{ textAlign: "center", width: "100%" }}>
-                    All Blogs
-                  </Typography>
-                </MenuItem>
-                <Divider>Categories</Divider>
-                <MenuItem onClick={handleClose}>
-                  <Typography sx={{ textAlign: "center", width: "100%" }}>
-                    Food and Diet
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Typography sx={{ textAlign: "center", width: "100%" }}>
-                    Exercise
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Typography sx={{ textAlign: "center", width: "100%" }}>
-                    Health
-                  </Typography>
-                </MenuItem>
-              </Menu>
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Search Blogs"
-                inputProps={{ "aria-label": "search blogs" }}
-              />
-              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-                <Search />
-              </IconButton>
-            </Paper>
-          </Box>
-
-          <Box
-            sx={{
-              flex: 1,
-              width: "100%",
-              maxWidth: 360,
-              display: { xs: "none", xl: "flex" },
-              // bgcolor: "background.paper",
-            }}
-          >
-            <Paper elevation={2} sx={{ mx: 2, width: "100%", height: 260 }}>
-              <List component="nav" aria-label="categories">
-                <ListItemButton
-                  selected={selectedIndex === 0}
-                  onClick={(event) => handleListItemClick(event, 0)}
-                >
-                  <ListItemText
-                    sx={{ textAlign: "center" }}
-                    primary="All Blogs"
-                  />
-                </ListItemButton>
-                <Divider sx={{ my: 1 }}>
-                  <Chip label="Categories" />
-                </Divider>
-                <ListItemButton
-                  selected={selectedIndex === 1}
-                  onClick={(event) => handleListItemClick(event, 1)}
-                >
-                  <ListItemText
-                    primary="Food and Diet"
-                    sx={{ textAlign: "center" }}
-                  />
-                </ListItemButton>
-
-                <ListItemButton
-                  selected={selectedIndex === 2}
-                  onClick={(event) => handleListItemClick(event, 2)}
-                >
-                  <ListItemText
-                    primary="Exercise"
-                    sx={{ textAlign: "center" }}
-                  />
-                </ListItemButton>
-                <ListItemButton
-                  selected={selectedIndex === 3}
-                  onClick={(event) => handleListItemClick(event, 3)}
-                >
-                  <ListItemText primary="Health" sx={{ textAlign: "center" }} />
-                </ListItemButton>
-              </List>
-            </Paper>
-          </Box>
-
-          <Box sx={{ flex: 3 }}>
-            <Box>
-              <Divider textAlign="left" sx={{ mb: 4 }}>
-                <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+              <MenuItem onClick={handleClose}>
+                <Typography sx={{ textAlign: "center", width: "100%" }}>
+                  All Blogs
+                </Typography>
+              </MenuItem>
+              <Divider>Categories</Divider>
+              <MenuItem onClick={handleClose}>
+                <Typography sx={{ textAlign: "center", width: "100%" }}>
                   Food and Diet
                 </Typography>
-              </Divider>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 2,
-              }}
-            >
-
-              {blogs.map((blog, index)=> <BlogCard blog={blog} key={index}/>)}
-           
-            
-            </Box>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Typography sx={{ textAlign: "center", width: "100%" }}>
+                  Exercise
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Typography sx={{ textAlign: "center", width: "100%" }}>
+                  Health
+                </Typography>
+              </MenuItem>
+            </Menu>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search Blogs"
+              inputProps={{ "aria-label": "search blogs" }}
+            />
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <Search />
+            </IconButton>
+          </Paper>
+          <Box sx={{ mb: 4 }}>
+            <Link to="/create-blog" className="links">
+              <Button variant="contained" color="info" sx={{ px: 8.2, py: 1 }}>
+                Create a new blog
+              </Button>
+            </Link>
           </Box>
-          <Box sx={{ flex: 1, display: { xs: "none", xl: "flex" } }}>
+        </Box>
+
+        <Box
+          sx={{
+            flex: 1,
+            width: "100%",
+            maxWidth: 360,
+            display: { xs: "none", xl: "flex" },
+            // bgcolor: "background.paper",
+          }}
+        >
+          <Paper elevation={2} sx={{ mx: 2, width: "100%", height: 260 }}>
+            <List component="nav" aria-label="categories">
+              <ListItemButton
+                selected={selectedIndex === 0}
+                onClick={(event) => handleListItemClick(event, 0)}
+              >
+                <ListItemText
+                  sx={{ textAlign: "center" }}
+                  primary="All Blogs"
+                />
+              </ListItemButton>
+              <Divider sx={{ my: 1 }}>
+                <Chip label="Categories" />
+              </Divider>
+              <ListItemButton
+                selected={selectedIndex === 1}
+                onClick={(event) => handleListItemClick(event, 1)}
+              >
+                <ListItemText
+                  primary="Food and Diet"
+                  sx={{ textAlign: "center" }}
+                />
+              </ListItemButton>
+
+              <ListItemButton
+                selected={selectedIndex === 2}
+                onClick={(event) => handleListItemClick(event, 2)}
+              >
+                <ListItemText primary="Exercise" sx={{ textAlign: "center" }} />
+              </ListItemButton>
+              <ListItemButton
+                selected={selectedIndex === 3}
+                onClick={(event) => handleListItemClick(event, 3)}
+              >
+                <ListItemText primary="Health" sx={{ textAlign: "center" }} />
+              </ListItemButton>
+            </List>
+          </Paper>
+        </Box>
+
+        <Box sx={{ flex: 3 }}>
+          <Box>
+            <Divider textAlign="left" sx={{ mb: 4 }}>
+              <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                Food and Diet
+              </Typography>
+            </Divider>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+            }}
+          >
+            {blogs.map((blog, index) => (
+              <BlogCard blog={blog} key={index} />
+            ))}
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            display: {
+              xs: "none",
+              xl: "flex",
+            },
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          <Box>
             <Paper
               component="form"
               sx={{
                 display: "flex",
                 alignItems: "center",
-                height: "50px",
-                width: "100%",
                 mx: 2,
               }}
             >
@@ -257,8 +270,16 @@ const Blog = () => {
               </IconButton>
             </Paper>
           </Box>
+          <Box>
+            <Link to="/create-blog" className="links">
+              <Button variant="contained" color="info" sx={{ px: 8.2, py: 1 }}>
+                Create a new blog
+              </Button>
+            </Link>
+          </Box>
         </Box>
-      </CurvePath>
+      </Box>
+      {/* </CurvePath> */}
     </Box>
   );
 };

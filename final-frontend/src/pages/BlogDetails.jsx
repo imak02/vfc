@@ -24,6 +24,8 @@ import {
   ArrowBackIos,
   BookmarkAdd,
   Comment,
+  Delete,
+  Edit,
   Favorite,
   Info,
   Search,
@@ -61,6 +63,11 @@ const BlogDetails = () => {
 
   const params = useParams();
   const blogId = params.blogId;
+
+  const handleBlogDelete = async () => {
+    const response = await axios.delete(`blog-details/${blogId}`);
+    console.log(response);
+  };
 
   const fetchBlog = async () => await axios.get(`blog-details/${blogId}`);
 
@@ -133,24 +140,42 @@ const BlogDetails = () => {
                   {blog.title}
                 </Typography>
 
-                <Typography
-                  variant="body1"
-                  color="GrayText"
+                <Box
                   sx={{
                     display: "flex",
-                    alignItems: { xs: "flex-end", md: "center" },
-                    justifyContent: "flex-end",
-                    width: { xs: "100%", md: 150 },
-                    py: 1,
+                    flexDirection: "column",
+                    alignSelf: "flex-end",
                   }}
                 >
-                  <AccessTime sx={{ alignSelf: "center" }} fontSize="inherit" />{" "}
-                  {moment(blog?.created_at).fromNow()}
-                </Typography>
+                  <Box sx={{ alignSelf: "flex-end" }}>
+                    <Link to={`/blog/edit/${blogId}`} className="links">
+                      <IconButton color="success">
+                        <Edit />
+                      </IconButton>
+                    </Link>
+                    <IconButton color="error" onClick={handleBlogDelete}>
+                      <Delete />
+                    </IconButton>
+                  </Box>
+                  <Typography
+                    variant="body1"
+                    color="GrayText"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      width: { xs: "100%", md: 200 },
+                      py: 1,
+                    }}
+                  >
+                    <AccessTime
+                      sx={{ alignSelf: "center" }}
+                      fontSize="inherit"
+                    />{" "}
+                    {moment(blog?.created_at).fromNow()}
+                  </Typography>
+                </Box>
               </Box>
               <Divider sx={{ borderColor: "black" }} />
-
-              <Link to={`/blog/edit/${blogId}`}>Edit</Link>
 
               <Box
                 component="img"

@@ -18,7 +18,7 @@ import { AddPhotoAlternate } from "@mui/icons-material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
   errorToast,
@@ -118,7 +118,7 @@ export default function EditBlog() {
   };
 
   const { mutate, isLoading: isSubmitting } = useMutation(
-    (values) => axios.post("/blog/new", values),
+    (values) => axios.patch(`blog-details/${blogId}`, values),
     {
       onMutate: () => {
         dispatch(loadingToast("Posting..."));
@@ -126,7 +126,6 @@ export default function EditBlog() {
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          dispatch(login(data.data.data.token));
           navigate("/blog");
         }
       },
@@ -144,13 +143,14 @@ export default function EditBlog() {
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
-      content: "",
-      image: "",
-      category: "",
+      title: blogData?.title ?? "",
+      description: blogData?.description ?? "",
+      content: blogData?.content ?? "",
+      image: blogData?.image ?? "",
+      category: blogData?.category ?? "",
     },
     validationSchema: validationSchema,
+    enableReinitialize: true,
 
     onSubmit: async (values, { resetForm }) => {
       const formData = new FormData();
