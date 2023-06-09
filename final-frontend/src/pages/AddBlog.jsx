@@ -96,7 +96,6 @@ export default function AddBlog() {
         dispatch(loadingToast("Posting..."));
       },
       onSuccess: (data) => {
-
         if (data.status === 200 || data.status === 201) {
           console.log(data);
           dispatch(successToast(data?.data?.message));

@@ -21,7 +21,7 @@ const UserBody = () => {
           My Body
         </Typography>
 
-        <Link to="/" className="links">
+        <Link to="/user/:id/edit-body" className="links">
           <Tooltip title="Edit Details">
             <DriveFileRenameOutline
               fontSize="large"
