@@ -68,7 +68,7 @@ const pageList = [
 const MyNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: "none",
   width: "100%",
-  color: "black",
+  color: "text.primary",
 
   "&:hover, &.active": {
     color: "blueviolet",
@@ -150,7 +150,12 @@ const UserSideBar = () => {
         </Box>
 
         <Box>
-          <List sx={{ pb: 5, display: { xs: "none", md: "block" } }}>
+          <List
+            sx={{
+              pb: 5,
+              display: { xs: "none", md: "block" },
+            }}
+          >
             {pageList.map((page) => (
               <ListItem key={page.id}>
                 <MyNavLink to={page.destination} className="links" end>

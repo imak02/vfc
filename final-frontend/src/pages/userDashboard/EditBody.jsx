@@ -8,8 +8,70 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  errorToast,
+  loadingToast,
+  successToast,
+} from "../../redux/slices/toastSlice";
 
 const EditBody = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { mutate, isLoading } = useMutation(
+    (values) => axios.post("/", values),
+    {
+      onMutate: () => {
+        dispatch(loadingToast("Posting..."));
+      },
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          console.log(data);
+          dispatch(successToast(data?.data?.message));
+          navigate("/blog");
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
+  const formik = useFormik({
+    initialValues: {
+      height: "",
+      weight: "",
+      blood_pressure: "",
+      blood_group: "",
+      blood_sugar: "",
+      body_type: "",
+      food_preference: "",
+      diseases: "",
+      allergies: "",
+      injuries: "",
+      abnormalities: "",
+    },
+
+    onSubmit: async (values, { resetForm }) => {
+      console.log(values);
+      // mutate(values, {
+      //   onSuccess: () => {
+      //     resetForm();
+      //   },
+      // });
+    },
+  });
   return (
     <Box>
       <Paper elevation={2} sx={{ p: 2 }}>
@@ -25,7 +87,7 @@ const EditBody = () => {
         </Typography>
         <Divider />
 
-        <Box component="form">
+        <Box component="form" onSubmit={formik.handleSubmit}>
           <Box sx={{ my: 2 }}>
             <Typography
               variant="h5"
@@ -49,16 +111,14 @@ const EditBody = () => {
                 color="primary"
                 id="height"
                 name="height"
-                type="text"
+                type="number"
                 placeholder="Enter your height in inches"
                 fullWidth
-                // value={formik.values.height}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.height && Boolean(formik.errors.height)
-                // }
-                // helperText={formik.touched.height && formik.errors.height}
+                value={formik.values.height}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={formik.touched.height && Boolean(formik.errors.height)}
+                helperText={formik.touched.height && formik.errors.height}
               />
             </Box>
 
@@ -77,16 +137,14 @@ const EditBody = () => {
                 color="primary"
                 id="weight"
                 name="weight"
-                type="text"
+                type="number"
                 placeholder="Enter your weight in kilograms"
                 fullWidth
-                // value={formik.values.weight}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.weight && Boolean(formik.errors.weight)
-                // }
-                // helperText={formik.touched.weight && formik.errors.weight}
+                value={formik.values.weight}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={formik.touched.weight && Boolean(formik.errors.weight)}
+                helperText={formik.touched.weight && formik.errors.weight}
               />
             </Box>
 
@@ -108,13 +166,16 @@ const EditBody = () => {
                 type="text"
                 placeholder="Enter your blood_pressure in mmHg"
                 fullWidth
-                // value={formik.values.blood_pressure}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.blood_pressure && Boolean(formik.errors.blood_pressure)
-                // }
-                // helperText={formik.touched.blood_pressure && formik.errors.blood_pressure}
+                value={formik.values.blood_pressure}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.blood_pressure &&
+                  Boolean(formik.errors.blood_pressure)
+                }
+                helperText={
+                  formik.touched.blood_pressure && formik.errors.blood_pressure
+                }
               />
             </Box>
 
@@ -133,16 +194,16 @@ const EditBody = () => {
                 name="blood_group"
                 select
                 fullWidth
-                // value={formik.values.blood_group}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.blood_group &&
-                //   Boolean(formik.errors.blood_group)
-                // }
-                // helperText={
-                //   formik.touched.blood_group && formik.errors.blood_group
-                // }
+                value={formik.values.blood_group}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.blood_group &&
+                  Boolean(formik.errors.blood_group)
+                }
+                helperText={
+                  formik.touched.blood_group && formik.errors.blood_group
+                }
                 SelectProps={{
                   displayEmpty: true,
                   renderValue: (value) =>
@@ -177,13 +238,16 @@ const EditBody = () => {
                 type="text"
                 placeholder="Enter your blood_sugar in mmHg"
                 fullWidth
-                // value={formik.values.blood_sugar}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.blood_sugar && Boolean(formik.errors.blood_sugar)
-                // }
-                // helperText={formik.touched.blood_sugar && formik.errors.blood_sugar}
+                value={formik.values.blood_sugar}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.blood_sugar &&
+                  Boolean(formik.errors.blood_sugar)
+                }
+                helperText={
+                  formik.touched.blood_sugar && formik.errors.blood_sugar
+                }
               />
             </Box>
 
@@ -203,16 +267,13 @@ const EditBody = () => {
                 name="body_type"
                 select
                 fullWidth
-                // value={formik.values.body_type}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.body_type &&
-                //   Boolean(formik.errors.body_type)
-                // }
-                // helperText={
-                //   formik.touched.body_type && formik.errors.body_type
-                // }
+                value={formik.values.body_type}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.body_type && Boolean(formik.errors.body_type)
+                }
+                helperText={formik.touched.body_type && formik.errors.body_type}
                 SelectProps={{
                   displayEmpty: true,
                   renderValue: (value) =>
@@ -243,16 +304,17 @@ const EditBody = () => {
                 name="food_preference"
                 select
                 fullWidth
-                // value={formik.values.food_preference}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.food_preference &&
-                //   Boolean(formik.errors.food_preference)
-                // }
-                // helperText={
-                //   formik.touched.food_preference && formik.errors.food_preference
-                // }
+                value={formik.values.food_preference}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.food_preference &&
+                  Boolean(formik.errors.food_preference)
+                }
+                helperText={
+                  formik.touched.food_preference &&
+                  formik.errors.food_preference
+                }
                 SelectProps={{
                   displayEmpty: true,
                   renderValue: (value) =>
@@ -298,13 +360,13 @@ const EditBody = () => {
                 rows={4}
                 placeholder="Enter the list of diseases you have suffered"
                 fullWidth
-                // value={formik.values.diseases}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.diseases && Boolean(formik.errors.diseases)
-                // }
-                // helperText={formik.touched.diseases && formik.errors.diseases}
+                value={formik.values.diseases}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.diseases && Boolean(formik.errors.diseases)
+                }
+                helperText={formik.touched.diseases && formik.errors.diseases}
               />
             </Box>
 
@@ -328,13 +390,13 @@ const EditBody = () => {
                 rows={4}
                 placeholder="Enter the list of allergies you have"
                 fullWidth
-                // value={formik.values.allergies}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.allergies && Boolean(formik.errors.allergies)
-                // }
-                // helperText={formik.touched.allergies && formik.errors.allergies}
+                value={formik.values.allergies}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.allergies && Boolean(formik.errors.allergies)
+                }
+                helperText={formik.touched.allergies && formik.errors.allergies}
               />
             </Box>
 
@@ -358,13 +420,13 @@ const EditBody = () => {
                 rows={4}
                 placeholder="Enter the list of injuries you have suffered"
                 fullWidth
-                // value={formik.values.injuries}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.injuries && Boolean(formik.errors.injuries)
-                // }
-                // helperText={formik.touched.injuries && formik.errors.injuries}
+                value={formik.values.injuries}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.injuries && Boolean(formik.errors.injuries)
+                }
+                helperText={formik.touched.injuries && formik.errors.injuries}
               />
             </Box>
 
@@ -388,13 +450,16 @@ const EditBody = () => {
                 rows={4}
                 placeholder="Enter the list of abnormalities you have"
                 fullWidth
-                // value={formik.values.abnormalities}
-                // onBlur={formik.handleBlur}
-                // onChange={formik.handleChange}
-                // error={
-                //   formik.touched.abnormalities && Boolean(formik.errors.abnormalities)
-                // }
-                // helperText={formik.touched.abnormalities && formik.errors.abnormalities}
+                value={formik.values.abnormalities}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.abnormalities &&
+                  Boolean(formik.errors.abnormalities)
+                }
+                helperText={
+                  formik.touched.abnormalities && formik.errors.abnormalities
+                }
               />
             </Box>
           </Box>
@@ -410,10 +475,10 @@ const EditBody = () => {
               type="reset"
               color="error"
               variant="contained"
-              // onClick={() => {
-              //   formik.resetForm();
-              //   setImage(null);
-              // }}
+              onClick={() => {
+                formik.resetForm();
+                setImage(null);
+              }}
             >
               Clear
             </Button>
@@ -422,10 +487,10 @@ const EditBody = () => {
               type="submit"
               color="success"
               variant="contained"
-              // disabled={isLoading}
+              disabled={isLoading}
             >
               Submit
-              {/* {isLoading ? "Posting..." : "Post"} */}
+              {isLoading ? "Posting..." : "Post"}
             </Button>
           </Box>
         </Box>
