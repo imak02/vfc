@@ -1,6 +1,7 @@
 import { ContactSupport, Info, Message } from "@mui/icons-material";
 import { Box, Button, Fab, Typography } from "@mui/material";
 import React from "react";
+import StyledButton from "./StyledButton";
 
 const Banner = ({
   title,
@@ -54,20 +55,20 @@ const Banner = ({
           >
             {description}
           </Typography>
-          {button && (
-            <Box sx={{ mt: 3 }}>
+          {button && <StyledButton icon={btnIcon} text={button} />}
+        </Box>
+      </Box>
+      {/* <Box sx={{ mt: 3 }}>
               <Button
                 variant="contained"
                 size="large"
                 color="primary"
                 endIcon={btnIcon}
+                className="button"
               >
-                {button}
+                <Typography className="button-content">{button}</Typography>
               </Button>
-            </Box>
-          )}
-        </Box>
-      </Box>
+            </Box> */}
 
       {/* <Box
         sx={{
