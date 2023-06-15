@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { CalendarMonth } from "@mui/icons-material";
 
 const data = [
   {
@@ -66,9 +67,12 @@ const UserDashboard = () => {
         <Typography variant="h4" component="h2" sx={{ fontWeight: "bold" }}>
           Dashboard
         </Typography>
-        <Typography variant="h6" component="h4">
-          {new Date().toDateString()}
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <CalendarMonth />
+          <Typography variant="h6" component="h4">
+            {new Date().toDateString()}
+          </Typography>
+        </Box>
       </Box>
 
       <Box

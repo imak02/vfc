@@ -1,39 +1,6 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import CircularProgress, {
-  circularProgressClasses,
-} from "@mui/material/CircularProgress";
 import React from "react";
-
-const MyCircularProgress = (props) => (
-  <Box sx={{ position: "relative" }}>
-    <CircularProgress
-      variant="determinate"
-      sx={{
-        color: (theme) => (theme.palette.mode === "light" ? "grey" : "white"),
-      }}
-      size={150}
-      thickness={3}
-      {...props}
-      value={100}
-    />
-    <CircularProgress
-      variant="determinate"
-      sx={{
-        color: (theme) => (theme.palette.mode === "light" ? "white" : "#000"),
-        animationDuration: "550ms",
-        position: "absolute",
-        left: 0,
-        [`& .${circularProgressClasses.circle}`]: {
-          strokeLinecap: "round",
-        },
-      }}
-      size={150}
-      thickness={3}
-      value={props.value}
-      {...props}
-    />
-  </Box>
-);
+import { Box, Card, CardContent, Typography } from "@mui/material";
+import MyCircularProgress from "./MyCircularProgress";
 
 const DbCard = ({ title, subtitle, value }) => {
   return (
@@ -52,18 +19,6 @@ const DbCard = ({ title, subtitle, value }) => {
         <Box sx={{ position: "relative" }}>
           <Box sx={{ position: "absolute", right: 20, top: 30 }}>
             <MyCircularProgress value={value} />
-            <Typography
-              variant="h4"
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%,-50%)",
-                fontWeight: "bold",
-              }}
-            >
-              {value}%
-            </Typography>
           </Box>
         </Box>
 

@@ -5,11 +5,16 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { ExitToApp, Logout } from "@mui/icons-material";
+import { DarkMode, ExitToApp, LightMode, Logout } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { Tooltip } from "@mui/material";
+import { Fab, Tooltip } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { dark, light } from "../redux/slices/themeSlice";
 
 const DbNavbar = () => {
+  const themeMode = useSelector((state) => state.themeMode.value);
+  const dispatch = useDispatch();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -45,11 +50,37 @@ const DbNavbar = () => {
             </Link>
           </Box>
 
-          <Tooltip title="Signout">
-            <IconButton edge="start" color="inherit" aria-label="signout">
-              <Logout fontSize="large" />
-            </IconButton>
-          </Tooltip>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <Box>
+              {themeMode === "light" ? (
+                <Tooltip arrow title="Dark mode">
+                  <Fab
+                    aria-label="DarkMode"
+                    size="small"
+                    onClick={() => dispatch(dark())}
+                  >
+                    <DarkMode fontSize="small" />
+                  </Fab>
+                </Tooltip>
+              ) : (
+                <Tooltip arrow title="Light mode">
+                  <Fab
+                    aria-label="LightMode"
+                    size="small"
+                    onClick={() => dispatch(light())}
+                  >
+                    <LightMode fontSize="small" />
+                  </Fab>
+                </Tooltip>
+              )}
+            </Box>
+
+            <Tooltip title="Signout">
+              <IconButton edge="start" color="inherit" aria-label="signout">
+                <Logout fontSize="large" />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>
