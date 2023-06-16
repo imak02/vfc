@@ -23,47 +23,10 @@ import {
   styled,
 } from "@mui/material";
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import MobileNavTabs from "../components/MobileNavTabs";
 
-const pageList = [
-  {
-    name: "Dashboard",
-    id: "dashboard",
-    icon: <Widgets color="inherit" />,
-    destination: "/user/123",
-  },
-  {
-    name: "Profile",
-    id: "profile",
-    icon: <AccountBox />,
-    destination: "/user/123/profile",
-  },
-  {
-    name: "Body",
-    id: "body",
-    icon: <Accessibility />,
-    destination: "/user/123/body",
-  },
-  {
-    name: "Diet",
-    id: "diet",
-    icon: <Fastfood />,
-    destination: "/user/123/diet",
-  },
-  {
-    name: "Blogs",
-    id: "blog",
-    icon: <Article />,
-    destination: "/user/123/blogs",
-  },
-  {
-    name: "Exercises",
-    id: "exercises",
-    icon: <SelfImprovement />,
-    destination: "/user/123/exercises",
-  },
-];
+
 
 const MyNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: "none",
@@ -76,6 +39,46 @@ const MyNavLink = styled(NavLink)(({ theme }) => ({
 }));
 
 const UserSideBar = () => {
+  const params = useParams();
+  const userId = params.id;
+  const pageList = [
+    {
+      name: "Dashboard",
+      id: "dashboard",
+      icon: <Widgets color="inherit" />,
+      destination: `/user/${userId}`,
+    },
+    {
+      name: "Profile",
+      id: "profile",
+      icon: <AccountBox />,
+      destination: `/user/${userId}/profile`,
+    },
+    {
+      name: "Body",
+      id: "body",
+      icon: <Accessibility />,
+      destination: `/user/${userId}/body`,
+    },
+    {
+      name: "Diet",
+      id: "diet",
+      icon: <Fastfood />,
+      destination: `/user/${userId}/diet`,
+    },
+    {
+      name: "Blogs",
+      id: "blog",
+      icon: <Article />,
+      destination: `/user/${userId}/blogs`,
+    },
+    {
+      name: "Exercises",
+      id: "exercises",
+      icon: <SelfImprovement />,
+      destination: `/user/${userId}/exercises`,
+    },
+  ];
   return (
     <Box>
       <Paper elevation={2}>

@@ -27,6 +27,11 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import countries from "../../data/countries";
+import { useMutation } from "@tanstack/react-query";
+import { errorToast, loadingToast, successToast } from "../../redux/slices/toastSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const nameRegex = /^[a-zA-Z-' ]+$/;
 const userNameRegex = /^[a-z0-9_-]{3,15}$/;
@@ -45,14 +50,14 @@ const validationSchema = Yup.object({
     .matches(nameRegex, "*Please enter a valid name")
     .max(100, "*Names can't be longer than 100 characters")
     .required("*Last name is required"),
-  username: Yup.string()
-    .min(3, "*Username must have 3-15 characters only")
-    .max(15, "*Username must have 5-15 characters only")
-    .matches(
-      userNameRegex,
-      "*Can contain any lower case character, digit or special symbol “_-” only"
-    )
-    .required("*Username is required"),
+  // username: Yup.string()
+  //   .min(3, "*Username must have 3-15 characters only")
+  //   .max(15, "*Username must have 5-15 characters only")
+  //   .matches(
+  //     userNameRegex,
+  //     "*Can contain any lower case character, digit or special symbol “_-” only"
+  //   )
+  //   .required("*Username is required"),
   email: Yup.string()
     .email("*Must be a valid email address")
     .max(100, "*Email must be less than 100 characters")
@@ -73,16 +78,16 @@ const passwordValidationSchema = Yup.object({
       "*Must contain at least one uppercase letter, one lowercase letter, one number and one special character"
     )
     .required("*Password required"),
-  new_password: Yup.string()
+  password: Yup.string()
     .min(8, "*Password must contain minimum of 8 characters")
     .matches(
       passwordRegex,
       "*Must contain at least one uppercase letter, one lowercase letter, one number and one special character"
     )
     .required("*Password required"),
-  confirm_password: Yup.string()
+  password2: Yup.string()
     .required("*Password required")
-    .oneOf([Yup.ref("new_password"), null], "Both passwords do not match."),
+    .oneOf([Yup.ref("password"), null], "Both passwords do not match."),
 });
 
 const EditProfile = () => {
@@ -91,6 +96,12 @@ const EditProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
+
+  const user = useSelector((state) => state.auth.user ?? "");
+
+  const dispatch = useDispatch();
+  const params = useParams();
+  const userId = params.id;
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -107,22 +118,67 @@ const EditProfile = () => {
     event.preventDefault();
   };
 
+  const { mutate, isLoading } = useMutation(
+    (values) => axios.put(`update-password/${userId}/`, values),
+    {
+      onMutate: () => {
+        dispatch(loadingToast("Changing password..."));
+      },
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          dispatch(successToast(data?.data?.message));
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
+  const { mutate: profileMutate } = useMutation(
+    (values) => axios.patch(`update-profile/${userId}/`, values),
+    {
+      onMutate: () => {
+        dispatch(loadingToast("Updating profile..."));
+      },
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          dispatch(successToast(data?.data?.message));
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
   const formik = useFormik({
     initialValues: {
-      image: "",
-      first_name: "",
-      last_name: "",
-      username: "",
-      email: "",
-      phone: "",
-      dob: "",
-      country: "",
-      address: "",
+      first_name: user?.first_name ?? "",
+      last_name: user?.last_name ?? "",
+      email: user?.email ?? "",
+      phone: user?.phone ?? "",
+      dob: user?.profile?.dob ?? "",
+      country: user?.profile?.country ?? "",
+      address: user?.profile?.address ?? "",
     },
     validationSchema: validationSchema,
+    enableReinitialize : true,
 
     onSubmit: async (values, { resetForm }) => {
-      console.log(values);
+      // console.log(values);
       // const formData = new FormData();
       // formData.set("image", values.image);
       // formData.set("first_name", values.first_name);
@@ -134,31 +190,28 @@ const EditProfile = () => {
       // formData.set("country", values.country);
       // formData.set("address", values.address);
 
-      // mutate(formData, {
-      //   onSuccess: () => {
-      //     resetForm();
-      //   },
-      // });
+      profileMutate(values, {
+        onSuccess: () => {
+          resetForm();
+        },
+      });
     },
   });
 
   const formik2 = useFormik({
     initialValues: {
       old_password: "",
-      new_password: "",
-      confirm_password: "",
+      password: "",
+      password2: "",
     },
     validationSchema: passwordValidationSchema,
 
     onSubmit: async (values, { resetForm }) => {
-      console.log(values);
-      // let sendData = Object.assign({}, values);
-      // delete sendData.confirm_password;
-      // mutate(sendData, {
-      //   onSuccess: () => {
-      //     resetForm();
-      //   },
-      // });
+      mutate(values, {
+        onSuccess: () => {
+          resetForm();
+        },
+      });
     },
   });
 
@@ -593,20 +646,20 @@ const EditProfile = () => {
 
                 <TextField
                   fullWidth
-                  id="new_password"
-                  name="new_password"
+                  id="password"
+                  name="password"
                   color="primary"
                   placeholder="Enter your new password"
                   type={showPassword ? "text" : "password"}
-                  value={formik2.values.new_password}
+                  value={formik2.values.password}
                   onBlur={formik2.handleBlur}
                   onChange={formik2.handleChange}
                   error={
-                    formik2.touched.new_password &&
-                    Boolean(formik2.errors.new_password)
+                    formik2.touched.password &&
+                    Boolean(formik2.errors.password)
                   }
                   helperText={
-                    formik2.touched.new_password && formik2.errors.new_password
+                    formik2.touched.password && formik2.errors.password
                   }
                   InputProps={{
                     endAdornment: (
@@ -638,21 +691,21 @@ const EditProfile = () => {
 
                 <TextField
                   fullWidth
-                  id="confirm_password"
-                  name="confirm_password"
+                  id="password2"
+                  name="password2"
                   color="primary"
                   placeholder="Confirm your new password"
                   type={showPassword ? "text" : "password"}
-                  value={formik2.values.confirm_password}
+                  value={formik2.values.password2}
                   onBlur={formik2.handleBlur}
                   onChange={formik2.handleChange}
                   error={
-                    formik2.touched.confirm_password &&
-                    Boolean(formik2.errors.confirm_password)
+                    formik2.touched.password2 &&
+                    Boolean(formik2.errors.password2)
                   }
                   helperText={
-                    formik2.touched.confirm_password &&
-                    formik2.errors.confirm_password
+                    formik2.touched.password2 &&
+                    formik2.errors.password2
                   }
                   InputProps={{
                     endAdornment: (

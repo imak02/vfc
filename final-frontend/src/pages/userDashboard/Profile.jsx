@@ -12,7 +12,8 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 
 const InfoBox = ({ name, value }) => {
   return (
@@ -40,6 +41,11 @@ const InfoBox = ({ name, value }) => {
 };
 
 const Profile = () => {
+  const user = useSelector((state) => state.auth.user ?? "");
+  console.log(user);
+
+  const params = useParams();
+  const userId = params.id;
   return (
     <Box>
       <Typography
@@ -88,7 +94,7 @@ const Profile = () => {
                 component="h2"
                 sx={{ fontWeight: "bold", color: "blueviolet" }}
               >
-                Shraddha Kapoor
+                {user?.first_name+" "+user?.last_name}
               </Typography>
               <Typography
                 color="GrayText"
@@ -96,11 +102,11 @@ const Profile = () => {
                 component="h6"
                 sx={{ fontWeight: "bold" }}
               >
-                @skapoor
+                @{user?.username}
               </Typography>
             </Box>
 
-            <Link className="links" to="/user/123/edit-profile">
+            <Link className="links" to={`/user/${userId}/edit-profile`}>
               <Tooltip title="Edit Profile">
                 <ManageAccounts fontSize="large" sx={{ color: "blueviolet" }} />
               </Tooltip>
@@ -112,25 +118,25 @@ const Profile = () => {
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
               Basic info
             </Typography>
-            <InfoBox name="Gender" value="Female" />
-            <InfoBox name="Birthday" value="19 May 1995" />
-            <InfoBox name="Role" value="User" />
+            <InfoBox name="Gender" value={user?.gender} />
+            <InfoBox name="Birthday" value={user?.profile?.dob} />
+            <InfoBox name="Role" value={user?.category} />
           </Box>
 
           <Box sx={{ border: "1px solid black", borderRadius: 2, p: 1, my: 2 }}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
               Contact info
             </Typography>
-            <InfoBox name="Phone" value="9846636184" />
-            <InfoBox name="Email" value="shraddha.kapoor@gmail.com" />
+            <InfoBox name="Phone" value={user?.phone} />
+            <InfoBox name="Email" value={user?.email} />
           </Box>
 
           <Box sx={{ border: "1px solid black", borderRadius: 2, p: 1, my: 2 }}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
               Address info
             </Typography>
-            <InfoBox name="Country" value="India" />
-            <InfoBox name="City" value="Mumbai, Maharashtra" />
+            <InfoBox name="Country" value={user?.profile?.country} />
+            <InfoBox name="City" value={user?.profile?.address} />
           </Box>
         </Box>
       </Paper>

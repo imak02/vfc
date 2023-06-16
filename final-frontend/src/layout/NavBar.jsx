@@ -369,7 +369,7 @@ function NavBar() {
                     },
                   }}
                 >
-                  <Link to={`/user/${user._id}`} className="links">
+                  <Link to={`/user/${user.id}`} className="links">
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Avatar alt={user.first_name} src="profile.jpeg" />{" "}
                       {user.first_name + " " + user.last_name}
