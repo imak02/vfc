@@ -28,7 +28,11 @@ import {
 } from "@mui/icons-material";
 import countries from "../../data/countries";
 import { useMutation } from "@tanstack/react-query";
-import { errorToast, loadingToast, successToast } from "../../redux/slices/toastSlice";
+import {
+  errorToast,
+  loadingToast,
+  successToast,
+} from "../../redux/slices/toastSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -164,6 +168,29 @@ const EditProfile = () => {
     }
   );
 
+  const { mutate: imageMutate } = useMutation(
+    (values) => axios.patch(`update-profile-picture/`, values),
+    {
+      onMutate: () => {
+        dispatch(loadingToast("Updating Profile Picture..."));
+      },
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          dispatch(successToast(data?.data?.message));
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
   const formik = useFormik({
     initialValues: {
       first_name: user?.first_name ?? "",
@@ -175,21 +202,9 @@ const EditProfile = () => {
       address: user?.profile?.address ?? "",
     },
     validationSchema: validationSchema,
-    enableReinitialize : true,
+    enableReinitialize: true,
 
     onSubmit: async (values, { resetForm }) => {
-      // console.log(values);
-      // const formData = new FormData();
-      // formData.set("image", values.image);
-      // formData.set("first_name", values.first_name);
-      // formData.set("last_name", values.last_name);
-      // formData.set("username", values.username);
-      // formData.set("email", values.email);
-      // formData.set("phone", values.phone);
-      // formData.set("dob", values.dob);
-      // formData.set("country", values.country);
-      // formData.set("address", values.address);
-
       profileMutate(values, {
         onSuccess: () => {
           resetForm();
@@ -215,6 +230,24 @@ const EditProfile = () => {
     },
   });
 
+  const formik3 = useFormik({
+    initialValues: {
+      image: "",
+    },
+    enableReinitialize: true,
+
+    onSubmit: async (values, { resetForm }) => {
+      const formData = new FormData();
+      formData.set("image", values.image);
+
+      imageMutate(formData, {
+        onSuccess: () => {
+          resetForm();
+        },
+      });
+    },
+  });
+
   return (
     <Paper sx={{ p: 2 }}>
       <Typography
@@ -230,7 +263,7 @@ const EditProfile = () => {
       </Typography>
       <Divider />
 
-      <Box component="form" onSubmit={formik.handleSubmit}>
+      <Box>
         <Box
           sx={{
             mt: 1,
@@ -241,7 +274,7 @@ const EditProfile = () => {
             gap: { lg: 5 },
           }}
         >
-          <Box sx={{ flex: 2 }}>
+          <Box sx={{ flex: 2 }} component="form" onSubmit={formik.handleSubmit}>
             <Box
               sx={{
                 marginBottom: 2,
@@ -465,8 +498,25 @@ const EditProfile = () => {
                 helperText={formik.touched.address && formik.errors.address}
               />
             </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                gap: 3,
+                justifyContent: "flex-end",
+                my: 2,
+              }}
+            >
+              <Button variant="contained" color="primary" type="submit">
+                Save Changes
+              </Button>
+            </Box>
           </Box>
-          <Box sx={{ flex: 1 }}>
+          <Box
+            sx={{ flex: 1 }}
+            component="form"
+            onSubmit={formik3.handleSubmit}
+          >
             <Box
               sx={{
                 marginBottom: 2,
@@ -506,7 +556,7 @@ const EditProfile = () => {
                       name="image"
                       type="file"
                       onChange={(event) => {
-                        formik.setFieldValue(
+                        formik3.setFieldValue(
                           "image",
                           event.currentTarget.files[0]
                         );
@@ -515,7 +565,7 @@ const EditProfile = () => {
                         );
                       }}
                       error={
-                        formik.touched.image && Boolean(formik.errors.image)
+                        formik3.touched.image && Boolean(formik3.errors.image)
                       }
                       sx={{ mb: 2, display: "none" }}
                     />
@@ -524,40 +574,13 @@ const EditProfile = () => {
               </Box>
             </Box>
             <Box
-              sx={{
-                marginBottom: 2,
-              }}
+              sx={{ display: "flex", justifyContent: "center", ml: -5, mb: 5 }}
             >
-              <Typography variant="h6" component="h2">
-                Username
-              </Typography>
-              <TextField
-                color="primary"
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Enter your username"
-                fullWidth
-                value={formik.values.username}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.username && Boolean(formik.errors.username)
-                }
-                helperText={formik.touched.username && formik.errors.username}
-              />
+              <Button variant="contained" color="success" type="submit">
+                Change Profile Picture
+              </Button>
             </Box>
           </Box>
-        </Box>
-        <Box
-          sx={{ display: "flex", gap: 3, justifyContent: "flex-end", my: 2 }}
-        >
-          <Button variant="contained" color="error" type="reset">
-            Cancel
-          </Button>
-          <Button variant="contained" color="primary" type="submit">
-            Save Changes
-          </Button>
         </Box>
       </Box>
 
@@ -655,8 +678,7 @@ const EditProfile = () => {
                   onBlur={formik2.handleBlur}
                   onChange={formik2.handleChange}
                   error={
-                    formik2.touched.password &&
-                    Boolean(formik2.errors.password)
+                    formik2.touched.password && Boolean(formik2.errors.password)
                   }
                   helperText={
                     formik2.touched.password && formik2.errors.password
@@ -704,8 +726,7 @@ const EditProfile = () => {
                     Boolean(formik2.errors.password2)
                   }
                   helperText={
-                    formik2.touched.password2 &&
-                    formik2.errors.password2
+                    formik2.touched.password2 && formik2.errors.password2
                   }
                   InputProps={{
                     endAdornment: (
