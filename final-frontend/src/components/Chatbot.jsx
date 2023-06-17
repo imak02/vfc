@@ -74,7 +74,7 @@ const Chatbot = () => {
         <Paper
           sx={{
             maxWidth: 400,
-            position: "absolute",
+            position: "fixed",
             zIndex: "999",
             top: 250,
             right: { xs: 0, md: 10 },

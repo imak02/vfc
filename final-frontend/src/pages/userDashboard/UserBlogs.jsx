@@ -14,7 +14,10 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
+import { useParams } from "react-router-dom";
 import BlogGridCard from "../../components/BlogGridCard";
 
 function createData(name, calories, fat, carbs, protein) {
@@ -75,6 +78,7 @@ const SearchBar = ({ title }) => {
 };
 
 const UserBlogs = () => {
+
   return (
     <Box>
       <Paper sx={{ p: 2, mb: 2 }} elevation={2}>

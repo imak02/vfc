@@ -22,9 +22,14 @@ import {
   Typography,
   styled,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import moment from "moment";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useParams } from "react-router-dom";
 import MobileNavTabs from "../components/MobileNavTabs";
+import { setUser } from "../redux/slices/authSlice";
 
 
 
@@ -39,7 +44,36 @@ const MyNavLink = styled(NavLink)(({ theme }) => ({
 }));
 
 const UserSideBar = () => {
+  const dispatch = useDispatch();
   const params = useParams();
+
+  const getCurrentUser = async () => await axios.get("user-profile/");
+
+  const userResult = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.status === 200) {
+        dispatch(setUser(data.data.payload));
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const user = useSelector((state) => state.auth.user ?? "");
+  console.log(user);
+
+//   var a = moment([2008, 9]);
+// var b = moment([2007, 0]);
+// a.diff(b, 'years');
+
+const age = moment(new Date((user?.profile?.dob))).fromNow(true);
+console.log(age)
+
+
   const userId = params.id;
   const pageList = [
     {
@@ -83,7 +117,7 @@ const UserSideBar = () => {
     <Box>
       <Paper elevation={2}>
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
-          <Link className="links" to="/user/123/edit-profile">
+          <Link className="links" to={`/user/${userId}/edit-profile`}>
             <Typography sx={{ color: "blueviolet", fontWeight: "bold" }}>
               Edit
             </Typography>
@@ -102,15 +136,15 @@ const UserSideBar = () => {
           <Avatar
             sx={{ bgcolor: "blue", width: 80, height: 80 }}
             alt="Profile"
-            src="/profile.jpeg"
+            src={user?.profile?.profilePicture}
           >
             A
           </Avatar>
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-              Shraddha Kapoor
+              {user.first_name+" "+user.last_name}
             </Typography>
-            <Typography color="GrayText">Female, 23 years</Typography>
+            <Typography color="GrayText">{user.gender}, {age}</Typography>
           </Box>
         </Box>
 

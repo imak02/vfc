@@ -132,9 +132,12 @@ export default function Login() {
       sx={{
         backgroundColor: (t) =>
           t.palette.mode === "light"
-            ? t.palette.secondary.main
+            ? t.palette.primary.main
             : t.palette.grey[700],
         minHeight: "100vh",
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
       }}
     >
       <Container>

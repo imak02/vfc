@@ -154,10 +154,14 @@ const Register = () => {
       sx={{
         backgroundColor: (t) =>
           t.palette.mode === "light"
-            ? t.palette.secondary.main
+            ? t.palette.primary.main
             : t.palette.grey[800],
         pt: 4,
         pb: 5,
+        minHeight:"100vh",
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
       }}
     >
       <Grid

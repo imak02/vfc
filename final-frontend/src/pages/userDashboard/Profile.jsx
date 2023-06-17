@@ -74,7 +74,7 @@ const Profile = () => {
           <Box
             sx={{ borderRadius: 2 }}
             component="img"
-            src="https://wallpaperaccess.com/full/1136918.jpg"
+            src={user?.profile?.profilePicture}
             alt="Profile"
             height="100%"
             width="100%"

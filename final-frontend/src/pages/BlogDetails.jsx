@@ -33,12 +33,12 @@ import {
 } from "@mui/icons-material";
 import moment from "moment";
 import CommentBox from "../components/CommentBox";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import BlogGridCard from "../components/BlogGridCard";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { errorToast } from "../redux/slices/toastSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // const blog = {
 //   _id: "1234579",
@@ -58,18 +58,23 @@ import { useDispatch } from "react-redux";
 
 const BlogDetails = () => {
   const [showComments, setShowComments] = useState(false);
+  const localUser = useSelector((state) => state.auth.user ?? "");
 
   const dispatch = useDispatch();
+  const navigate=useNavigate();
 
   const params = useParams();
   const blogId = params.blogId;
 
   const handleBlogDelete = async () => {
-    const response = await axios.delete(`blog-details/${blogId}`);
+    const response = await axios.delete(`blog-details/${blogId}/`);
+    if(response.status===200){
+        navigate("/blog");
+    }
     console.log(response);
   };
-
-  const fetchBlog = async () => await axios.get(`blog-details/${blogId}`);
+  
+  const fetchBlog = async () => await axios.get(`blog-details/${blogId}/`);
 
   const { data, isLoading, isError, error } = useQuery(
     ["fetchblog", blogId],
@@ -94,7 +99,9 @@ const BlogDetails = () => {
     return <span>Error: {error.message}</span>;
   }
   const blog = data.data.payload;
+  const localUserId=localUser?.id;
 
+  const blogUserId=data.data.payload.author.id;
   return (
     <Box>
       <Banner
@@ -147,7 +154,8 @@ const BlogDetails = () => {
                     alignSelf: "flex-end",
                   }}
                 >
-                  <Box sx={{ alignSelf: "flex-end" }}>
+                 { localUserId===blogUserId && <Box sx={{ alignSelf: "flex-end" }}>
+
                     <Link to={`/blog/edit/${blogId}`} className="links">
                       <IconButton color="success">
                         <Edit />
@@ -156,7 +164,7 @@ const BlogDetails = () => {
                     <IconButton color="error" onClick={handleBlogDelete}>
                       <Delete />
                     </IconButton>
-                  </Box>
+                  </Box>}
                   <Typography
                     variant="body1"
                     color="GrayText"

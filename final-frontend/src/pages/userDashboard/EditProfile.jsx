@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Autocomplete,
   Avatar,
@@ -27,7 +27,7 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import countries from "../../data/countries";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   errorToast,
   loadingToast,
@@ -101,7 +101,14 @@ const EditProfile = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
 
+  const queryClient = useQueryClient()
+
   const user = useSelector((state) => state.auth.user ?? "");
+
+  useEffect(()=>{
+    setProfilePic(user?.profile?.profilePicture)
+  },[user]);
+
 
   const dispatch = useDispatch();
   const params = useParams();
@@ -154,6 +161,7 @@ const EditProfile = () => {
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
+          queryClient.invalidateQueries({ queryKey: ['currentUser'] });
         }
       },
       onError: (error) => {
@@ -177,6 +185,8 @@ const EditProfile = () => {
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
+          queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+
         }
       },
       onError: (error) => {
@@ -205,7 +215,17 @@ const EditProfile = () => {
     enableReinitialize: true,
 
     onSubmit: async (values, { resetForm }) => {
-      profileMutate(values, {
+      const profileObj = {
+        dob: values.dob,
+        country: values.country,
+        address: values.address,
+      };
+      const sendData = Object.assign({}, values);
+      delete sendData.dob;
+      delete sendData.country;
+      delete sendData.address;
+      sendData.profile = profileObj;
+      profileMutate(sendData, {
         onSuccess: () => {
           resetForm();
         },
@@ -232,13 +252,13 @@ const EditProfile = () => {
 
   const formik3 = useFormik({
     initialValues: {
-      image: "",
+      profilePicture: "",
     },
     enableReinitialize: true,
 
     onSubmit: async (values, { resetForm }) => {
       const formData = new FormData();
-      formData.set("image", values.image);
+      formData.set("profilePicture", values.profilePicture);
 
       imageMutate(formData, {
         onSuccess: () => {
@@ -534,7 +554,7 @@ const EditProfile = () => {
                 <Badge overlap="circular">
                   <Avatar
                     alt="Profile"
-                    src={profilePic || "/profile.jpeg"}
+                    src={profilePic}
                     sx={{
                       width: 215,
                       height: 215,
@@ -552,12 +572,12 @@ const EditProfile = () => {
 
                     <Input
                       fullWidth
-                      id="image"
-                      name="image"
+                      id="profilePicture"
+                      name="profilePicture"
                       type="file"
                       onChange={(event) => {
                         formik3.setFieldValue(
-                          "image",
+                          "profilePicture",
                           event.currentTarget.files[0]
                         );
                         setProfilePic(
@@ -565,7 +585,7 @@ const EditProfile = () => {
                         );
                       }}
                       error={
-                        formik3.touched.image && Boolean(formik3.errors.image)
+                        formik3.touched.profilePicture && Boolean(formik3.errors.profilePicture)
                       }
                       sx={{ mb: 2, display: "none" }}
                     />

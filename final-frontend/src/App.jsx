@@ -3,6 +3,8 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import { Box } from "@mui/material";
+import { useSelector } from "react-redux";
 
 //pages
 import Home from "./pages/Home";
@@ -15,8 +17,6 @@ import Diet from "./pages/Diet";
 import Blog from "./pages/Blog";
 import Template from "./pages/Template";
 import Example from "./pages/Example";
-import { Box } from "@mui/material";
-import { useSelector } from "react-redux";
 import DietDetails from "./pages/DietDetails";
 import ResetPassword from "./pages/ResetPassword";
 import AddBlog from "./pages/AddBlog";

@@ -9,7 +9,6 @@ import App from "./App";
 import MyThemeProvider from "./MyThemeProvider";
 import "./api/axiosDefaults";
 import "./index.css";
-import Chatbot from "./components/Chatbot";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +19,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <MyThemeProvider>
-            <Chatbot />
             <Toast />
             <App />
           </MyThemeProvider>

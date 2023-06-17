@@ -44,18 +44,18 @@ const validationSchema = Yup.object({
   content: Yup.string("Enter a short descriptive paragraph").required(
     "Content is required"
   ),
-  image: Yup.mixed()
-    .required("Image is required")
-    .test(
-      "fileSize",
-      "File size is limited to 1 Mb",
-      (value) => value && value.size <= FILE_SIZE
-    )
-    .test(
-      "fileFormat",
-      "Unsupported Format",
-      (value) => value && SUPPORTED_FORMATS.includes(value.type)
-    ),
+  // image: Yup.mixed()
+  //   .required("Image is required")
+  //   .test(
+  //     "fileSize",
+  //     "File size is limited to 1 Mb",
+  //     (value) => value && value.size <= FILE_SIZE
+  //   )
+    // .test(
+    //   "fileFormat",
+    //   "Unsupported Format",
+    //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    // ),
   category: Yup.string("Select a category").required(
     "Please select a category"
   ),
@@ -72,7 +72,7 @@ export default function EditBlog() {
   const params = useParams();
   const blogId = params.blogId;
 
-  const fetchBlog = async () => await axios.get(`blog-details/${blogId}`);
+  const fetchBlog = async () => await axios.get(`blog-details/${blogId}/`);
 
   const { data, isLoading, isError, error } = useQuery(
     ["fetchblog", blogId],
@@ -80,7 +80,8 @@ export default function EditBlog() {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          console.log(data.data);
+          setImage(data?.data?.payload?.image);
+          
         }
       },
       onError: (error) => {
@@ -118,7 +119,7 @@ export default function EditBlog() {
   };
 
   const { mutate, isLoading: isSubmitting } = useMutation(
-    (values) => axios.patch(`blog-details/${blogId}`, values),
+    (values) => axios.patch(`blog-details/${blogId}/`, values),
     {
       onMutate: () => {
         dispatch(loadingToast("Posting..."));
@@ -139,7 +140,8 @@ export default function EditBlog() {
         }
       },
     }
-  );
+  );  
+  const blogData = data?.data?.payload;
 
   const formik = useFormik({
     initialValues: {
