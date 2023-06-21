@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Divider,
@@ -18,6 +19,10 @@ import {
   loadingToast,
   successToast,
 } from "../../redux/slices/toastSlice";
+import diseasesOptions from "../../data/diseases";
+import allergiesOptions from "../../data/allergies";
+import injuriesOptions from "../../data/injuries";
+import abnormalitiesOptions from "../../data/abnormalities";
 
 const EditBody = () => {
   const dispatch = useDispatch();
@@ -57,10 +62,10 @@ const EditBody = () => {
       blood_sugar: "",
       body_type: "",
       food_preference: "",
-      diseases: "",
-      allergies: "",
-      injuries: "",
-      abnormalities: "",
+      diseases: [],
+      allergies: [],
+      injuries: [],
+      abnormalities: [],
     },
 
     onSubmit: async (values, { resetForm }) => {
@@ -351,22 +356,28 @@ const EditBody = () => {
               <Typography variant="h6" component="h2">
                 Diseases
               </Typography>
-              <TextField
-                color="primary"
-                id="diseases"
+              <Autocomplete
+                color="focusInput"
                 name="diseases"
-                type="text"
-                multiline
-                rows={4}
-                placeholder="Enter the list of diseases you have suffered"
-                fullWidth
+                multiple
+                options={diseasesOptions}
+                filterSelectedOptions
                 value={formik.values.diseases}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.diseases && Boolean(formik.errors.diseases)
-                }
-                helperText={formik.touched.diseases && formik.errors.diseases}
+                onChange={(e, value) => {
+                  formik.setFieldValue("diseases", value);
+                }}
+                fullWidth
+                sx={{ mb: 2 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="diseases"
+                    id="diseases"
+                    placeholder="Enter any diseases you have..."
+                    color="focusInput"
+                    onBlur={formik.handleBlur}
+                  />
+                )}
               />
             </Box>
 
@@ -381,7 +392,30 @@ const EditBody = () => {
               <Typography variant="h6" component="h2">
                 Allergies
               </Typography>
-              <TextField
+              <Autocomplete
+                color="focusInput"
+                name="allergies"
+                multiple
+                options={allergiesOptions}
+                filterSelectedOptions
+                value={formik.values.allergies}
+                onChange={(e, value) => {
+                  formik.setFieldValue("allergies", value);
+                }}
+                fullWidth
+                sx={{ mb: 2 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="allergies"
+                    id="allergies"
+                    placeholder="Enter any allergies you have..."
+                    color="focusInput"
+                    onBlur={formik.handleBlur}
+                  />
+                )}
+              />
+              {/* <TextField
                 color="primary"
                 id="allergies"
                 name="allergies"
@@ -397,7 +431,7 @@ const EditBody = () => {
                   formik.touched.allergies && Boolean(formik.errors.allergies)
                 }
                 helperText={formik.touched.allergies && formik.errors.allergies}
-              />
+              /> */}
             </Box>
 
             <Box
@@ -411,22 +445,28 @@ const EditBody = () => {
               <Typography variant="h6" component="h2">
                 Injuries
               </Typography>
-              <TextField
-                color="primary"
-                id="injuries"
+              <Autocomplete
+                color="focusInput"
                 name="injuries"
-                type="text"
-                multiline
-                rows={4}
-                placeholder="Enter the list of injuries you have suffered"
-                fullWidth
+                multiple
+                options={injuriesOptions}
+                filterSelectedOptions
                 value={formik.values.injuries}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.injuries && Boolean(formik.errors.injuries)
-                }
-                helperText={formik.touched.injuries && formik.errors.injuries}
+                onChange={(e, value) => {
+                  formik.setFieldValue("injuries", value);
+                }}
+                fullWidth
+                sx={{ mb: 2 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="injuries"
+                    id="injuries"
+                    placeholder="Enter any injuries you have..."
+                    color="focusInput"
+                    onBlur={formik.handleBlur}
+                  />
+                )}
               />
             </Box>
 
@@ -441,25 +481,28 @@ const EditBody = () => {
               <Typography variant="h6" component="h2">
                 Body Abnormalities
               </Typography>
-              <TextField
-                color="primary"
-                id="abnormalities"
+              <Autocomplete
+                color="focusInput"
                 name="abnormalities"
-                type="text"
-                multiline
-                rows={4}
-                placeholder="Enter the list of abnormalities you have"
-                fullWidth
+                multiple
+                options={abnormalitiesOptions}
+                filterSelectedOptions
                 value={formik.values.abnormalities}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.abnormalities &&
-                  Boolean(formik.errors.abnormalities)
-                }
-                helperText={
-                  formik.touched.abnormalities && formik.errors.abnormalities
-                }
+                onChange={(e, value) => {
+                  formik.setFieldValue("abnormalities", value);
+                }}
+                fullWidth
+                sx={{ mb: 2 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="abnormalities"
+                    id="abnormalities"
+                    placeholder="Enter any abnormalities you have..."
+                    color="focusInput"
+                    onBlur={formik.handleBlur}
+                  />
+                )}
               />
             </Box>
           </Box>

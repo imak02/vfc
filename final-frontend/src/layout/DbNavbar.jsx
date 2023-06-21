@@ -17,8 +17,8 @@ const DbNavbar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar sx={{ displa: "flex", justifyContent: "space-between" }}>
+      <AppBar position="fixed">
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box>
             <Link to="/" className="logo__link links">
               <Box
@@ -83,6 +83,7 @@ const DbNavbar = () => {
           </Box>
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </Box>
   );
 };

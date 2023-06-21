@@ -1,6 +1,7 @@
 import { Delete, Edit, Search } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Divider,
   IconButton,
   InputBase,
@@ -17,7 +18,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import BlogGridCard from "../../components/BlogGridCard";
 
 function createData(name, calories, fat, carbs, protein) {
@@ -78,12 +79,18 @@ const SearchBar = ({ title }) => {
 };
 
 const UserBlogs = () => {
-
   return (
     <Box>
       <Paper sx={{ p: 2, mb: 2 }} elevation={2}>
         <SearchBar title="My Blogs" />
-        <Box sx={{ my: 5 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+          <Link to="/create-blog" className="links">
+            <Button variant="contained" color="info" sx={{ px: 4, py: 1 }}>
+              Create a new blog
+            </Button>
+          </Link>
+        </Box>
+        <Box sx={{ my: 2 }}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="blogs table">
               <TableHead>

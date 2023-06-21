@@ -227,6 +227,8 @@ export default function AddBlog() {
                     id="title"
                     name="title"
                     type="text"
+                    multiline
+                    rows={2}
                     placeholder="Title of the blog"
                     fullWidth
                     value={formik.values.title}
@@ -265,7 +267,7 @@ export default function AddBlog() {
                     SelectProps={{
                       displayEmpty: true,
                       renderValue: (value) =>
-                        value ? value.toUpperCase() : "Select a category",
+                        value ? value.toUpperCase() : "Select a Category",
                     }}
                   >
                     {["Diet", "Exercise", "Health"].map((categoryOption) => (
@@ -289,6 +291,8 @@ export default function AddBlog() {
                     name="description"
                     color="focusInput"
                     autoComplete="off"
+                    multiline
+                    rows={4}
                     placeholder="Short description of the blog"
                     value={formik.values.description}
                     onBlur={formik.handleBlur}

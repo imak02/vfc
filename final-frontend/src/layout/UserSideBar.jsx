@@ -31,8 +31,6 @@ import { Link, NavLink, useParams } from "react-router-dom";
 import MobileNavTabs from "../components/MobileNavTabs";
 import { setUser } from "../redux/slices/authSlice";
 
-
-
 const MyNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: "none",
   width: "100%",
@@ -66,13 +64,12 @@ const UserSideBar = () => {
   const user = useSelector((state) => state.auth.user ?? "");
   console.log(user);
 
-//   var a = moment([2008, 9]);
-// var b = moment([2007, 0]);
-// a.diff(b, 'years');
+  //   var a = moment([2008, 9]);
+  // var b = moment([2007, 0]);
+  // a.diff(b, 'years');
 
-const age = moment(new Date((user?.profile?.dob))).fromNow(true);
-console.log(age)
-
+  const age = moment(new Date(user?.profile?.dob)).fromNow(true);
+  console.log(age);
 
   const userId = params.id;
   const pageList = [
@@ -142,9 +139,11 @@ console.log(age)
           </Avatar>
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-              {user.first_name+" "+user.last_name}
+              {user.first_name + " " + user.last_name}
             </Typography>
-            <Typography color="GrayText">{user.gender}, {age}</Typography>
+            <Typography color="GrayText">
+              {user.gender}, {age}
+            </Typography>
           </Box>
         </Box>
 
