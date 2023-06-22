@@ -20,7 +20,7 @@ const DbBannerCard = ({ title, subtitle, value }) => {
       >
         <Box sx={{ position: "relative" }}>
           <Box sx={{ position: "absolute", right: 40, top: 80 }}>
-            <MyCircularProgress value={value} myColor="skyblue" />
+            <MyCircularProgress value={value} mycolor="skyblue" />
           </Box>
         </Box>
 

@@ -12,22 +12,17 @@ import {
 } from "@mui/material";
 import React from "react";
 
-const PeopleCard = () => {
+const PeopleCard = ({ name, role, image }) => {
   return (
     <Card sx={{ width: 300 }}>
       <CardContent>
-        <CardMedia
-          component="img"
-          height={200}
-          image="https://images.pexels.com/photos/8852029/pexels-photo-8852029.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          alt="blog"
-        />
+        <CardMedia component="img" height={200} image={image} alt="blog" />
         <Typography
           variant="h5"
           component="h3"
           sx={{ fontWeight: "bold", textAlign: "center", my: 2 }}
         >
-          Manita Kunwor
+          {name}
         </Typography>
 
         <Box
@@ -44,7 +39,7 @@ const PeopleCard = () => {
             color="GrayText"
             sx={{ textAlign: "center" }}
           >
-            Dietician
+            {role}
           </Typography>
           <Box sx={{ display: "flex", gap: 2 }}>
             <Tooltip title="Like">

@@ -1,26 +1,30 @@
 import React from "react";
 import LinearProgressCard from "../../components/LinearProgressCard";
 import { Box, Paper, Typography } from "@mui/material";
-import { Egg, LocalDrink, LocalFireDepartment } from "@mui/icons-material";
+import {
+  DirectionsRun,
+  FitnessCenter,
+  LocalFireDepartment,
+} from "@mui/icons-material";
 import DietBarChart from "../../components/DietBarChart";
 import SearchBar from "../../components/SearchBar";
 import PeopleCard from "../../components/PeopleCard";
 import DbBannerCard from "../../components/DbBannerCard";
 import MyAccordion from "../../components/MyAccordion";
-import DietList from "../../components/DietList";
+import ExerciseList from "../../components/ExerciseList";
 
-const dietsType = [
-  { id: 1, title: "Breakfast" },
-  { id: 2, title: "Brunch" },
-  { id: 3, title: "Lunch" },
-  { id: 4, title: "Supper" },
-  { id: 5, title: "Dinner" },
+const exercisesType = [
+  { id: 1, title: "Biceps" },
+  { id: 2, title: "Back" },
+  { id: 3, title: "Legs" },
+  { id: 4, title: "Chest" },
+  { id: 5, title: "Cardio" },
 ];
 
-const UserDietDetails = () => {
+const UserExerciseDetails = () => {
   return (
     <Box>
-      <DbBannerCard title="Diet" subtitle="3214 calories" value={80} />
+      <DbBannerCard title="Exercise" subtitle="1 hr 12 minutes" value={80} />
       <Box
         sx={{
           display: "flex",
@@ -48,15 +52,15 @@ const UserDietDetails = () => {
           }}
         >
           <LinearProgressCard
-            name="Water Intake"
+            name="Running"
             progress="5.1"
             target="8"
-            unit="ltr"
-            icon={<LocalDrink fontSize="large" />}
+            unit="km"
+            icon={<DirectionsRun fontSize="large" />}
             color="skyblue"
           />
           <LinearProgressCard
-            name="Calorie Intake"
+            name="Calorie Burnt"
             progress="1000"
             target="5000"
             unit="kcal"
@@ -64,24 +68,24 @@ const UserDietDetails = () => {
             color="orange"
           />
           <LinearProgressCard
-            name="Protein Intake"
-            progress="50"
-            target="80"
-            unit="gm"
-            icon={<Egg fontSize="large" />}
+            name="Exercise"
+            progress="5"
+            target="8"
+            unit="hrs"
+            icon={<FitnessCenter fontSize="large" />}
             color="blueviolet"
           />
         </Box>
       </Box>
       <Box sx={{ my: 5 }}>
         <MyAccordion
-          title="My Diet"
-          headers={dietsType}
-          content={<DietList />}
+          title="My Workout"
+          headers={exercisesType}
+          content={<ExerciseList />}
         />
       </Box>
       <Paper sx={{ p: 2, my: 5 }} elevation={2}>
-        <SearchBar title="Popular Nutritionists" />
+        <SearchBar title="Popular Trainers" />
         <Box
           sx={{
             my: 5,
@@ -93,23 +97,23 @@ const UserDietDetails = () => {
           }}
         >
           <PeopleCard
-            name="Aayush Regmi"
-            role="Dietician"
+            name="Rohil Maharjan"
+            role="Cardio Specialist"
             image="https://images.pexels.com/photos/8852029/pexels-photo-8852029.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
           <PeopleCard
-            name="Aayush Regmi"
-            role="Dietician"
+            name="Rohil Maharjan"
+            role="Cardio Specialist"
             image="https://images.pexels.com/photos/8852029/pexels-photo-8852029.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
           <PeopleCard
-            name="Aayush Regmi"
-            role="Dietician"
+            name="Rohil Maharjan"
+            role="Cardio Specialist"
             image="https://images.pexels.com/photos/8852029/pexels-photo-8852029.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
           <PeopleCard
-            name="Aayush Regmi"
-            role="Dietician"
+            name="Rohil Maharjan"
+            role="Cardio Specialist"
             image="https://images.pexels.com/photos/8852029/pexels-photo-8852029.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
         </Box>
@@ -118,4 +122,4 @@ const UserDietDetails = () => {
   );
 };
 
-export default UserDietDetails;
+export default UserExerciseDetails;

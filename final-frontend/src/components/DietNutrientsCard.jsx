@@ -25,7 +25,7 @@ const DietNutrientsCard = () => {
           gap: 2,
         }}
       >
-        <MyCircularProgress value={75} myColor="blueviolet" />
+        <MyCircularProgress value={75} mycolor="blueviolet" />
 
         <Grid container spacing={3} sx={{ ml: { xs: 1, md: 2 } }}>
           {nutrients.map((nutrient) => (

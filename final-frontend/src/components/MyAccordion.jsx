@@ -14,29 +14,21 @@ import {
 } from "@mui/material";
 import DietList from "./DietList";
 
-const dietsType = [
-  { id: 1, title: "Breakfast" },
-  { id: 2, title: "Brunch" },
-  { id: 3, title: "Lunch" },
-  { id: 4, title: "Supper" },
-  { id: 5, title: "Dinner" },
-];
-
-const DietAccordion = () => {
+const MyAccordion = ({ title, headers, content }) => {
   return (
     <Box>
       <Typography variant="h5" component="h3" fontWeight="bold" sx={{ my: 2 }}>
-        Diet List
+        {title}
       </Typography>
-      {dietsType.map((dietType) => (
-        <Accordion key={dietType.id} sx={{ mb: 2 }}>
+      {headers?.map((header) => (
+        <Accordion key={header.id} sx={{ mb: 2 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon fontSize="large" />}
-            aria-controls={`${dietType.title}-content`}
-            id={`${dietType.title}-header`}
+            aria-controls={`${header.title}-content`}
+            id={`${header.title}-header`}
           >
             <Typography variant="h6" sx={{ p: 1 }}>
-              {dietType.title}
+              {header.title}
             </Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ mx: { md: 4 } }}>
@@ -64,7 +56,7 @@ const DietAccordion = () => {
                       // onChange={handleChange}
                     />
                   }
-                  label={<DietList />}
+                  label={content}
                 />
                 <FormControlLabel
                   sx={{
@@ -84,7 +76,7 @@ const DietAccordion = () => {
                       // onChange={handleChange}
                     />
                   }
-                  label={<DietList />}
+                  label={content}
                 />
                 <FormControlLabel
                   sx={{
@@ -104,7 +96,7 @@ const DietAccordion = () => {
                       // onChange={handleChange}
                     />
                   }
-                  label={<DietList />}
+                  label={content}
                 />
               </FormGroup>
               <FormHelperText>Be careful</FormHelperText>
@@ -116,4 +108,4 @@ const DietAccordion = () => {
   );
 };
 
-export default DietAccordion;
+export default MyAccordion;

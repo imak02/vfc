@@ -18,7 +18,7 @@ const DbCard = ({ title, subtitle, value, width, height }) => {
       >
         <Box sx={{ position: "relative" }}>
           <Box sx={{ position: "absolute", right: 20, top: 30 }}>
-            <MyCircularProgress value={value} myColor="white" />
+            <MyCircularProgress value={value} mycolor="white" />
           </Box>
         </Box>
 

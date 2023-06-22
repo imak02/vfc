@@ -22,7 +22,7 @@ const MyCircularProgress = (props) => (
         variant="determinate"
         sx={{
           color: (theme) =>
-            theme.palette.mode === "light" ? props.myColor : "white",
+            theme.palette.mode === "light" ? props.mycolor : "white",
           animationDuration: "550ms",
           position: "absolute",
           left: 0,
@@ -46,7 +46,7 @@ const MyCircularProgress = (props) => (
           transform: "translate(-50%,-50%)",
           fontWeight: "bold",
           color: (theme) =>
-            theme.palette.mode === "light" ? props.myColor : "white",
+            theme.palette.mode === "light" ? props.mycolor : "white",
         }}
       >
         {props.value}%

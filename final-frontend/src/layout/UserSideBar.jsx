@@ -69,7 +69,6 @@ const UserSideBar = () => {
   // a.diff(b, 'years');
 
   const age = moment(new Date(user?.profile?.dob)).fromNow(true);
-  console.log(age);
 
   const userId = params.id;
   const pageList = [

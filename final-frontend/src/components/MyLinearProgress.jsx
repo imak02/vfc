@@ -5,7 +5,7 @@ import LinearProgress, {
 import { Box, Typography, styled } from "@mui/material";
 
 const BorderLinearProgress = styled(LinearProgress)(
-  ({ theme, height, bgColor }) => ({
+  ({ theme, height, mycolor }) => ({
     height: height,
     borderRadius: 15,
     [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -14,20 +14,19 @@ const BorderLinearProgress = styled(LinearProgress)(
     },
     [`& .${linearProgressClasses.bar}`]: {
       borderRadius: 15,
-      backgroundColor: theme.palette.mode === "light" ? bgColor : "#fff",
+      backgroundColor: theme.palette.mode === "light" ? mycolor : "#fff",
     },
   })
 );
 
 const MyLinearProgress = ({ value, height, color, showValue }) => {
-  console.log(color);
   return (
     <Box>
       <BorderLinearProgress
         variant="determinate"
         value={value}
         height={height}
-        bgColor={color}
+        mycolor={color}
       />
       {showValue && (
         <Box
