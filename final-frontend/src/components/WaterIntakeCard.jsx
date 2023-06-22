@@ -72,7 +72,12 @@ const WaterIntakeCard = () => {
       </Box>
       <Box sx={{ p: 2, position: "relative" }}>
         <Box sx={{ display: "block" }}>
-          <MyLinearProgress value={75} />
+          <MyLinearProgress
+            value={75}
+            height={30}
+            color="skyblue"
+            showValue={true}
+          />
         </Box>
       </Box>
     </Paper>

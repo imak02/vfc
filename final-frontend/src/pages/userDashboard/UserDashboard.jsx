@@ -86,9 +86,19 @@ const UserDashboard = () => {
           alignItems: "center",
         }}
       >
-        <DbCard title="Exercise" subtitle="1 hr 52 minutes" value={55} />
-        <DbCard title="Diet" subtitle="3214 calories" value={85} />
-        <DbCard title="Sleep" subtitle="5 hr 52 minutes" value={95} />
+        <DbCard
+          title="Exercise"
+          subtitle="1 hr 52 minutes"
+          value={55}
+          width={450}
+        />
+        <DbCard title="Diet" subtitle="3214 calories" value={85} width={450} />
+        <DbCard
+          title="Sleep"
+          subtitle="5 hr 52 minutes"
+          value={95}
+          width={450}
+        />
       </Box>
       <Card sx={{ p: 2 }}>
         <Typography variant="h5" component="h3" sx={{ fontWeight: "bold" }}>

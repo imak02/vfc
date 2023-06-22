@@ -31,6 +31,7 @@ import UserBlogs from "./pages/userDashboard/UserBlogs";
 import UserDiet from "./pages/userDashboard/UserDiet";
 import UserExercises from "./pages/userDashboard/UserExercises";
 import EditBody from "./pages/userDashboard/EditBody";
+import UserDietDetails from "./pages/userDashboard/UserDietDetails";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -149,6 +150,10 @@ const router = createBrowserRouter([
       {
         path: "/user/:id/diet",
         element: <UserDiet />,
+      },
+      {
+        path: "/user/:id/diet-details",
+        element: <UserDietDetails />,
       },
       {
         path: "/user/:id/exercises",

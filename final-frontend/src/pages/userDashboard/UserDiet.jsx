@@ -7,6 +7,7 @@ import DietNutrientsCard from "../../components/DietNutrientsCard";
 import MyCircularProgress from "../../components/MyCircularProgress";
 import WaterIntakeCard from "../../components/WaterIntakeCard";
 import { CalendarMonth } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const UserDiet = () => {
   return (
@@ -35,11 +36,20 @@ const UserDiet = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", lg: "row" },
           gap: 2,
+          justifyContent: "space-around",
         }}
       >
-        <DbCard title="Diet" subtitle="3214 calories" value={55} />
+        <Link to="/user/13/diet-details">
+          <DbCard
+            title="Diet"
+            subtitle="3214 calories"
+            value={55}
+            width={550}
+            height={340}
+          />
+        </Link>
         <DietNutrientsCard />
       </Box>
       <Box sx={{ my: 5 }}>

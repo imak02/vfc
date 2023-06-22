@@ -4,43 +4,53 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import { Box, Typography, styled } from "@mui/material";
 
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 30,
-  borderRadius: 15,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor:
-      theme.palette.grey[theme.palette.mode === "light" ? 200 : 400],
-  },
-  [`& .${linearProgressClasses.bar}`]: {
+const BorderLinearProgress = styled(LinearProgress)(
+  ({ theme, height, bgColor }) => ({
+    height: height,
     borderRadius: 15,
-    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#fff",
-  },
-}));
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor:
+        theme.palette.grey[theme.palette.mode === "light" ? 200 : 400],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 15,
+      backgroundColor: theme.palette.mode === "light" ? bgColor : "#fff",
+    },
+  })
+);
 
-const MyLinearProgress = ({ value }) => {
+const MyLinearProgress = ({ value, height, color, showValue }) => {
+  console.log(color);
   return (
     <Box>
-      <BorderLinearProgress variant="determinate" value={value} />
-      <Box
-        sx={{
-          display: "flex",
-          gap: 1,
-          position: "absolute",
-          left: "50%",
-          top: 15,
-          transform: "translate(-50%,0%)",
-        }}
-      >
-        <Typography
-          variant="h6"
+      <BorderLinearProgress
+        variant="determinate"
+        value={value}
+        height={height}
+        bgColor={color}
+      />
+      {showValue && (
+        <Box
           sx={{
-            fontWeight: "bold",
-            color: "black",
+            display: "flex",
+            gap: 1,
+            position: "absolute",
+            left: "50%",
+            top: 15,
+            transform: "translate(-50%,0%)",
           }}
         >
-          {value}% completed
-        </Typography>
-      </Box>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: "bold",
+              color: "black",
+            }}
+          >
+            {value}% completed
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

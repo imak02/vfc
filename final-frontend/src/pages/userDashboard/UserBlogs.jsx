@@ -20,6 +20,7 @@ import axios from "axios";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import BlogGridCard from "../../components/BlogGridCard";
+import SearchBar from "../../components/SearchBar";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -32,51 +33,6 @@ const rows = [
   createData("Cupcake", 305, 3.7, 67, 4.3),
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
-
-const SearchBar = ({ title }) => {
-  return (
-    <Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h2"
-          sx={{ fontWeight: "bold", flex: 5 }}
-        >
-          {title}
-        </Typography>
-        <Box sx={{ flex: 1, display: { xs: "none", lg: "flex" } }}>
-          <Paper
-            component="form"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              height: "50px",
-              width: "100%",
-              mx: 2,
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search Blogs"
-              inputProps={{ "aria-label": "search blogs" }}
-            />
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <Search />
-            </IconButton>
-          </Paper>
-        </Box>
-      </Box>
-      <Divider sx={{ borderColor: "black", borderBottomWidth: 2 }} />
-    </Box>
-  );
-};
 
 const UserBlogs = () => {
   return (

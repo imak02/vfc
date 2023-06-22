@@ -28,7 +28,7 @@ const UserProfileLayout = () => {
         container
         spacing={3}
         justifyContent="center"
-        sx={{ padding: { xs: 1, lg: 3 } }}
+        sx={{ padding: { xs: 1, lg: 3 }, bgcolor: "lightgray" }}
       >
         <Grid item xs={12} sm={9} md={4} lg={3} xl={2.5}>
           <UserSideBar />
