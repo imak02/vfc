@@ -33,6 +33,7 @@ import UserExercises from "./pages/userDashboard/UserExercises";
 import EditBody from "./pages/userDashboard/EditBody";
 import UserDietDetails from "./pages/userDashboard/UserDietDetails";
 import UserExerciseDetails from "./pages/userDashboard/UserExerciseDetails";
+import ExerciseVideo from "./pages/userDashboard/ExerciseVideo";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -163,6 +164,10 @@ const router = createBrowserRouter([
       {
         path: "/user/:id/exercise-details",
         element: <UserExerciseDetails />,
+      },
+      {
+        path: "/user/:id/exercise-video",
+        element: <ExerciseVideo />,
       },
     ],
   },

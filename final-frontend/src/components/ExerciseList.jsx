@@ -24,7 +24,7 @@ const ExerciseList = () => {
         </Typography>
       </Box>
       <Box sx={{ textAlign: "center" }}>
-        <Link to="/" className="links">
+        <Link to="/user/123/exercise-video" className="links">
           <IconButton size="large" color="info">
             <PlayCircle fontSize="large" />
           </IconButton>
