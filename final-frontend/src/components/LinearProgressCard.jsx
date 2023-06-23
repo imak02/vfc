@@ -14,13 +14,29 @@ const LinearProgressCard = ({ name, progress, target, unit, icon, color }) => {
           mb: 1,
         }}
       >
-        <Avatar sx={{ bgcolor: color, height: 56, width: 56 }}>{icon}</Avatar>
+        <Avatar
+          sx={{
+            bgcolor: (theme) =>
+              theme.palette.mode === "light" ? color : "white",
+            height: 56,
+            width: 56,
+          }}
+        >
+          {icon}
+        </Avatar>
         <Box>
           <Typography variant="h6" color="GrayText">
             {name}
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="h6" color={color} fontWeight="bold">
+            <Typography
+              variant="h6"
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === "light" ? color : "white",
+              }}
+              fontWeight="bold"
+            >
               {progress}
             </Typography>
             <Typography variant="body1">/{target}</Typography>
