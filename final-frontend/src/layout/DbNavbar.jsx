@@ -17,9 +17,18 @@ const DbNavbar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" sx={{ zIndex: 999 }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { md: "none" } }}
+            >
+              {mobileOpen ? <Close /> : <Menu />}
+            </IconButton>
             <Link to="/" className="logo__link links">
               <Box
                 sx={{

@@ -104,7 +104,7 @@ const UserDashboard = () => {
         <Typography variant="h5" component="h3" sx={{ fontWeight: "bold" }}>
           Statistics
         </Typography>
-        <Box sx={{ width: "100%", height: 500 }}>
+        <Box sx={{ width: "100%", height: 500, maxWidth: "100vw" }}>
           <ResponsiveContainer>
             <ComposedChart
               width={500}

@@ -123,7 +123,7 @@ const UserBlogs = () => {
                       </Tooltip>
                     </Box>
                   </TableCell>
-                </TableRow>{" "}
+                </TableRow>
                 <TableRow>
                   <TableCell component="td" scope="row">
                     <Box
@@ -156,7 +156,7 @@ const UserBlogs = () => {
                       </Tooltip>
                     </Box>
                   </TableCell>
-                </TableRow>{" "}
+                </TableRow>
                 <TableRow>
                   <TableCell component="td" scope="row">
                     <Box
