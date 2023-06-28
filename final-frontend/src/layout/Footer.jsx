@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { Fab, Grid, List, Paper } from "@mui/material";
+import { Avatar, Fab, Grid, List, Paper } from "@mui/material";
 import {
   CorporateFare,
   Engineering,
@@ -29,22 +29,22 @@ export default function Footer() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        mt: 50,
+        // mt: 50,
       }}
     >
       <Paper
         elevation={2}
         component="footer"
         sx={{
-          pt: "500px",
+          // pt: "500px",
           backgroundColor: (theme) =>
             theme.palette.mode === "light"
               ? theme.palette.primary.main
               : "background.default",
-          clipPath: {
-            xs: "polygon(0% 40%, 100% 30%, 100% 100%, 0% 100%)",
-            md: "polygon(0% 60%, 100% 30%, 100% 100%, 0% 100%)",
-          },
+          // clipPath: {
+          //   xs: "polygon(0% 40%, 100% 30%, 100% 100%, 0% 100%)",
+          //   md: "polygon(0% 60%, 100% 30%, 100% 100%, 0% 100%)",
+          // },
         }}
       >
         <Grid
@@ -69,7 +69,7 @@ export default function Footer() {
                     variant="h4"
                     sx={{
                       fontWeight: "bold",
-                      "&:hover": { color: "orangered" },
+                      "&:hover": { color: "blueviolet" },
                     }}
                   >
                     Virtual Fitness Coach
@@ -84,24 +84,44 @@ export default function Footer() {
               </Typography>
               <Box display="flex" gap={1}>
                 <Link to="https://www.facebook.com">
-                  <Fab size="small" color="secondary" aria-label="facebook">
+                  <Avatar
+                    sx={{
+                      bgcolor: (theme) =>
+                        theme.palette.mode === "light" ? "black" : "white",
+                    }}
+                  >
                     <Facebook />
-                  </Fab>
+                  </Avatar>
                 </Link>
                 <Link to="https://www.twitter.com">
-                  <Fab size="small" color="secondary" aria-label="twitter">
+                  <Avatar
+                    sx={{
+                      bgcolor: (theme) =>
+                        theme.palette.mode === "light" ? "black" : "white",
+                    }}
+                  >
                     <Twitter />
-                  </Fab>
+                  </Avatar>
                 </Link>
                 <Link to="https://www.instagram.com">
-                  <Fab size="small" color="secondary" aria-label="instagram">
+                  <Avatar
+                    sx={{
+                      bgcolor: (theme) =>
+                        theme.palette.mode === "light" ? "black" : "white",
+                    }}
+                  >
                     <Instagram />
-                  </Fab>
+                  </Avatar>
                 </Link>
                 <Link to="https://www.youtube.com">
-                  <Fab size="small" color="secondary" aria-label="youtube">
+                  <Avatar
+                    sx={{
+                      bgcolor: (theme) =>
+                        theme.palette.mode === "light" ? "black" : "white",
+                    }}
+                  >
                     <YouTube />
-                  </Fab>
+                  </Avatar>
                 </Link>
               </Box>
             </Box>

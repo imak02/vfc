@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 const SingleListItem = ({ icon, primaryText, secondaryText, to }) => {
   return (
     <Link className="links" to={to}>
-      <ListItem sx={{ color: "inherit", "&:hover": { color: "orangered" } }}>
+      <ListItem sx={{ color: "inherit", "&:hover": { color: "blueviolet" } }}>
         <ListItemIcon
-          sx={{ color: "inherit", "&:hover": { color: "orangered" } }}
+          sx={{ color: "inherit", "&:hover": { color: "blueviolet" } }}
         >
           {icon}
         </ListItemIcon>

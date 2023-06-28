@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 
 const About = () => {
   return (
-    <Box sx={{ my: 5 }}>
+    <Box sx={{ minHeight: "100vh" }}>
       <Carousel />
     </Box>
   );

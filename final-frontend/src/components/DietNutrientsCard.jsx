@@ -16,12 +16,13 @@ const nutrients = [
 
 const DietNutrientsCard = () => {
   return (
-    <Paper sx={{ p: 2, maxWidth: 600 }} elevation={2}>
+    <Paper sx={{ p: 2 }} elevation={2}>
       <Box
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
+          justifyContent: "space-between",
           gap: 2,
         }}
       >

@@ -14,6 +14,7 @@ import {
   IconButton,
   InputBase,
   Paper,
+  Skeleton,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -39,6 +40,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { errorToast } from "../redux/slices/toastSlice";
 import { useDispatch, useSelector } from "react-redux";
+import ErrorAlert from "../components/ErrorAlert";
 
 // const blog = {
 //   _id: "1234579",
@@ -48,7 +50,7 @@ import { useDispatch, useSelector } from "react-redux";
 //     username: "johnny",
 //   },
 //   createdAt: "2023-03-27T03:23:30.787+00:00",
-//   image: "bg.jpg",
+//   image: "/bg.jpg",
 //   title: "Best positional representation for doing setup ",
 //   content:
 //     "<p><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>Captain America debuted 82 years ago this month, in 1941’s “Captain America Comics” no. 1, the brainchild of Joe Simon and Jack Kirby. The sons of Jewish immigrants, born Hymie Simon and Jacob Kurtzberg, in 1939&nbsp;</em></strong><a href='https://urldefense.com/v3/__https:/www.tcj.com/the-joe-simon-interview__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN3hIWSPJ$' rel='noopener noreferrer' target='_blank' style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><strong><em>they became the first staffers</em></strong></a><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>&nbsp;of nascent publisher Timely Comics—later Marvel—Simon the editor and writer at age 26 and Kirby the artist and art director at age 22. Their Captain America was&nbsp;</em></strong><a href='https://urldefense.com/v3/__https:/kirbymuseum.org/blogs/effect/2012/08/06/19867-kirby-interview__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN-3rhJPX$' rel='noopener noreferrer' target='_blank' style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><strong><em>an instant hit</em></strong></a><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>, selling almost a million copies a month.</em></strong></p><p><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>This embodiment of America had a square jaw, blond hair and blue eyes, but he didn’t hail from a Mayflower family or the Midwest heartland. He came from the ethnic slums of the&nbsp;</em></strong><a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=xLD7Bw-h7dk__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN-La02Uc$' rel='noopener noreferrer' target='_blank' style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><strong><em>Lower East Side</em></strong></a><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>, born to poor Irish immigrants.</em></strong></p><p><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>Kirby grew up in the Jewish tenements of the neighborhood, and like&nbsp;</em></strong><a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=GsdGs6xOdWg__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN0IvCbB0$' rel='noopener noreferrer' target='_blank' style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><strong><em>Steve Rogers</em></strong></a><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>&nbsp;was a short and scrawny kid who got constantly picked on by bullies. Like&nbsp;</em></strong><a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=IZnVoPw-fHw__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN7AHrrW_$' rel='noopener noreferrer' target='_blank' style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><strong><em>Rogers</em></strong></a><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>, he always stood his ground, getting into scrapes, often at the defense of his blond younger brother, Dave. And, like&nbsp;</em></strong><a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=PQRHZmgmKuA__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCNxSHngW9$' rel='noopener noreferrer' target='_blank' style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><strong><em>Rogers</em></strong></a><strong style='color: rgb(230, 0, 0); background-color: rgb(178, 178, 0);'><em>, he developed a lifelong intolerance of bullies of any kind, his son Neal says.</em></strong></p><p>Captain America debuted 82 years ago this month, in 1941’s “Captain America Comics” no. 1, the brainchild of Joe Simon and Jack Kirby. The sons of Jewish immigrants, born Hymie Simon and Jacob Kurtzberg, in 1939&nbsp;<a href='https://urldefense.com/v3/__https:/www.tcj.com/the-joe-simon-interview__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN3hIWSPJ$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>they became the first staffers</a>&nbsp;of nascent publisher Timely Comics—later Marvel—Simon the editor and writer at age 26 and Kirby the artist and art director at age 22. Their Captain America was&nbsp;<a href='https://urldefense.com/v3/__https:/kirbymuseum.org/blogs/effect/2012/08/06/19867-kirby-interview__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN-3rhJPX$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>an instant hit</a>, selling almost a million copies a month.</p><p>This embodiment of America had a square jaw, blond hair and blue eyes, but he didn’t hail from a Mayflower family or the Midwest heartland. He came from the ethnic slums of the&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=xLD7Bw-h7dk__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN-La02Uc$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Lower East Side</a>, born to poor Irish immigrants.</p><p>Kirby grew up in the Jewish tenements of the neighborhood, and like&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=GsdGs6xOdWg__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN0IvCbB0$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Steve Rogers</a>&nbsp;was a short and scrawny kid who got constantly picked on by bullies. Like&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=IZnVoPw-fHw__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN7AHrrW_$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Rogers</a>, he always stood his ground, getting into scrapes, often at the defense of his blond younger brother, Dave. And, like&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=PQRHZmgmKuA__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCNxSHngW9$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Rogers</a>, he developed a lifelong intolerance of bullies of any kind, his son Neal says.Captain America debuted 82 years ago this month, in 1941’s “Captain America Comics” no. 1, the brainchild of Joe Simon and Jack Kirby. The sons of Jewish immigrants, born Hymie Simon and Jacob Kurtzberg, in 1939&nbsp;<a href='https://urldefense.com/v3/__https:/www.tcj.com/the-joe-simon-interview__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN3hIWSPJ$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>they became the first staffers</a>&nbsp;of nascent publisher Timely Comics—later Marvel—Simon the editor and writer at age 26 and Kirby the artist and art director at age 22. Their Captain America was&nbsp;<a href='https://urldefense.com/v3/__https:/kirbymuseum.org/blogs/effect/2012/08/06/19867-kirby-interview__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN-3rhJPX$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>an instant hit</a>, selling almost a million copies a month.</p><p>This embodiment of America had a square jaw, blond hair and blue eyes, but he didn’t hail from a Mayflower family or the Midwest heartland. He came from the ethnic slums of the&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=xLD7Bw-h7dk__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN-La02Uc$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Lower East Side</a>, born to poor Irish immigrants.</p><p>Kirby grew up in the Jewish tenements of the neighborhood, and like&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=GsdGs6xOdWg__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN0IvCbB0$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Steve Rogers</a>&nbsp;was a short and scrawny kid who got constantly picked on by bullies. Like&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=IZnVoPw-fHw__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCN7AHrrW_$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Rogers</a>, he always stood his ground, getting into scrapes, often at the defense of his blond younger brother, Dave. And, like&nbsp;<a href='https://urldefense.com/v3/__https:/www.youtube.com/watch?v=PQRHZmgmKuA__;!!AQdq3sQhfUj4q8uUguY!nLmnYTH-sTMU5Uxsoa3VEcJUg92eW3Dnd7mePnpgyca4kkJQl1d3p6OdJ9kHhVlLrU6KzzQz56SRgJsCNxSHngW9$' rel='noopener noreferrer' target='_blank' style='color: var(--theme-paragraph__link-color);'>Rogers</a>, he developed a lifelong intolerance of bullies of any kind, his son Neal says.</p>",
@@ -61,19 +63,19 @@ const BlogDetails = () => {
   const localUser = useSelector((state) => state.auth.user ?? "");
 
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const params = useParams();
   const blogId = params.blogId;
 
   const handleBlogDelete = async () => {
     const response = await axios.delete(`blog-details/${blogId}/`);
-    if(response.status===200){
-        navigate("/blog");
+    if (response.status === 200) {
+      navigate("/blog");
     }
     console.log(response);
   };
-  
+
   const fetchBlog = async () => await axios.get(`blog-details/${blogId}/`);
 
   const { data, isLoading, isError, error } = useQuery(
@@ -91,17 +93,10 @@ const BlogDetails = () => {
     }
   );
 
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
+  const blog = data?.data?.payload;
+  const localUserId = localUser?.id;
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
-  const blog = data.data.payload;
-  const localUserId=localUser?.id;
-
-  const blogUserId=data.data.payload.author.id;
+  const blogUserId = data?.data?.payload?.author?.id;
   return (
     <Box>
       <Banner
@@ -116,180 +111,254 @@ const BlogDetails = () => {
         focusText="VFC Blogs"
       />
 
-      <Box sx={{}}>
-        <Container sx={{ mt: 10, position: "relative" }} maxWidth="xl">
-          <Box
-            sx={{
-              position: "absolute",
-              left: -20,
-              height: 100,
-              display: { xs: "none", xl: "flex" },
-              alignItems: "center",
-            }}
-          >
-            <Link to="/blogs" className="links">
-              {" "}
-              <ArrowBackIos sx={{ fontSize: 50 }} />
-            </Link>
-          </Box>
-          <Paper sx={{ p: 2 }} elevation={2}>
-            <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: { xs: "column", md: "row" },
-                  py: 2,
-                }}
-              >
-                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                  {blog.title}
-                </Typography>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignSelf: "flex-end",
-                  }}
-                >
-                 { localUserId===blogUserId && <Box sx={{ alignSelf: "flex-end" }}>
-
-                    <Link to={`/blog/edit/${blogId}`} className="links">
-                      <IconButton color="success">
-                        <Edit />
-                      </IconButton>
-                    </Link>
-                    <IconButton color="error" onClick={handleBlogDelete}>
-                      <Delete />
-                    </IconButton>
-                  </Box>}
-                  <Typography
-                    variant="body1"
-                    color="GrayText"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      width: { xs: "100%", md: 200 },
-                      py: 1,
-                    }}
-                  >
-                    <AccessTime
-                      sx={{ alignSelf: "center" }}
-                      fontSize="inherit"
-                    />{" "}
-                    {moment(blog?.created_at).fromNow()}
-                  </Typography>
-                </Box>
-              </Box>
-              <Divider sx={{ borderColor: "black" }} />
-
-              <Box
-                component="img"
-                sx={{
-                  height: { xs: 300, md: 600 },
-                  my: 4,
-                  width: "100%",
-                  objectFit: "cover",
-                }}
-                src={blog.image}
-                alt="blog"
-              />
-
-              <Typography
-                variant="body1"
-                component="p"
-                sx={{ borderLeft: "2px solid gray", pl: 2, ml: 2, mb: 2 }}
-              >
-                {blog.description}
-              </Typography>
-              <Typography
-                component="p"
-                variant="body1"
-                dangerouslySetInnerHTML={{ __html: blog.content }}
-              />
-
-              <Box
-                display="flex"
-                flexDirection={{ xs: "column", md: "row" }}
-                alignItems={{ xs: "flex-start", md: "center" }}
-                justifyContent="space-between"
-                gap={2}
-                marginTop={10}
-              >
+      <Box sx={{ minHeight: "100vh" }}>
+        {isError ? (
+          <ErrorAlert message={error.message} />
+        ) : (
+          <Container sx={{ mt: 10, position: "relative" }} maxWidth="xl">
+            <Box
+              sx={{
+                position: "absolute",
+                left: -20,
+                height: 100,
+                display: { xs: "none", xl: "flex" },
+                alignItems: "center",
+              }}
+            >
+              <Link to="/blog" className="links">
+                <ArrowBackIos sx={{ fontSize: 50 }} />
+              </Link>
+            </Box>
+            <Paper sx={{ p: 2 }} elevation={2}>
+              <Box>
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 1,
+                    justifyContent: "space-between",
+                    flexDirection: { xs: "column", md: "row" },
+                    py: 2,
                   }}
                 >
-                  <Avatar
-                    sx={{ bgcolor: "red" }}
-                    src={`${blog?.author?.profilePic}`}
-                    alt={blog?.author?.first_name}
-                  >
-                    {blog?.author?.first_name}
-                  </Avatar>
-                  <Typography variant="body1">
-                    {blog.author.first_name}
+                  <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                    {isLoading ? (
+                      <Skeleton
+                        variant="text"
+                        sx={{ width: { xs: 200, md: 300, lg: 500 } }}
+                      />
+                    ) : (
+                      blog?.title
+                    )}
                   </Typography>
-                </Box>
-                <Box display="flex" gap={2}>
-                  <Tooltip title="Like">
-                    <Fab color="info" aria-label="like" size="small">
-                      <Badge color="error" badgeContent={9}>
-                        <Favorite fontSize="medium" />
-                      </Badge>
-                    </Fab>
-                  </Tooltip>
 
-                  <Tooltip title="Comment">
-                    <Fab
-                      color="info"
-                      aria-label="comment"
-                      size="small"
-                      onClick={() => {
-                        setShowComments((prev) => !prev);
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignSelf: "flex-end",
+                    }}
+                  >
+                    {localUserId === blogUserId &&
+                      (isLoading ? (
+                        <Skeleton
+                          variant="rectangular"
+                          sx={{ width: { xs: 100, md: 300, lg: 500 } }}
+                        />
+                      ) : (
+                        <Box sx={{ alignSelf: "flex-end" }}>
+                          <Link to={`/blog/edit/${blogId}`} className="links">
+                            <IconButton color="success">
+                              <Edit />
+                            </IconButton>
+                          </Link>
+                          <IconButton color="error" onClick={handleBlogDelete}>
+                            <Delete />
+                          </IconButton>
+                        </Box>
+                      ))}
+                    <Typography
+                      variant="body1"
+                      color="GrayText"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        width: { xs: "100%", md: 200 },
+                        py: 1,
                       }}
                     >
-                      <Badge color="error" badgeContent={100}>
-                        <Comment fontSize="medium" />
-                      </Badge>
-                    </Fab>
-                  </Tooltip>
-
-                  <Tooltip title="Share">
-                    <Fab color="info" aria-label="share" size="small">
-                      <Badge color="error" badgeContent={100}>
-                        <Share fontSize="medium" />
-                      </Badge>
-                    </Fab>
-                  </Tooltip>
-
-                  <Tooltip title="Save">
-                    <Fab color="info" aria-label="save" size="small">
-                      <Badge color="error" badgeContent={100}>
-                        <BookmarkAdd fontSize="medium" />
-                      </Badge>
-                    </Fab>
-                  </Tooltip>
+                      {isLoading ? (
+                        <Skeleton
+                          variant="text"
+                          sx={{ width: { xs: 100, md: 300, lg: 500 } }}
+                        />
+                      ) : (
+                        <>
+                          <AccessTime
+                            sx={{ alignSelf: "center" }}
+                            fontSize="inherit"
+                          />
+                          {moment(blog?.created_at).fromNow()}
+                        </>
+                      )}
+                    </Typography>
+                  </Box>
                 </Box>
+                <Divider sx={{ borderColor: "black" }} />
+
+                {isLoading ? (
+                  <Skeleton
+                    variant="rectangular"
+                    sx={{ height: { xs: 200, md: 300, lg: 400 } }}
+                  />
+                ) : (
+                  <Box
+                    component="img"
+                    sx={{
+                      height: { xs: 300, md: 600 },
+                      my: 4,
+                      width: "100%",
+                      objectFit: "cover",
+                    }}
+                    src={blog?.image}
+                    alt="blog"
+                  />
+                )}
+
+                <Typography
+                  variant="body1"
+                  component="p"
+                  sx={{ borderLeft: "2px solid gray", pl: 2, ml: 2, mb: 2 }}
+                >
+                  {isLoading ? (
+                    <Skeleton
+                      variant="text"
+                      sx={{ width: { xs: 200, md: 300, lg: 500 } }}
+                    />
+                  ) : (
+                    blog?.description
+                  )}
+                </Typography>
+
+                {isLoading ? (
+                  <>
+                    <Skeleton
+                      variant="text"
+                      sx={{ width: { xs: 100, md: 300, lg: 500 } }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      sx={{ width: { xs: 150, md: 350, lg: 800 } }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      sx={{ width: { xs: 200, md: 400, lg: 1000 } }}
+                    />
+                  </>
+                ) : (
+                  <Typography
+                    component="p"
+                    variant="body1"
+                    dangerouslySetInnerHTML={{ __html: blog?.content }}
+                  />
+                )}
+
+                <Box
+                  display="flex"
+                  flexDirection={{ xs: "column", md: "row" }}
+                  alignItems={{ xs: "flex-start", md: "center" }}
+                  justifyContent="space-between"
+                  gap={2}
+                  marginTop={10}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    {isLoading ? (
+                      <Skeleton variant="circular" height={50} width={50} />
+                    ) : (
+                      <Avatar
+                        sx={{ bgcolor: "red" }}
+                        src={`${blog?.author?.profilePic}`}
+                        alt={blog?.author?.first_name}
+                      >
+                        {blog?.author?.first_name}
+                      </Avatar>
+                    )}
+
+                    {isLoading ? (
+                      <Skeleton variant="text" width={200} />
+                    ) : (
+                      <Typography variant="body1">
+                        {blog?.author?.first_name}
+                      </Typography>
+                    )}
+                  </Box>
+
+                  {isLoading ? (
+                    <Skeleton
+                      variant="text"
+                      sx={{ width: { xs: 100, md: 300, lg: 500 } }}
+                    />
+                  ) : (
+                    <Box display="flex" gap={2}>
+                      <Tooltip title="Like">
+                        <Fab color="info" aria-label="like" size="small">
+                          <Badge color="error" badgeContent={9}>
+                            <Favorite fontSize="medium" />
+                          </Badge>
+                        </Fab>
+                      </Tooltip>
+
+                      <Tooltip title="Comment">
+                        <Fab
+                          color="info"
+                          aria-label="comment"
+                          size="small"
+                          onClick={() => {
+                            setShowComments((prev) => !prev);
+                          }}
+                        >
+                          <Badge color="error" badgeContent={100}>
+                            <Comment fontSize="medium" />
+                          </Badge>
+                        </Fab>
+                      </Tooltip>
+
+                      <Tooltip title="Share">
+                        <Fab color="info" aria-label="share" size="small">
+                          <Badge color="error" badgeContent={100}>
+                            <Share fontSize="medium" />
+                          </Badge>
+                        </Fab>
+                      </Tooltip>
+
+                      <Tooltip title="Save">
+                        <Fab color="info" aria-label="save" size="small">
+                          <Badge color="error" badgeContent={100}>
+                            <BookmarkAdd fontSize="medium" />
+                          </Badge>
+                        </Fab>
+                      </Tooltip>
+                    </Box>
+                  )}
+                </Box>
+
+                <Collapse in={showComments} timeout={800}>
+                  <Box sx={{ mt: 4 }}>
+                    <Divider>
+                      <Chip label="COMMENTS" />
+                    </Divider>
+                    <CommentBox />
+                  </Box>
+                </Collapse>
               </Box>
-
-              {/* {showComments && ( */}
-              <Collapse in={showComments} timeout={800}>
-                <Box sx={{ mt: 4 }}>
-                  <Divider>
-                    <Chip label="COMMENTS" />
-                  </Divider>
-                  <CommentBox />
-                </Box>
-              </Collapse>
-            </Box>
-          </Paper>
-        </Container>
+            </Paper>
+          </Container>
+        )}
 
         <Box sx={{ mx: 5, my: 10 }}>
           <Box

@@ -9,7 +9,7 @@ const ErrorAlert = (props) => {
       id="error-page"
       className="error"
       sx={{
-        minHeight: "100vh",
+        my: 10,
         color: "red",
         display: "flex ",
         flexDirection: "column",
@@ -20,7 +20,7 @@ const ErrorAlert = (props) => {
     >
       <Alert severity="error" variant="filled" sx={{}}>
         <AlertTitle>Error</AlertTitle>
-        <Typography variant="h1">${props.message}</Typography>
+        <Typography variant="h3">{props.message}</Typography>
       </Alert>
 
       <Link component="button" to="/" className="links">

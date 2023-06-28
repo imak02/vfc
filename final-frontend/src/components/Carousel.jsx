@@ -11,7 +11,7 @@ const images = [];
 const Carousel = () => {
   var settings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 4,
@@ -45,7 +45,6 @@ const Carousel = () => {
   };
   return (
     <Container>
-      {" "}
       <div>
         <h2> Responsive </h2>
         <Slider {...settings}>

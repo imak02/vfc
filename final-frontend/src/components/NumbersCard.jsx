@@ -8,9 +8,10 @@ const NumbersCard = ({ number, title, icon }) => {
       <Card
         sx={{
           width: 350,
-          bgcolor: "orange",
+          bgcolor: (theme) =>
+            theme.palette.mode === "light" ? "lightgray" : "#121212",
           "&:hover": {
-            bgcolor: "pink",
+            bgcolor: "skyblue",
             transform: "scale(1.1)",
             transition: "0.7s ease-out",
           },

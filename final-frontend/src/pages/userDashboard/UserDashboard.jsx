@@ -79,26 +79,40 @@ const UserDashboard = () => {
         sx={{
           my: 3,
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", xl: "row" },
           flexWrap: "wrap",
           gap: 5,
-          justifyContent: "space-around",
+          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <DbCard
-          title="Exercise"
-          subtitle="1 hr 52 minutes"
-          value={55}
-          width={450}
-        />
-        <DbCard title="Diet" subtitle="3214 calories" value={85} width={450} />
-        <DbCard
-          title="Sleep"
-          subtitle="5 hr 52 minutes"
-          value={95}
-          width={450}
-        />
+        <Box sx={{ width: { xs: "100%", xl: "auto" } }}>
+          <DbCard
+            title="Exercise"
+            subtitle="1 hr 52 minutes"
+            value={55}
+            width={450}
+            image="https://images.pexels.com/photos/2261477/pexels-photo-2261477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          />
+        </Box>
+        <Box sx={{ width: { xs: "100%", xl: "auto" } }}>
+          <DbCard
+            title="Diet"
+            subtitle="3214 calories"
+            value={85}
+            width={450}
+            image="https://images.pexels.com/photos/357737/pexels-photo-357737.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          />
+        </Box>
+        <Box sx={{ width: { xs: "100%", xl: "auto" } }}>
+          <DbCard
+            title="Sleep"
+            subtitle="5 hr 52 minutes"
+            value={95}
+            width={450}
+            image="https://images.pexels.com/photos/6541417/pexels-photo-6541417.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          />
+        </Box>
       </Box>
       <Card sx={{ p: 2 }}>
         <Typography variant="h5" component="h3" sx={{ fontWeight: "bold" }}>

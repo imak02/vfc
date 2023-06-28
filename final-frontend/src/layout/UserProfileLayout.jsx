@@ -196,31 +196,6 @@ function UserProfileLayout(props) {
           </ListItem>
         ))}
       </List>
-      {/* <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
-      {/* <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
     </Box>
   );
 
@@ -230,29 +205,6 @@ function UserProfileLayout(props) {
   return (
     <Box sx={{ display: { md: "flex" } }}>
       <CssBaseline />
-      {/* <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        // sx={{
-        //   width: { sm: `calc(100% - ${drawerWidth}px)` },
-        //   ml: { sm: `${drawerWidth}px` },
-        // }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: "none" } }}
-          >
-            {mobileOpen ? <Close /> : <Menu />}
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
 
       <AppBar
         position="fixed"
@@ -342,7 +294,10 @@ function UserProfileLayout(props) {
       </AppBar>
       <Box
         component="nav"
-        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+        sx={{
+          width: { md: drawerWidth },
+          flexShrink: { md: 0 },
+        }}
         aria-label="mailbox folders"
       >
         <Drawer
@@ -390,7 +345,8 @@ function UserProfileLayout(props) {
           justifyContent="center"
           sx={{
             padding: { xs: 1, lg: 3 },
-            bgcolor: "lightgray",
+            bgcolor: (theme) =>
+              theme.palette.mode === "light" ? "lightgray" : "black",
             minHeight: "100vh",
           }}
         >

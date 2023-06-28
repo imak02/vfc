@@ -216,7 +216,6 @@ const UserBody = () => {
               <Typography>Lung Cancer</Typography>
               <Typography>Diabetes</Typography>
               <Typography>Pneumonia</Typography>
-              <Typography>All other diseases</Typography>
             </Box>
           </Box>
           <Divider />
@@ -259,7 +258,6 @@ const UserBody = () => {
               <Typography>Lung Cancer</Typography>
               <Typography>Diabetes</Typography>
               <Typography>Pneumonia</Typography>
-              <Typography>All other diseases</Typography>
             </Box>
           </Box>
         </Paper>

@@ -37,9 +37,9 @@ const UserExercises = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
+          flexDirection: { xs: "column", xl: "row" },
           gap: 2,
-          justifyContent: "space-around",
+          justifyContent: "space-between",
         }}
       >
         <Link to="/user/123/exercise-details">
@@ -48,10 +48,11 @@ const UserExercises = () => {
             subtitle="2 hr 12 minutes"
             value={55}
             width={550}
-            height={265}
+            height={260}
+            image="https://images.pexels.com/photos/2261477/pexels-photo-2261477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
         </Link>
-        <Box>
+        <Box sx={{ flexGrow: 1 }}>
           <ExerciseProgressCard />
         </Box>
       </Box>

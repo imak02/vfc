@@ -36,7 +36,7 @@ const UserDiet = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
+          flexDirection: { xs: "column", xl: "row" },
           gap: 2,
           justifyContent: "space-around",
         }}
@@ -48,9 +48,12 @@ const UserDiet = () => {
             value={55}
             width={550}
             height={340}
+            image="https://images.pexels.com/photos/357737/pexels-photo-357737.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
         </Link>
-        <DietNutrientsCard />
+        <Box>
+          <DietNutrientsCard />
+        </Box>
       </Box>
       <Box sx={{ my: 5 }}>
         <WaterIntakeCard />

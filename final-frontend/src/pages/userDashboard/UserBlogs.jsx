@@ -214,6 +214,25 @@ const UserBlogs = () => {
           <BlogGridCard />
         </Box>
       </Paper>
+      <Paper sx={{ p: 2, my: 2 }} elevation={2}>
+        <SearchBar title="Saved Blogs" />
+        <Box
+          sx={{
+            my: 5,
+            gap: 10,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <BlogGridCard />
+          <BlogGridCard />
+          <BlogGridCard />
+          <BlogGridCard />
+          <BlogGridCard />
+        </Box>
+      </Paper>
     </Box>
   );
 };

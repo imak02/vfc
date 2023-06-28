@@ -20,18 +20,21 @@ const ExerciseProgressCard = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", sm: "row" },
           alignItems: "center",
           justifyContent: "space-between",
-          gap: 2,
+          textAlign: "center",
+          gap: 5,
         }}
       >
         <Box
           sx={{
             flex: 1,
             display: "flex",
-            flexDirection: "column",
+            flexDirection: { xs: "row", sm: "column" },
             alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
           }}
         >
           <MyCircularProgress value={75} mycolor="orange" />
@@ -59,8 +62,10 @@ const ExerciseProgressCard = () => {
           sx={{
             flex: 1,
             display: "flex",
-            flexDirection: "column",
+            flexDirection: { xs: "row", sm: "column" },
             alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
           }}
         >
           <MyCircularProgress value={25} mycolor="skyblue" />
@@ -89,8 +94,10 @@ const ExerciseProgressCard = () => {
           sx={{
             flex: 1.2,
             display: "flex",
-            flexDirection: "column",
+            flexDirection: { xs: "row", sm: "column" },
             alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
           }}
         >
           <MyCircularProgress value={50} mycolor="blueviolet" />

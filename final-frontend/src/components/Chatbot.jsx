@@ -28,7 +28,7 @@ const Chatbot = () => {
               top: "90%",
               right: "0",
               display: { xs: "none", md: "flex" },
-              zIndex: "999",
+              zIndex: 999,
             }}
           >
             <Fab
@@ -75,8 +75,8 @@ const Chatbot = () => {
           sx={{
             maxWidth: 400,
             position: "fixed",
-            zIndex: "999",
-            top: 250,
+            zIndex: 9999,
+            bottom: 10,
             right: { xs: 0, md: 10 },
             mx: 1,
           }}

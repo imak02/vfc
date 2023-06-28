@@ -17,7 +17,10 @@ const DbNavbar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{ zIndex: 999 }}>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box>
             <IconButton
