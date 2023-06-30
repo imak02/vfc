@@ -64,7 +64,9 @@ function UserProfileLayout(props) {
   const themeMode = useSelector((state) => state.themeMode.value);
   const dispatch = useDispatch();
 
-  const pageList = [
+  let isAdmin = true;
+
+  const userPageList = [
     {
       name: "Dashboard",
       id: "dashboard",
@@ -102,6 +104,23 @@ function UserProfileLayout(props) {
       destination: `/user/${userId}/exercises`,
     },
   ];
+
+  const adminPageList = [
+    {
+      name: "Dashboard",
+      id: "dashboard",
+      icon: <Widgets color="inherit" />,
+      destination: `/admin/${userId}`,
+    },
+    {
+      name: "Users",
+      id: "users",
+      icon: <SelfImprovement />,
+      destination: `/admin/${userId}/users`,
+    },
+  ];
+
+  const pageList = isAdmin ? adminPageList : userPageList;
 
   const drawer = (
     <Box sx={{ m: 2 }}>

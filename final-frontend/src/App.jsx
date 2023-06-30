@@ -35,6 +35,8 @@ import UserDietDetails from "./pages/userDashboard/UserDietDetails";
 import UserExerciseDetails from "./pages/userDashboard/UserExerciseDetails";
 import ExerciseVideo from "./pages/userDashboard/ExerciseVideo";
 import UsersList from "./pages/userDashboard/UsersList";
+import UserDetails from "./pages/userDashboard/UserDetails";
+import UserDetailsNew from "./pages/userDashboard/UserDetailsNew";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -122,6 +124,25 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
+    path: "/admin/:id",
+    element: <UserProfileLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/admin/:id/",
+        element: <UserDashboard />,
+      },
+      {
+        path: "/admin/:id/users",
+        element: <UsersList />,
+      },
+      {
+        path: "/admin/:id/users/:userId",
+        element: <UserDetailsNew />,
+      },
+    ],
+  },
+  {
     path: "/user/:id",
     element: <UserProfileLayout />,
     errorElement: <Error />,
@@ -170,10 +191,14 @@ const router = createBrowserRouter([
         path: "/user/:id/exercise-video",
         element: <ExerciseVideo />,
       },
-      {
-        path: "/user/:id/users",
-        element: <UsersList />,
-      },
+      // {
+      //   path: "/admin/:id/users",
+      //   element: <UsersList />,
+      // },
+      // {
+      //   path: "/admin/:id/user-details",
+      //   element: <UserDetailsNew />,
+      // },
     ],
   },
 ]);
