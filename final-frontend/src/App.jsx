@@ -37,6 +37,7 @@ import ExerciseVideo from "./pages/userDashboard/ExerciseVideo";
 import UsersList from "./pages/userDashboard/UsersList";
 import UserDetails from "./pages/userDashboard/UserDetails";
 import UserDetailsNew from "./pages/userDashboard/UserDetailsNew";
+import Exercise from "./pages/userDashboard/Exercise";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/blog",
         element: <Blog />,
+      },
+      {
+        path: "/exercise",
+        element: <Exercise />,
       },
       {
         path: "/blog/:blogId",
@@ -189,7 +194,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/:id/exercise-video",
-        element: <ExerciseVideo />,
+        element: <Exercise />,
       },
       // {
       //   path: "/admin/:id/users",

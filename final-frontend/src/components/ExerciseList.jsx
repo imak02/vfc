@@ -24,7 +24,7 @@ const ExerciseList = () => {
         </Typography>
       </Box>
       <Box sx={{ textAlign: "center" }}>
-        <Link to="/user/123/exercise-video" className="links">
+        <Link to="/exercise" className="links">
           <IconButton size="large" color="info">
             <PlayCircle fontSize="large" />
           </IconButton>
@@ -39,7 +39,7 @@ const ExerciseList = () => {
         </Link>
       </Box>
       <Box sx={{ borderRadius: 3, overflow: "hidden" }}>
-        <Link to="/" className="links">
+        <Link to="/exercise" className="links">
           <Box
             component="img"
             sx={{ borderRadius: 3 }}

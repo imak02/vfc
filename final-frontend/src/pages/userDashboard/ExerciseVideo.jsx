@@ -43,51 +43,6 @@ const ExerciseVideo = () => {
       <Box
         sx={{
           display: "flex",
-          gap: 2,
-          flexDirection: { xs: "column", md: "row" },
-        }}
-      >
-        <Box sx={{ flex: 2 }}>
-          {!openCamera && (
-            <Box
-              width="100%"
-              height={500}
-              component="img"
-              alt="exercise"
-              src="https://indatalabs.com/wp-content/uploads/2020/10/human-activity-recognition-fitness-app.jpg"
-            />
-          )}
-          {openCamera && (
-            <Webcam
-              audio={false}
-              width="100%"
-              height={500}
-              screenshotFormat="image/jpeg"
-              videoConstraints={videoConstraints}
-            />
-          )}
-          <FormControlLabel
-            labelPlacement="start"
-            control={
-              <Switch
-                checked={openCamera}
-                onChange={() => {
-                  setOpenCamera((prev) => !prev);
-                }}
-                color="info"
-              />
-            }
-            label="VFC requires you to turn on your camera to detect your posture. Turn on your camera?"
-          />
-        </Box>
-        <Box sx={{ flex: 1, order: { xs: -1, md: 0 } }}>
-          <ExerciseBox />
-        </Box>
-      </Box>
-      <Divider sx={{ my: 5, borderBottomWidth: 3 }} />
-      <Box
-        sx={{
-          display: "flex",
           flexDirection: { xs: "column", md: "row" },
           gap: 5,
         }}
@@ -139,7 +94,11 @@ const ExerciseVideo = () => {
             textAlign: "center",
           }}
         >
-          <Box>
+          <Box
+            onClick={() => {
+              setOpenCamera(true);
+            }}
+          >
             <Avatar
               sx={{
                 bgcolor: "green",
@@ -155,7 +114,11 @@ const ExerciseVideo = () => {
               Start
             </Typography>
           </Box>
-          <Box>
+          <Box
+            onClick={() => {
+              setOpenCamera(false);
+            }}
+          >
             <Avatar
               sx={{
                 bgcolor: "red",
@@ -171,6 +134,51 @@ const ExerciseVideo = () => {
               Stop
             </Typography>
           </Box>
+        </Box>
+      </Box>
+      <Divider sx={{ my: 5, borderBottomWidth: 3 }} />
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
+        <Box sx={{ flex: 2 }}>
+          {!openCamera && (
+            <Box
+              width="100%"
+              height={500}
+              component="img"
+              alt="exercise"
+              src="https://indatalabs.com/wp-content/uploads/2020/10/human-activity-recognition-fitness-app.jpg"
+            />
+          )}
+          {openCamera && (
+            <Webcam
+              audio={false}
+              width="100%"
+              height={500}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+            />
+          )}
+          <FormControlLabel
+            labelPlacement="start"
+            control={
+              <Switch
+                checked={openCamera}
+                onChange={() => {
+                  setOpenCamera((prev) => !prev);
+                }}
+                color="info"
+              />
+            }
+            label="VFC requires you to turn on your camera to detect your posture. Turn on your camera?"
+          />
+        </Box>
+        <Box sx={{ flex: 1, order: { xs: -1, md: 0 } }}>
+          <ExerciseBox />
         </Box>
       </Box>
       <Divider sx={{ my: 5, borderBottomWidth: 3 }} />
