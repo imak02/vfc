@@ -51,17 +51,21 @@ export default function Login() {
     setEmail(e.target.value);
   };
 
-  const sendOTP = async (e) => {
-    e.preventDefault();
-    try {
-      setError(null);
-      const response = await axios.post("/user/forgot-password", { email });
-      console.log(response);
-      navigate("/reset-password", { state: { email } });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const sendOTP = async (e) => {
+  //   e.preventDefault();
+  //   emailMutate(email, {
+  //     onSuccess: () => {
+  //       resetForm();
+  //     },
+  //   });
+  //   // try {
+  //   //   const response = await axios.post("forgot-password/", { email });
+  //   //   console.log(response);
+  //   //   navigate("/reset-password", { state: { email } });
+  //   // } catch (error) {
+  //   //   dispatch(errorToast(error?.response?.data?.error));
+  //   // }
+  // };
 
   const handleOpen = () => {
     setOpenModal(true);
@@ -80,6 +84,35 @@ export default function Login() {
     event.preventDefault();
   };
 
+  const sendOTP = () => {
+    let sendData = { email: email };
+    emailMutate(sendData, {
+      onSuccess: () => {
+        resetForm();
+      },
+    });
+  };
+
+  const { mutate: emailMutate, isLoading: isSubmitting } = useMutation(
+    (values) => axios.post("forgot-password/", values),
+    {
+      onMutate: () => {
+        dispatch(loadingToast("Sending OTP..."));
+      },
+      onSuccess: (data) => {
+        console.log(data);
+        if (data.status === 200 || data.status === 201) {
+          dispatch(successToast(data?.data?.message));
+          navigate("/");
+        }
+      },
+      onError: (error) => {
+        console.log(error);
+        dispatch(errorToast(error?.response?.data?.error));
+      },
+    }
+  );
+
   const { mutate, isLoading } = useMutation(
     (values) => axios.post("login/", values),
     {
@@ -87,7 +120,7 @@ export default function Login() {
         dispatch(loadingToast("Logging in..."));
       },
       onSuccess: (data) => {
-        console.log(data)
+        console.log(data);
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
           dispatch(login(data.data.token));
@@ -135,9 +168,9 @@ export default function Login() {
             ? t.palette.primary.main
             : t.palette.grey[700],
         minHeight: "100vh",
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center"
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Container>
@@ -287,12 +320,8 @@ export default function Login() {
                       <Typography variant="body1">Forgot Password?</Typography>
                     </Box>
                     <Dialog open={openModal} onClose={handleClose} fullWidth>
-                      <Box
-                        component="form"
-                        onSubmit={sendOTP}
-                        sx={{ backgroundColor: "skyblue" }}
-                      >
-                        <Box
+                      <Box component="form" onSubmit={sendOTP} sx={{}}>
+                        {/* <Box
                           sx={{
                             display: "flex",
                             justifyContent: "center",
@@ -305,7 +334,7 @@ export default function Login() {
                             height={50}
                             width={50}
                           />
-                        </Box>
+                        </Box> */}
                         <DialogTitle>Forgot Password?</DialogTitle>
 
                         <DialogContent>
@@ -327,21 +356,23 @@ export default function Login() {
                             sx={{ marginY: 2 }}
                           />
                         </DialogContent>
-                        <DialogActions>
+                        <DialogActions sx={{ mr: 2, mb: 2 }}>
                           <Button
                             onClick={handleClose}
                             color="error"
                             variant="contained"
+                            disabled={isSubmitting}
                           >
                             Cancel
                           </Button>
                           <Button
                             type="submit"
+                            disabled={isSubmitting}
                             onClick={sendOTP}
                             color="success"
                             variant="contained"
                           >
-                            Send OTP
+                            {isSubmitting ? "Sending" : "Send OTP"}
                           </Button>
                         </DialogActions>
                       </Box>

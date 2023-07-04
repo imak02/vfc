@@ -14,6 +14,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  errorToast,
+  loadingToast,
+  successToast,
+} from "../redux/slices/toastSlice";
+import { useDispatch } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -23,14 +30,14 @@ const validationSchema = Yup.object({
     .min(6, "Otp must contain at least six digits")
     .max(6, "Otp can contain at most six digits")
     .required("Otp is required"),
-  password: Yup.string()
+  new_password: Yup.string()
     .min(8, "*Password must contain minimum of 8 characters")
     .matches(
       passwordRegex,
       "*Must contain at least one uppercase letter, one lowercase letter, one number and one special character"
     )
     .required("*Password required"),
-  password2: Yup.string().oneOf(
+  confirm_password: Yup.string().oneOf(
     [Yup.ref("password"), null],
     "Both passwords do not match."
   ),
@@ -42,6 +49,7 @@ const ResetPassword = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const email = location.state?.email;
 
   console.log(email);
@@ -58,33 +66,48 @@ const ResetPassword = () => {
     event.preventDefault();
   };
 
+  const { mutate, isLoading } = useMutation(
+    (values) => axios.post("reset-password/", values),
+    {
+      onMutate: () => {
+        dispatch(loadingToast("Resetting Password..."));
+      },
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          dispatch(successToast(data?.data?.message));
+          navigate("/login");
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
   const formik = useFormik({
     initialValues: {
       email: email,
       otp: "",
-      password: "",
-      password2: "",
+      new_password: "",
+      confirm_password: "",
     },
     validationSchema: validationSchema,
     enableReinitialize: true,
 
     onSubmit: async (values, { resetForm }) => {
-      try {
-        const response = await axios({
-          method: "post",
-          url: `/user/reset-password`,
-          data: values,
-        });
-
-        console.log(response);
-        if (response) {
+      let sendData = Object.assign({}, values);
+      delete sendData.confirm_password;
+      mutate(sendData, {
+        onSuccess: () => {
           resetForm();
-          navigate("/login");
-        }
-      } catch (error) {
-        console.log(error);
-        setError(error);
-      }
+        },
+      });
     },
   });
 
@@ -98,7 +121,7 @@ const ResetPassword = () => {
         minHeight: "100vh",
       }}
     >
-      <Paper elevation={2} sx={{ p: 3, bgcolor: "skyblue" }}>
+      <Paper elevation={2} sx={{ p: 3 }}>
         <Box
           sx={{
             display: "flex",
@@ -138,17 +161,21 @@ const ResetPassword = () => {
           <TextField
             fullWidth
             size="small"
-            id="password"
-            type="password"
-            name="password"
+            type={showPassword ? "text" : "password"}
+            id="new_password"
+            name="new_password"
             color="focusInput"
             autoComplete="off"
             label="New Password"
-            value={formik.values.password}
+            value={formik.values.new_password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
+            error={
+              formik.touched.new_password && Boolean(formik.errors.new_password)
+            }
+            helperText={
+              formik.touched.new_password && formik.errors.new_password
+            }
             sx={{ marginY: 2 }}
             InputProps={{
               endAdornment: (
@@ -169,16 +196,21 @@ const ResetPassword = () => {
           <TextField
             fullWidth
             size="small"
-            id="password2"
-            name="password2"
+            type={showPassword2 ? "text" : "password"}
+            id="confirm_password"
+            name="confirm_password"
             label="Confirm Password"
             color="focusInput"
-            type={showPassword2 ? "text" : "password"}
-            value={formik.values.password2}
+            value={formik.values.confirm_password}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            error={formik.touched.password2 && Boolean(formik.errors.password2)}
-            helperText={formik.touched.password2 && formik.errors.password2}
+            error={
+              formik.touched.confirm_password &&
+              Boolean(formik.errors.confirm_password)
+            }
+            helperText={
+              formik.touched.confirm_password && formik.errors.confirm_password
+            }
             sx={{ marginY: 2 }}
             InputProps={{
               endAdornment: (
@@ -200,9 +232,9 @@ const ResetPassword = () => {
             variant="contained"
             sx={{ alignSelf: "flex-end" }}
             type="submit"
-            disabled={formik.isSubmitting}
+            disabled={isLoading}
           >
-            {formik.isSubmitting ? "Resetting..." : "Reset"}
+            {isLoading ? "Resetting..." : "Reset"}
           </Button>
         </Box>
       </Paper>
