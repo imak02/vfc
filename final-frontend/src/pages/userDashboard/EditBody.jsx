@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   errorToast,
   loadingToast,
@@ -23,13 +23,16 @@ import diseasesOptions from "../../data/diseases";
 import allergiesOptions from "../../data/allergies";
 import injuriesOptions from "../../data/injuries";
 import abnormalitiesOptions from "../../data/abnormalities";
+import axios from "axios";
 
 const EditBody = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
+  const userId = params.id;
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("/", values),
+    (values) => axios.post("create-body-details/", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Posting..."));
@@ -38,7 +41,7 @@ const EditBody = () => {
         if (data.status === 200 || data.status === 201) {
           console.log(data);
           dispatch(successToast(data?.data?.message));
-          navigate("/blog");
+          navigate(`/user/${userId}/body`);
         }
       },
       onError: (error) => {
@@ -69,12 +72,12 @@ const EditBody = () => {
     },
 
     onSubmit: async (values, { resetForm }) => {
-      console.log(values);
-      // mutate(values, {
-      //   onSuccess: () => {
-      //     resetForm();
-      //   },
-      // });
+      // console.log(values);
+      mutate(values, {
+        onSuccess: () => {
+          resetForm();
+        },
+      });
     },
   });
   return (
@@ -532,8 +535,8 @@ const EditBody = () => {
               variant="contained"
               disabled={isLoading}
             >
-              Submit
-              {isLoading ? "Posting..." : "Post"}
+              
+              {isLoading ? "Submitting..." : "Submit"}
             </Button>
           </Box>
         </Box>

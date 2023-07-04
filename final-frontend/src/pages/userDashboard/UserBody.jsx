@@ -1,9 +1,31 @@
 import React from "react";
 import { Box, Divider, Paper, Tooltip, Typography } from "@mui/material";
 import { DriveFileRenameOutline } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const UserBody = () => {
+  const params = useParams();
+  const userId = params.id;
+
+  const getCurrentUserBody = async () => await axios.get(`get-body-details/${userId}/`);
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["userBody"],
+    queryFn: getCurrentUserBody,
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.status === 200) {
+        console.log(data.data);
+      }
+
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+  const userBody = data?.data?.payload;
   return (
     <Box>
       <Box
@@ -21,7 +43,7 @@ const UserBody = () => {
           My Body
         </Typography>
 
-        <Link to="/user/:id/edit-body" className="links">
+        <Link to={`/user/${userId}/edit-body`} className="links">
           <Tooltip title="Edit Details">
             <DriveFileRenameOutline
               fontSize="large"
@@ -55,7 +77,7 @@ const UserBody = () => {
                     Height
                   </Typography>
                   <Typography variant="h4" component="h3">
-                    185
+                    {userBody?.height}
                     <Typography variant="caption" sx={{ fontWeight: "bold" }}>
                       cm
                     </Typography>
@@ -67,7 +89,7 @@ const UserBody = () => {
                     Weight
                   </Typography>
                   <Typography variant="h4" component="h3">
-                    90
+                    {userBody?.weight}
                     <Typography variant="caption" sx={{ fontWeight: "bold" }}>
                       kg
                     </Typography>
@@ -90,10 +112,8 @@ const UserBody = () => {
                     Blood Group
                   </Typography>
                   <Typography variant="h4" component="h3">
-                    A
-                    <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-                      +
-                    </Typography>
+                    {userBody?.blood_group}
+
                   </Typography>
                 </Box>
                 <Divider orientation="vertical" variant="middle" flexItem />
@@ -102,7 +122,7 @@ const UserBody = () => {
                     Body Type
                   </Typography>
                   <Typography variant="h4" component="h3">
-                    Ectomorph
+                    {userBody?.body_type}
                     <Typography
                       variant="caption"
                       sx={{ fontWeight: "bold" }}
@@ -135,7 +155,7 @@ const UserBody = () => {
               <Typography sx={{}} variant="h6" component="h6" fontWeight="bold">
                 Blood Pressure
               </Typography>
-              <Typography>120/80 mmHg</Typography>
+              <Typography>{userBody?.blood_pressure} mmHg</Typography>
             </Box>
             <Divider />
 
@@ -151,7 +171,7 @@ const UserBody = () => {
               <Typography variant="h6" component="h6" fontWeight="bold">
                 Blood Sugar
               </Typography>
-              <Typography>80 mg/dl</Typography>
+              <Typography>{userBody?.blood_sugar} mg/dl</Typography>
             </Box>
             <Divider />
 
@@ -167,7 +187,7 @@ const UserBody = () => {
               <Typography variant="h6" component="h6" fontWeight="bold">
                 Food Preference
               </Typography>
-              <Typography>Vegan</Typography>
+              <Typography>{userBody?.food_preference}</Typography>
             </Box>
             <Divider />
 
@@ -183,8 +203,11 @@ const UserBody = () => {
               <Typography variant="h6" component="h6" fontWeight="bold">
                 Body Abnormalities
               </Typography>
-              <Typography>None</Typography>
+              <Box>
+                {userBody?.abnormalities?.map((abnormality) => <Typography>{abnormality}</Typography>)}
+              </Box>
             </Box>
+
           </Paper>
         </Box>
 
@@ -211,11 +234,9 @@ const UserBody = () => {
               Diseases
             </Typography>
             <Box>
-              <Typography>Tuberculosis</Typography>
-              <Typography>Asthma</Typography>
-              <Typography>Lung Cancer</Typography>
-              <Typography>Diabetes</Typography>
-              <Typography>Pneumonia</Typography>
+              {userBody?.diseases?.map((disease) => <Typography>{disease}</Typography>)}
+
+
             </Box>
           </Box>
           <Divider />
@@ -232,11 +253,8 @@ const UserBody = () => {
               Allergies
             </Typography>
             <Box>
-              <Typography>Tuberculosis</Typography>
-              <Typography>Asthma</Typography>
-              <Typography>Lung Cancer</Typography>
-              <Typography>Diabetes</Typography>
-              <Typography>Pneumonia</Typography>
+              {userBody?.allergies?.map((allergy) => <Typography>{allergy}</Typography>)}
+
             </Box>
           </Box>
           <Divider />
@@ -253,11 +271,8 @@ const UserBody = () => {
               Injuries
             </Typography>
             <Box>
-              <Typography>Tuberculosis</Typography>
-              <Typography>Asthma</Typography>
-              <Typography>Lung Cancer</Typography>
-              <Typography>Diabetes</Typography>
-              <Typography>Pneumonia</Typography>
+              {userBody?.injuries?.map((injury) => <Typography>{injury}</Typography>)}
+
             </Box>
           </Box>
         </Paper>

@@ -107,8 +107,8 @@ const Register = () => {
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          navigate("/login");
         }
+        navigate("/verify-user",{ state: { username }});
       },
       onError: (error) => {
         if (error instanceof AxiosError) {

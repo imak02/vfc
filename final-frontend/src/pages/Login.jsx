@@ -103,7 +103,7 @@ export default function Login() {
         console.log(data);
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          navigate("/");
+          navigate("/reset-password",{ state: { email }});
         }
       },
       onError: (error) => {
@@ -150,7 +150,6 @@ export default function Login() {
     onSubmit: async (values, { resetForm }) => {
       let sendData = Object.assign({}, values);
       delete sendData.remember;
-      console.log(sendData);
       mutate(sendData, {
         onSuccess: () => {
           resetForm();

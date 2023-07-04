@@ -27,8 +27,8 @@ const passwordRegex =
 
 const validationSchema = Yup.object({
   otp: Yup.string()
-    .min(6, "Otp must contain at least six digits")
-    .max(6, "Otp can contain at most six digits")
+    .min(4, "Otp must contain at least four digits")
+    .max(4, "Otp can contain at most four digits")
     .required("Otp is required"),
   new_password: Yup.string()
     .min(8, "*Password must contain minimum of 8 characters")
@@ -38,7 +38,7 @@ const validationSchema = Yup.object({
     )
     .required("*Password required"),
   confirm_password: Yup.string().oneOf(
-    [Yup.ref("password"), null],
+    [Yup.ref("new_password"), null],
     "Both passwords do not match."
   ),
 });
@@ -51,8 +51,6 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const email = location.state?.email;
-
-  console.log(email);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

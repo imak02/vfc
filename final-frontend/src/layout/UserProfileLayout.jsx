@@ -32,7 +32,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { dark, light } from "../redux/slices/themeSlice";
-import { logout } from "../redux/slices/authSlice";
+import { logout, setUser } from "../redux/slices/authSlice";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const drawerWidth = 340;
 
@@ -50,9 +52,28 @@ function UserProfileLayout(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
+
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
   };
+
+  const getCurrentUser = async () => await axios.get("user-profile/");
+
+  const userResult = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.status === 200) {
+        dispatch(setUser(data.data.payload));
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const user = useSelector((state) => state.auth.user ?? "");
   const age = moment(new Date(user?.profile?.dob)).fromNow(true);
@@ -62,9 +83,8 @@ function UserProfileLayout(props) {
   const userId = params.id;
 
   const themeMode = useSelector((state) => state.themeMode.value);
-  const dispatch = useDispatch();
 
-  let isAdmin = true;
+  let isAdmin = false;
 
   const userPageList = [
     {
@@ -157,7 +177,7 @@ function UserProfileLayout(props) {
             {user?.first_name + " " + user?.last_name}
           </Typography>
           <Typography color="GrayText">
-            {user?.gender}, {age}
+            {user?.gender === "male" && "Male" }{user?.gender === "female" && "Female" }{user?.gender === "others" && "Others" }, {user?.profile?.dob && age}
           </Typography>
         </Box>
       </Box>

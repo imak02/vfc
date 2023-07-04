@@ -38,6 +38,7 @@ import UsersList from "./pages/userDashboard/UsersList";
 import UserDetails from "./pages/userDashboard/UserDetails";
 import UserDetailsNew from "./pages/userDashboard/UserDetailsNew";
 import Exercise from "./pages/userDashboard/Exercise";
+import VerifyUser from "./pages/VerifyUser";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -127,6 +128,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/verify-user",
+    element: <VerifyUser />,
   },
   {
     path: "/admin/:id",
