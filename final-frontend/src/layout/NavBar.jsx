@@ -318,15 +318,11 @@ function NavBar() {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip arrow title="Profile Settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    {userResult.isLoading ? (
-                      <CircularProgress />
-                    ) : (
-                      <Avatar
-                        alt={user.first_name}
-                        src={user?.profile?.profilePicture}
-                        sx={{ bgcolor: "orange", color: "black" }}
-                      />
-                    )}
+                    <Avatar
+                      alt={user.first_name}
+                      src={user?.profile?.profilePicture}
+                      sx={{ bgcolor: "orange", color: "black" }}
+                    />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -371,7 +367,10 @@ function NavBar() {
                 >
                   <Link to={`/user/${user.id}`} className="links">
                     <MenuItem onClick={handleCloseUserMenu}>
-                      <Avatar alt={user.first_name} src={user?.profile?.profilePicture} />
+                      <Avatar
+                        alt={user.first_name}
+                        src={user?.profile?.profilePicture}
+                      />
                       {user.first_name + " " + user.last_name}
                     </MenuItem>
                   </Link>
