@@ -101,7 +101,7 @@ const EditProfile = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const user = useSelector((state) => state.auth.user ?? "");
 

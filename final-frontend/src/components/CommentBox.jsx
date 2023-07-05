@@ -14,32 +14,61 @@ import {
   Typography,
 } from "@mui/material";
 import moment from "moment";
+import axios from "axios";
+import { useMutation, useQuery,useQueryClient } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+
+
 import React, { useState } from "react";
+import { errorToast } from "../redux/slices/toastSlice";
 
-const comments = [
-  {
-    _id: "123456789",
-    commenter: { name: "Alia Bhatt", profilePic: "profile.jpeg" },
-    comment: "This is a comment or don't you believe me?",
-    createdAt: "2023-03-27T03:23:30.787+00:00",
-  },
-  {
-    _id: "12345678",
-    commenter: { name: "Ram Ram", profilePic: "profile.jpeg" },
-    comment: "I only know two words that are Ram and Ram",
-    createdAt: "2023-03-27T03:23:30.787+00:00",
-  },
-  {
-    _id: "1234567",
-    commenter: { name: "Ayush Maandhar", profilePic: "profile.jpeg" },
-    comment: "La yesma chai Nepali ma lekhna man lagyo malai",
-    createdAt: "2023-03-27T03:23:30.787+00:00",
-  },
-];
+const CommentBox = ({ blogId, comments }) => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
-const CommentBox = () => {
   const [comment, setComment] = useState("");
-  let isLoggedIn = true;
+  const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user ?? "");
+
+  const { mutate, isLoading:isPosting } = useMutation(
+    (values) => axios.post(`blog-comment-create/${blogId}/`, values),
+    {
+
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          console.log(data);
+          queryClient.invalidateQueries({ queryKey: ['fetchComments'] });
+
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
+  const postComment = async (e) => {
+    e.preventDefault();
+    let commentData = { comment: comment }
+    mutate(commentData, {
+      onSuccess: () => {
+        setComment("");
+      },
+    });
+    // try {
+    //   const response = await axios.post(`blog-comment-create/${blogId}/`, commentData);
+    //   console.log(response);
+
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }
 
   return (
     <Box>
@@ -47,14 +76,16 @@ const CommentBox = () => {
         <Box
           sx={{ mt: 3, display: "flex", alignItems: "center", gap: 2 }}
           component="form"
+          onSubmit={postComment}
         >
-          <Avatar alt="P" src="profile.jpeg" />
+          <Avatar alt={user?.first_name} src={user?.profile?.profilePicture} />
           <TextField
             id="comment"
             name="comment"
             fullWidth
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+
             variant="outlined"
             placeholder="Add your comment"
             InputProps={{
@@ -64,6 +95,7 @@ const CommentBox = () => {
                     type="submit"
                     aria-label="Post Comment"
                     color="info"
+                    disabled={isPosting}
                     // onClick={postComment}
                     //   onMouseDown={handleMouseDownPassword}
                     edge="end"
@@ -81,20 +113,20 @@ const CommentBox = () => {
         <List
           sx={{ width: "100%", bgcolor: "transparent", ml: { xs: -2, sm: 0 } }}
         >
-          {comments.map((comment) => (
-            <Box key={comment._id}>
+          {comments?.map((comment,index) => (
+            <Box key={index}>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar
-                    alt={comment.commenter.name}
-                    src={`${comment?.commenter?.profilePic}`}
+                    alt={comment.user}
+                    src={`http://localhost:8000${comment?.profilePicture}`}
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={comment.commenter.name}
+                  primary={comment?.user}
                   secondary={
                     <React.Fragment>
-                      {moment(comment.createdAt).format("Do MMMM YYYY")}
+                      {moment(comment?.created_at).format("Do MMMM YYYY")}
 
                       <Typography
                         sx={{ display: "inline" }}
@@ -102,7 +134,7 @@ const CommentBox = () => {
                         variant="body2"
                         color="text.primary"
                       >
-                        {` —— ${comment.comment}`}
+                        {` —— ${comment?.comment}`}
                       </Typography>
                     </React.Fragment>
                   }

@@ -15,10 +15,18 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  errorToast,
+} from "../../redux/slices/toastSlice";
+import moment from "moment";
+
+
+
 import BlogGridCard from "../../components/BlogGridCard";
 import SearchBar from "../../components/SearchBar";
 
@@ -35,6 +43,62 @@ const rows = [
 ];
 
 const UserBlogs = () => {
+  const dispatch = useDispatch();
+
+  const getCurrentUserBlogs = async () => await axios.get("user/created-blogs/");
+  const getCurrentUserLikedBlogs = async () => await axios.get("user/liked-blogs/");
+  const getCurrentUserSavedBlogs = async () => await axios.get("user/saved-blogs/");
+
+  const [userBlogsResult, userLikedBlogsResult, userSavedBlogsResult] = useQueries({
+    queries: [{
+      queryKey: ["currentUserBlogs"],
+      queryFn: getCurrentUserBlogs,
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        console.log(error);
+        dispatch(errorToast(error?.response?.data?.message));
+      },
+    }, {
+      queryKey: ["currentUserLikedBlogs"],
+      queryFn: getCurrentUserLikedBlogs,
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        console.log(error);
+        dispatch(errorToast(error?.response?.data?.message));
+      },
+    }, {
+      queryKey: ["currentUserSavedBlogs"],
+      queryFn: getCurrentUserSavedBlogs,
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        console.log(error);
+        dispatch(errorToast(error?.response?.data?.message));
+      },
+    }]
+  });
+
+  // const userBlogsResult = useQuery({
+  //   queryKey: ["currentUserBlogs"],
+  //   queryFn: getCurrentUserBlogs,
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //     dispatch(errorToast(error?.response?.data?.message));
+  //   },
+  // });
+
+  const userBlogs = userBlogsResult?.data?.data;
+  const userLikedBlogs = userLikedBlogsResult?.data?.data;
+  const userSavedBlogs = userSavedBlogsResult?.data?.data;
+
   return (
     <Box>
       <Paper sx={{ p: 2, mb: 2 }} elevation={2}>
@@ -58,24 +122,22 @@ const UserBlogs = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
+                {userBlogs?.map((blog) => <TableRow key={blog.id}>
                   <TableCell component="td" scope="row">
                     <Box
                       component="img"
                       height={100}
                       width={100}
                       alt="blog"
-                      src="/foodPoster.jpg"
+                      src={blog.image}
                     />
                   </TableCell>
                   <TableCell sx={{ maxWidth: 500 }}>
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      The posture state to follow for errorless training The
-                      posture state to follow for errorless training posture
-                      state to follow for errorless training
+                      {blog.title}
                     </Typography>
                   </TableCell>
-                  <TableCell>1 month ago</TableCell>
+                  <TableCell>{moment(new Date(blog.updated_to)).fromNow()}</TableCell>
                   <TableCell>
                     <Box sx={{ display: "flex", gap: 1 }}>
                       <Tooltip title="Edit">
@@ -90,106 +152,8 @@ const UserBlogs = () => {
                       </Tooltip>
                     </Box>
                   </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="td" scope="row">
-                    <Box
-                      component="img"
-                      height={100}
-                      width={100}
-                      alt="blog"
-                      src="/foodPoster.jpg"
-                    />
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 500 }}>
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      The posture state to follow for errorless training The
-                      posture state to follow for errorless training posture
-                      state to follow for errorless training
-                    </Typography>
-                  </TableCell>
-                  <TableCell>1 month ago</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <Tooltip title="Edit">
-                        <IconButton>
-                          <Edit color="info" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton>
-                          <Delete color="error" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="td" scope="row">
-                    <Box
-                      component="img"
-                      height={100}
-                      width={100}
-                      alt="blog"
-                      src="/foodPoster.jpg"
-                    />
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 500 }}>
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      The posture state to follow for errorless training The
-                      posture state to follow for errorless training posture
-                      state to follow for errorless training
-                    </Typography>
-                  </TableCell>
-                  <TableCell>1 month ago</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <Tooltip title="Edit">
-                        <IconButton>
-                          <Edit color="info" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton>
-                          <Delete color="error" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="td" scope="row">
-                    <Box
-                      component="img"
-                      height={100}
-                      width={100}
-                      alt="blog"
-                      src="/foodPoster.jpg"
-                    />
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 500 }}>
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      The posture state to follow for errorless training The
-                      posture state to follow for errorless training posture
-                      state to follow for errorless training
-                    </Typography>
-                  </TableCell>
-                  <TableCell>1 month ago</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <Tooltip title="Edit">
-                        <IconButton>
-                          <Edit color="info" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton>
-                          <Delete color="error" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
+                </TableRow>)}
+
               </TableBody>
             </Table>
           </TableContainer>
@@ -207,11 +171,8 @@ const UserBlogs = () => {
             justifyContent: "center",
           }}
         >
-          <BlogGridCard />
-          <BlogGridCard />
-          <BlogGridCard />
-          <BlogGridCard />
-          <BlogGridCard />
+          {userLikedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog} />)}
+
         </Box>
       </Paper>
       <Paper sx={{ p: 2, my: 2 }} elevation={2}>
@@ -226,11 +187,8 @@ const UserBlogs = () => {
             justifyContent: "center",
           }}
         >
-          <BlogGridCard />
-          <BlogGridCard />
-          <BlogGridCard />
-          <BlogGridCard />
-          <BlogGridCard />
+                  {userSavedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog} />)}
+
         </Box>
       </Paper>
     </Box>

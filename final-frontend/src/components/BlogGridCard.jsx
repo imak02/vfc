@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import React from "react";
 
-const BlogGridCard = () => {
+const BlogGridCard = ({blog}) => {
   return (
     <Box>
       <Card sx={{ width: 350 }}>
@@ -20,7 +20,7 @@ const BlogGridCard = () => {
           <CardMedia
             component="img"
             height={200}
-            image="/foodPoster.jpg"
+            image={blog?.blog?.image}
             alt="blog"
           />
           <Typography
@@ -28,7 +28,7 @@ const BlogGridCard = () => {
             component="h3"
             sx={{ fontWeight: "bold", textAlign: "center", my: 5 }}
           >
-            Why red meat is bad?
+           {blog?.blog?.title}
           </Typography>
           <Box
             sx={{
@@ -47,16 +47,16 @@ const BlogGridCard = () => {
             >
               <Avatar
                 sx={{ bgcolor: "red" }}
-                src="/profile.jpeg"
+                src={blog?.blog?.author?.profile?.profilePicture}
                 alt="John Cena"
               >
-                John Cena
+                {`${blog?.blog?.author?.first_name} ${blog?.blog?.author?.last_name}`}
               </Avatar>
-              <Typography variant="body1">John Cena </Typography>
+              <Typography variant="body1">{`${blog?.blog?.author?.first_name} ${blog?.blog?.author?.last_name}`}</Typography>
             </Box>
             <Tooltip title="Like">
               <Fab color="info" aria-label="like" size="small">
-                <Badge color="error" badgeContent={9}>
+                <Badge color="error" badgeContent={blog?.blog?.likes_count}>
                   <Favorite fontSize="medium" />
                 </Badge>
               </Fab>

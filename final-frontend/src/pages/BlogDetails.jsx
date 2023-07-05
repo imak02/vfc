@@ -36,11 +36,12 @@ import moment from "moment";
 import CommentBox from "../components/CommentBox";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import BlogGridCard from "../components/BlogGridCard";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { errorToast } from "../redux/slices/toastSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ErrorAlert from "../components/ErrorAlert";
+
 
 // const blog = {
 //   _id: "1234579",
@@ -60,10 +61,13 @@ import ErrorAlert from "../components/ErrorAlert";
 
 const BlogDetails = () => {
   const [showComments, setShowComments] = useState(false);
+  // const [likes, setLikes] = useState(0);
   const localUser = useSelector((state) => state.auth.user ?? "");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
 
   const params = useParams();
   const blogId = params.blogId;
@@ -76,27 +80,131 @@ const BlogDetails = () => {
     console.log(response);
   };
 
-  const fetchBlog = async () => await axios.get(`blog-details/${blogId}/`);
+  const saveBlog = async () => {
+    const response = await axios.post(`blog-save-create/${blogId}/`);
+    setSaves((prev) => prev++);
+    console.log(response);
+  }
 
-  const { data, isLoading, isError, error } = useQuery(
-    ["fetchblog", blogId],
-    fetchBlog,
+  const { mutate: likeMutate } = useMutation(
+    () => axios.post(`blog-like-create/${blogId}/`),
     {
+
       onSuccess: (data) => {
-        if (data.status === 200) {
-          console.log(data.data);
+        if (data.status === 200 || data.status === 201) {
+          queryClient.invalidateQueries({ queryKey: ['fetchLikes'] });
+          console.log(data);
+
         }
       },
       onError: (error) => {
-        dispatch(errorToast(error?.response?.data?.error));
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
       },
     }
   );
 
-  const blog = data?.data?.payload;
-  const localUserId = localUser?.id;
+  const { mutate: saveMutate } = useMutation(
+    () => axios.post(`blog-save-create/${blogId}/`),
+    {
 
-  const blogUserId = data?.data?.payload?.author?.id;
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          console.log(data);
+
+          // queryClient.invalidateQueries({ queryKey: ['fetchSaves'] });
+
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
+  const fetchBlog = async () => await axios.get(`blog-details/${blogId}/`);
+  const fetchBlogLikes = async () => await axios.get(`blog/${blogId}/likes`);
+  const fetchComments = async () => await axios.get(`blog/${blogId}/comments/`);
+  const fetchBlogSaves = async () => await axios.get(`blog/${blogId}/saves-count/`);
+
+  const [blogResult, likeResult, commentResult, saveResult] = useQueries({
+    queries: [
+      {
+        queryKey: ['fetchBlog', blogId], queryFn: fetchBlog, onSuccess: (data) => {
+          if (data.status === 200) {
+            console.log(data.data);
+          }
+        },
+        onError: (error) => {
+          dispatch(errorToast(error?.response?.data?.error));
+        },
+      },
+      {
+        queryKey: ['fetchLikes', blogId], queryFn: fetchBlogLikes, onSuccess: (data) => {
+          if (data.status === 200) {
+            console.log(data.data);
+          }
+        },
+        onError: (error) => {
+          dispatch(errorToast(error?.response?.data?.error));
+        },
+      },
+      {
+        queryKey: ['fetchComments', blogId], queryFn: fetchComments, onSuccess: (data) => {
+          if (data.status === 200) {
+            console.log(data.data);
+          }
+        },
+        onError: (error) => {
+          dispatch(errorToast(error?.response?.data?.error));
+        },
+      },
+      {
+        queryKey: ['fetchSaves', blogId], queryFn: fetchBlogSaves, onSuccess: (data) => {
+          if (data.status === 200) {
+            console.log(data.data);
+          }
+        },
+        onError: (error) => {
+          dispatch(errorToast(error?.response?.data?.error));
+        },
+      },
+    ]
+  });
+
+  // const { data, isLoading, isError, error } = useQuery(
+  //   ["fetchblog", blogId],
+  //   fetchBlog,
+  //   {
+  //     onSuccess: (data) => {
+  //       if (data.status === 200) {
+  //         console.log(data.data);
+  //       }
+  //     },
+  //     onError: (error) => {
+  //       dispatch(errorToast(error?.response?.data?.error));
+  //     },
+  //   }
+  // );
+
+  const blog = blogResult?.data?.data?.payload;
+  const blogUserId = blog?.author?.id;
+  const localUserId = localUser?.id;
+  const comments = commentResult?.data?.data;
+  const likesCount = likeResult?.data?.data.likes_count;
+  const savesCount = saveResult?.data?.data.saves_count;
+
   return (
     <Box>
       <Banner
@@ -112,8 +220,8 @@ const BlogDetails = () => {
       />
 
       <Box sx={{ minHeight: "100vh" }}>
-        {isError ? (
-          <ErrorAlert message={error.message} />
+        {blogResult?.isError ? (
+          <ErrorAlert message={blogResult?.error.message} />
         ) : (
           <Container sx={{ mt: 10, position: "relative" }} maxWidth="xl">
             <Box
@@ -141,7 +249,7 @@ const BlogDetails = () => {
                   }}
                 >
                   <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                    {isLoading ? (
+                    {blogResult?.isLoading ? (
                       <Skeleton
                         variant="text"
                         sx={{ width: { xs: 200, md: 300, lg: 500 } }}
@@ -159,7 +267,7 @@ const BlogDetails = () => {
                     }}
                   >
                     {localUserId === blogUserId &&
-                      (isLoading ? (
+                      (blogResult?.isLoading ? (
                         <Skeleton
                           variant="rectangular"
                           sx={{ width: { xs: 100, md: 300, lg: 500 } }}
@@ -186,7 +294,7 @@ const BlogDetails = () => {
                         py: 1,
                       }}
                     >
-                      {isLoading ? (
+                      {blogResult?.isLoading ? (
                         <Skeleton
                           variant="text"
                           sx={{ width: { xs: 100, md: 300, lg: 500 } }}
@@ -205,7 +313,7 @@ const BlogDetails = () => {
                 </Box>
                 <Divider sx={{ borderColor: "black" }} />
 
-                {isLoading ? (
+                {blogResult?.isLoading ? (
                   <Skeleton
                     variant="rectangular"
                     sx={{ height: { xs: 200, md: 300, lg: 400 } }}
@@ -229,7 +337,7 @@ const BlogDetails = () => {
                   component="p"
                   sx={{ borderLeft: "2px solid gray", pl: 2, ml: 2, mb: 2 }}
                 >
-                  {isLoading ? (
+                  {blogResult?.isLoading ? (
                     <Skeleton
                       variant="text"
                       sx={{ width: { xs: 200, md: 300, lg: 500 } }}
@@ -239,7 +347,7 @@ const BlogDetails = () => {
                   )}
                 </Typography>
 
-                {isLoading ? (
+                {blogResult?.isLoading ? (
                   <>
                     <Skeleton
                       variant="text"
@@ -277,7 +385,7 @@ const BlogDetails = () => {
                       gap: 1,
                     }}
                   >
-                    {isLoading ? (
+                    {blogResult?.isLoading ? (
                       <Skeleton variant="circular" height={50} width={50} />
                     ) : (
                       <Avatar
@@ -289,7 +397,7 @@ const BlogDetails = () => {
                       </Avatar>
                     )}
 
-                    {isLoading ? (
+                    {blogResult?.isLoading ? (
                       <Skeleton variant="text" width={200} />
                     ) : (
                       <Typography variant="body1">
@@ -298,7 +406,7 @@ const BlogDetails = () => {
                     )}
                   </Box>
 
-                  {isLoading ? (
+                  {blogResult?.isLoading ? (
                     <Skeleton
                       variant="text"
                       sx={{ width: { xs: 100, md: 300, lg: 500 } }}
@@ -306,8 +414,8 @@ const BlogDetails = () => {
                   ) : (
                     <Box display="flex" gap={2}>
                       <Tooltip title="Like">
-                        <Fab color="info" aria-label="like" size="small">
-                          <Badge color="error" badgeContent={9}>
+                        <Fab color="info" aria-label="like" size="small" onClick={() => { likeMutate() }}>
+                          <Badge color="error" badgeContent={likesCount}>
                             <Favorite fontSize="medium" />
                           </Badge>
                         </Fab>
@@ -322,23 +430,23 @@ const BlogDetails = () => {
                             setShowComments((prev) => !prev);
                           }}
                         >
-                          <Badge color="error" badgeContent={100}>
+                          <Badge color="error" badgeContent={comments?.length}>
                             <Comment fontSize="medium" />
                           </Badge>
                         </Fab>
                       </Tooltip>
 
-                      <Tooltip title="Share">
+                      {/* <Tooltip title="Share">
                         <Fab color="info" aria-label="share" size="small">
                           <Badge color="error" badgeContent={100}>
                             <Share fontSize="medium" />
                           </Badge>
                         </Fab>
-                      </Tooltip>
+                      </Tooltip> */}
 
                       <Tooltip title="Save">
-                        <Fab color="info" aria-label="save" size="small">
-                          <Badge color="error" badgeContent={100}>
+                        <Fab color="info" aria-label="save" size="small" onClick={() => { saveMutate() }}>
+                          <Badge color="error" badgeContent={savesCount}>
                             <BookmarkAdd fontSize="medium" />
                           </Badge>
                         </Fab>
@@ -352,7 +460,7 @@ const BlogDetails = () => {
                     <Divider>
                       <Chip label="COMMENTS" />
                     </Divider>
-                    <CommentBox />
+                    <CommentBox blogId={blogId} comments={comments} />
                   </Box>
                 </Collapse>
               </Box>
