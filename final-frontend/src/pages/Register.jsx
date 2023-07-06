@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { Google, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, redirect } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import {
@@ -98,29 +98,6 @@ const Register = () => {
     event.preventDefault();
   };
 
-  const { mutate, isLoading } = useMutation(
-    (values) => axios.post("signup/", values),
-    {
-      onMutate: () => {
-        dispatch(loadingToast("Registering user..."));
-      },
-      onSuccess: (data) => {
-        if (data.status === 200 || data.status === 201) {
-          dispatch(successToast(data?.data?.message));
-        }
-        navigate("/verify-user",{ state: { username }});
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          console.log(error.response.data);
-          dispatch(errorToast(error?.response?.data?.message));
-        } else {
-          console.log(error);
-          dispatch(errorToast(error?.response?.data?.message));
-        }
-      },
-    }
-  );
 
   const formik = useFormik({
     initialValues: {
@@ -148,6 +125,32 @@ const Register = () => {
       });
     },
   });
+
+const emailForValidation = formik?.values?.email;
+
+  const { mutate, isLoading } = useMutation(
+    (values) => axios.post("signup/", values),
+    {
+      onMutate: () => {
+        dispatch(loadingToast("Registering user..."));
+      },
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          dispatch(successToast(data?.data?.message));
+          navigate("/verify-user",{ state: { emailForValidation }});
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
 
   return (
     <Box

@@ -34,7 +34,7 @@ const VerifyUser = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const username = location.state?.username;
+  const email = location?.state?.emailForValidation;
 
 
 
@@ -64,7 +64,7 @@ const VerifyUser = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: username,
+      email: email,
       otp: "",
 
     },
@@ -72,12 +72,11 @@ const VerifyUser = () => {
     enableReinitialize: true,
 
     onSubmit: async (values, { resetForm }) => {
-      console.log(values);
-      // mutate(values, {
-      //   onSuccess: () => {
-      //     resetForm();
-      //   },
-      // });
+      mutate(values, {
+        onSuccess: () => {
+          resetForm();
+        },
+      });
     },
   });
 
@@ -102,7 +101,7 @@ const VerifyUser = () => {
         >
           <Box component="img" src="logo.png" height={50} width={50} />
         </Box>
-        <Typography variant="h6">Reset password</Typography>
+        <Typography variant="h6">Email Verification</Typography>
         <Typography variant="body2">
           Please enter the otp you have received via email to continue verification process.
         </Typography>
