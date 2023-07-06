@@ -28,6 +28,10 @@ import moment from "moment";
 import React, { useState } from "react";
 import CommentBox from "./CommentBox";
 import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { errorToast } from "../redux/slices/toastSlice";
+import { useDispatch } from "react-redux";
 
 // const blog = {
 //   _id: "1234579",
@@ -45,6 +49,78 @@ import { Link } from "react-router-dom";
 
 const BlogCard = ({ blog }) => {
   const [showComments, setShowComments] = useState(false);
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const blogId = blog?.id;
+
+
+  const { mutate: likeMutate } = useMutation(
+    () => axios.post(`blog-like-create/${blogId}/`),
+    {
+
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          queryClient.invalidateQueries({ queryKey: ['blogs'] });
+          console.log(data);
+
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
+  const { mutate: saveMutate } = useMutation(
+    () => axios.post(`blog-save-create/${blogId}/`),
+    {
+
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          console.log(data);
+
+          queryClient.invalidateQueries({ queryKey: ['blogs'] });
+
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
+
+
+  const fetchComments = async () => await axios.get(`blog/${blogId}/comments/`);
+
+  const commentResult = useQuery({
+    queryKey: ['fetchComments', blogId], queryFn: fetchComments, onSuccess: (data) => {
+      if (data.status === 200) {
+        console.log(data.data);
+      }
+    },
+    onError: (error) => {
+      dispatch(errorToast(error?.response?.data?.error));
+    },
+  },);
+
+
+
+  const comments = commentResult?.data?.data;
+
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
       <Paper elevation={5} sx={{ maxWidth: 900 }}>
@@ -59,7 +135,7 @@ const BlogCard = ({ blog }) => {
           <CardHeader
             avatar={
               <Avatar
-                src={`${blog?.author?.profilePic}`}
+                src={`${blog?.author?.profile?.profilePicture}`}
                 alt={blog?.author?.first_name}
               >
                 {blog?.author?.first_name}
@@ -70,7 +146,7 @@ const BlogCard = ({ blog }) => {
                 <MoreVert />
               </IconButton>
             }
-            title={blog?.author?.first_name}
+            title={`${blog?.author?.first_name} ${blog?.author?.last_name}`}
             subheader={moment(blog?.created_at).fromNow()}
             sx={{ display: { xs: "flex", md: "none" } }}
           />
@@ -162,19 +238,19 @@ const BlogCard = ({ blog }) => {
               >
                 <Avatar
                   sx={{ bgcolor: "red" }}
-                  src={`${blog?.author?.profilePic}`}
+                  src={`${blog?.author?.profile?.profilePicture}`}
                   alt={blog?.author?.first_name}
                 >
                   {blog?.author?.first_name}
                 </Avatar>
                 <Typography variant="body1">
-                  {blog.author.first_name}
+                  {`${blog.author.first_name} ${blog.author.last_name}`}
                 </Typography>
               </Box>
               <Box display="flex" gap={2}>
                 <Tooltip title="Like">
-                  <Fab color="info" aria-label="like" size="small">
-                    <Badge color="error" badgeContent={9}>
+                  <Fab color="primary" aria-label="like" size="small" onClick={() => { likeMutate() }}>
+                    <Badge color="error" badgeContent={blog?.likes_count}>
                       <Favorite fontSize="medium" />
                     </Badge>
                   </Fab>
@@ -182,30 +258,30 @@ const BlogCard = ({ blog }) => {
 
                 <Tooltip title="Comment">
                   <Fab
-                    color="info"
+                    color="primary"
                     aria-label="comment"
                     size="small"
                     onClick={() => {
                       setShowComments((prev) => !prev);
                     }}
                   >
-                    <Badge color="error" badgeContent={100}>
+                    <Badge color="error" badgeContent={blog?.comments_count}>
                       <Comment fontSize="medium" />
                     </Badge>
                   </Fab>
                 </Tooltip>
 
-                <Tooltip title="Share">
-                  <Fab color="info" aria-label="share" size="small">
+                {/* <Tooltip title="Share">
+                  <Fab color="primary" aria-label="share" size="small">
                     <Badge color="error" badgeContent={100}>
                       <Share fontSize="medium" />
                     </Badge>
                   </Fab>
-                </Tooltip>
+                </Tooltip> */}
 
                 <Tooltip title="Save">
-                  <Fab color="info" aria-label="save" size="small">
-                    <Badge color="error" badgeContent={100}>
+                  <Fab color="primary" aria-label="save" size="small" onClick={() => { saveMutate() }}>
+                    <Badge color="error" badgeContent={blog?.saves_count}>
                       <BookmarkAdd fontSize="medium" />
                     </Badge>
                   </Fab>
@@ -214,12 +290,21 @@ const BlogCard = ({ blog }) => {
             </Box>
 
             {/* {showComments && ( */}
-            <Collapse in={showComments} timeout={800}>
+            {/* <Collapse in={showComments} timeout={800}>
               <Box sx={{ mt: 4 }}>
                 <Divider>
                   <Chip label="COMMENTS" />
                 </Divider>
                 <CommentBox />
+              </Box>
+            </Collapse> */}
+
+            <Collapse in={showComments} timeout={800}>
+              <Box sx={{ mt: 4 }}>
+                <Divider>
+                  <Chip label="COMMENTS" />
+                </Divider>
+                <CommentBox blogId={blogId} comments={comments} />
               </Box>
             </Collapse>
             {/* )} */}

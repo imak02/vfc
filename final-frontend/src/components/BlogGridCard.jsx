@@ -4,6 +4,7 @@ import {
   Badge,
   Box,
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   Fab,
@@ -11,16 +12,20 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const BlogGridCard = ({blog}) => {
+  const blogId = blog?.id;
   return (
     <Box>
+       
+      <Link to={`/blog/${blogId}`} className="links">
       <Card sx={{ width: 350 }}>
         <CardContent>
           <CardMedia
             component="img"
             height={200}
-            image={blog?.blog?.image}
+            image={blog?.image}
             alt="blog"
           />
           <Typography
@@ -28,7 +33,7 @@ const BlogGridCard = ({blog}) => {
             component="h3"
             sx={{ fontWeight: "bold", textAlign: "center", my: 5 }}
           >
-           {blog?.blog?.title}
+           {blog?.title}
           </Typography>
           <Box
             sx={{
@@ -47,16 +52,17 @@ const BlogGridCard = ({blog}) => {
             >
               <Avatar
                 sx={{ bgcolor: "red" }}
-                src={blog?.blog?.author?.profile?.profilePicture}
+                src={blog?.author?.profile?.profilePicture}
                 alt="John Cena"
               >
-                {`${blog?.blog?.author?.first_name} ${blog?.blog?.author?.last_name}`}
+                {`${blog?.author?.first_name} ${blog?.author?.last_name}`}
               </Avatar>
-              <Typography variant="body1">{`${blog?.blog?.author?.first_name} ${blog?.blog?.author?.last_name}`}</Typography>
+              <Typography variant="body1">{`${blog?.author?.first_name} ${blog?.author?.last_name}`}</Typography>
             </Box>
+            {/* userLikedBlogs */}
             <Tooltip title="Like">
               <Fab color="info" aria-label="like" size="small">
-                <Badge color="error" badgeContent={blog?.blog?.likes_count}>
+                <Badge color="error" badgeContent={blog?.likes_count}>
                   <Favorite fontSize="medium" />
                 </Badge>
               </Fab>
@@ -64,6 +70,7 @@ const BlogGridCard = ({blog}) => {
           </Box>
         </CardContent>
       </Card>
+      </Link>
     </Box>
   );
 };

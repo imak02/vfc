@@ -80,11 +80,11 @@ const BlogDetails = () => {
     console.log(response);
   };
 
-  const saveBlog = async () => {
-    const response = await axios.post(`blog-save-create/${blogId}/`);
-    setSaves((prev) => prev++);
-    console.log(response);
-  }
+  // const saveBlog = async () => {
+  //   const response = await axios.post(`blog-save-create/${blogId}/`);
+  //   setSaves((prev) => prev++);
+  //   console.log(response);
+  // }
 
   const { mutate: likeMutate } = useMutation(
     () => axios.post(`blog-like-create/${blogId}/`),
@@ -180,10 +180,11 @@ const BlogDetails = () => {
           dispatch(errorToast(error?.response?.data?.error));
         },
       },
+
     ]
   });
 
-  // const { data, isLoading, isError, error } = useQuery(
+  // const { data, isLoading, isError, error } = useQuery(blogUserId
   //   ["fetchblog", blogId],
   //   fetchBlog,
   //   {
@@ -204,6 +205,27 @@ const BlogDetails = () => {
   const comments = commentResult?.data?.data;
   const likesCount = likeResult?.data?.data.likes_count;
   const savesCount = saveResult?.data?.data.saves_count;
+
+  const fetchSameAuthorBlogs = async () => await axios.get(`/blog/author/${blogUserId}/blogs/`);
+
+
+  const authorBlogResult = useQuery({
+    queryKey: ['fetchAuthorBlogs', blogId], queryFn: fetchSameAuthorBlogs, onSuccess: (data) => {
+      if (data.status === 200) {
+        console.log(data.data);
+      }
+    },
+    onError: (error) => {
+      dispatch(errorToast(error?.response?.data?.error));
+    },
+    enabled: !!blogUserId,
+  },);
+
+  const authorOtherBlogs = authorBlogResult?.data?.data;
+
+
+  console.log(authorOtherBlogs);
+
 
   return (
     <Box>
@@ -390,7 +412,7 @@ const BlogDetails = () => {
                     ) : (
                       <Avatar
                         sx={{ bgcolor: "red" }}
-                        src={`${blog?.author?.profilePic}`}
+                        src={`${blog?.author?.profile?.profilePicture}`}
                         alt={blog?.author?.first_name}
                       >
                         {blog?.author?.first_name}
@@ -401,7 +423,7 @@ const BlogDetails = () => {
                       <Skeleton variant="text" width={200} />
                     ) : (
                       <Typography variant="body1">
-                        {blog?.author?.first_name}
+                        {`${blog?.author?.first_name} ${blog?.author?.last_name}`}
                       </Typography>
                     )}
                   </Box>
@@ -414,7 +436,7 @@ const BlogDetails = () => {
                   ) : (
                     <Box display="flex" gap={2}>
                       <Tooltip title="Like">
-                        <Fab color="info" aria-label="like" size="small" onClick={() => { likeMutate() }}>
+                        <Fab color="primary" aria-label="like" size="small" onClick={() => { likeMutate() }}>
                           <Badge color="error" badgeContent={likesCount}>
                             <Favorite fontSize="medium" />
                           </Badge>
@@ -423,7 +445,7 @@ const BlogDetails = () => {
 
                       <Tooltip title="Comment">
                         <Fab
-                          color="info"
+                          color="primary"
                           aria-label="comment"
                           size="small"
                           onClick={() => {
@@ -445,7 +467,7 @@ const BlogDetails = () => {
                       </Tooltip> */}
 
                       <Tooltip title="Save">
-                        <Fab color="info" aria-label="save" size="small" onClick={() => { saveMutate() }}>
+                        <Fab color="primary" aria-label="save" size="small" onClick={() => { saveMutate() }}>
                           <Badge color="error" badgeContent={savesCount}>
                             <BookmarkAdd fontSize="medium" />
                           </Badge>
@@ -522,11 +544,8 @@ const BlogDetails = () => {
               justifyContent: "center",
             }}
           >
-            <BlogGridCard />
-            <BlogGridCard />
-            <BlogGridCard />
-            <BlogGridCard />
-            <BlogGridCard />
+            {authorOtherBlogs?.map((blog) => <BlogGridCard key={blog.id} blog={blog} />)}
+
           </Box>
         </Box>
       </Box>

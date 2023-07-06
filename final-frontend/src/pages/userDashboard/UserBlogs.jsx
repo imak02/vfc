@@ -171,7 +171,7 @@ const UserBlogs = () => {
             justifyContent: "center",
           }}
         >
-          {userLikedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog} />)}
+          {userLikedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog.blog} />)}
 
         </Box>
       </Paper>
@@ -187,7 +187,7 @@ const UserBlogs = () => {
             justifyContent: "center",
           }}
         >
-                  {userSavedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog} />)}
+                  {userSavedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog.blog} />)}
 
         </Box>
       </Paper>

@@ -4,7 +4,7 @@ import React from "react";
 const BlogSkeleton = () => {
   return (
     <Box>
-      <Skeleton height={50} width={500} />
+      <Skeleton height={50} sx={{width:{xs:100, md:500}}}  />
       <Skeleton variant="rectangular" height={200} sx={{ mb: 1 }} />
       <Box
         sx={{
