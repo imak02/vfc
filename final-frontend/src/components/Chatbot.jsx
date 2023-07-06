@@ -14,10 +14,73 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { errorToast } from "../redux/slices/toastSlice";
 
 const Chatbot = () => {
   const [showChatBox, setShowChatBox] = useState(false);
+  const [question, setQuestion] = useState("");
+  const [thread, setThread] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const handleClose = async () => {
+    setThread([]);
+    setShowChatBox(false);
+
+    try {
+      const response = await axios.delete("http://localhost:5000/query/");
+      console.log(response);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleQuestionChange = (e) => { setQuestion(e.target.value) };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let sendData = { question: question };
+    // console.log(sendData);
+    mutate(sendData, {
+      onSuccess: () => {
+        // setThread((prev) => [...prev, {question:question}]);
+        setQuestion("");
+      },
+    });
+
+  }
+
+  const { mutate, isLoading } = useMutation(
+    (values) => axios.post("http://localhost:5000/query/", values),
+    {
+      onMutate: () => {
+      },
+      onSuccess: (data) => {
+        if (data.status === 200 || data.status === 201) {
+          console.log(data.data);
+          setThread((prev) => [...prev, data.data]);
+        }
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          console.log(error.response.data);
+          dispatch(errorToast(error?.response?.data?.message));
+        } else {
+          console.log(error);
+          dispatch(errorToast(error?.response?.data?.message));
+        }
+      },
+    }
+  );
+
+  console.log(thread);
+
+
+
   return (
     <Box sx={{ position: "relative" }}>
       {!showChatBox && (
@@ -73,6 +136,7 @@ const Chatbot = () => {
       >
         <Paper
           sx={{
+            width: { xs: 300, md: 400 },
             maxWidth: 400,
             position: "fixed",
             zIndex: 9999,
@@ -96,9 +160,7 @@ const Chatbot = () => {
               VFC Chatbot
             </Typography>
             <IconButton
-              onClick={() => {
-                setShowChatBox(false);
-              }}
+              onClick={handleClose}
             >
               <Close />
             </IconButton>
@@ -107,34 +169,22 @@ const Chatbot = () => {
             sx={{
               bgcolor: (theme) =>
                 theme.palette.mode === "light" ? "lightgrey" : "#121212",
+              width: { xs: 300, md: 400 },
+
               height: { xs: 450, md: 500 },
               p: 2,
+              overflowY: "scroll"
+
             }}
           >
-            <Box
-              sx={{ display: "inline-flex", flexDirection: "column", gap: 2 }}
+            {thread.map((chat) => <Box
+              sx={{
+                display: "inline-flex", flexDirection: "column", gap: 2,
+                width: "100%",
+                my: 2,
+              }}
             >
-              <Box>
-                <Chip
-                  sx={{
-                    height: "auto",
-                    "& .MuiChip-label": {
-                      display: "block",
-                      whiteSpace: "normal",
-                      px: 2,
-                      py: 1,
-                    },
-                  }}
-                  label={
-                    <Typography>
-                      "Hi! How may I help you? Hi! How may I help you?Hi! How
-                      may I help you?Hi! How may I help you?Hi! How may I help
-                      you?Hi! How may I help you?"
-                    </Typography>
-                  }
-                  size="medium"
-                />
-              </Box>
+
               <Box sx={{ alignSelf: "flex-end" }}>
                 <Chip
                   sx={{
@@ -147,13 +197,76 @@ const Chatbot = () => {
                     },
                   }}
                   label={
-                    <Typography sx={{ textAlign: "left" }}>Hello</Typography>
+                    <Typography sx={{ textAlign: "left" }}>{chat.Question}</Typography>
                   }
                   size="medium"
                 />
               </Box>
-            </Box>
+
+              <Box sx={{ alignSelf: "flex-start" }}>
+                <Chip
+                  sx={{
+                    height: "auto",
+                    "& .MuiChip-label": {
+                      display: "block",
+                      whiteSpace: "normal",
+                      px: 2,
+                      py: 1,
+                    },
+                  }}
+                  label={
+                    <Typography>
+                      {chat.Answer}
+                    </Typography>
+                  }
+                  size="medium"
+                />
+              </Box>
+
+
+
+
+
+
+
+
+              {/* {thread.map((chat) =>
+                <Box sx={{ alignSelf: "flex-end" }}>
+                  <Chip
+                    sx={{
+                      height: "auto",
+                      "& .MuiChip-label": {
+                        display: "block",
+                        whiteSpace: "normal",
+                        px: 2,
+                        py: 1,
+                      },
+                    }}
+                    label={
+                      <Typography sx={{ textAlign: "left" }}>{chat}</Typography>
+                    }
+                    size="medium"
+                  />
+                </Box>
+              )} */}
+              {/* <Chip
+                sx={{
+                  height: "auto",
+                  "& .MuiChip-label": {
+                    display: "block",
+                    whiteSpace: "normal",
+                    px: 2,
+                    py: 1,
+                  },
+                }}
+                label={
+                  <Typography sx={{ textAlign: "left" }}>{thread[0]}</Typography>
+                }
+                size="medium"
+              /> */}
+            </Box>)}
           </Box>
+          {/* </Box> */}
 
           {/* <Box>
           <TextField
@@ -178,6 +291,7 @@ const Chatbot = () => {
         </Box> */}
           <Paper
             component="form"
+            onSubmit={handleSubmit}
             sx={{
               p: "4px 4px",
               display: "flex",
@@ -189,6 +303,8 @@ const Chatbot = () => {
               sx={{ ml: 1, flex: 1 }}
               placeholder="Type your message here..."
               inputProps={{ "aria-label": "Chatbot" }}
+              value={question}
+              onChange={handleQuestionChange}
             />
             <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
               <Send color="info" />
@@ -196,7 +312,7 @@ const Chatbot = () => {
           </Paper>
         </Paper>
       </Slide>
-    </Box>
+    </Box >
   );
 };
 
