@@ -9,12 +9,49 @@ import {
 import React from "react";
 
 const DietDetails = ({ diet }) => {
+  const SingleItem = ({ value }) => {
+    return (
+      <ListItem sx={{ display: "list-item" }}>
+        <ListItemText primary={value} />
+      </ListItem>
+    );
+  };
+
   return (
     <Box>
       <Box>
         <Typography variant="h6" component="h6">
+          Nutritional Values (g):
+        </Typography>
+        <Box>
+          <List
+            sx={{ listStyleType: "disc", pl: 6 }}
+            dense={true}
+            disablePadding
+          >
+            <SingleItem value={`Calories: ${diet.Calories}`} />
+            <SingleItem value={`Fat Content: ${diet.FatContent}`} />
+            <SingleItem
+              value={`Saturated Fat Content: ${diet.SaturatedFatContent}`}
+            />
+            <SingleItem
+              value={`Cholesterol Content: ${diet.CholesterolContent}`}
+            />
+            <SingleItem value={`Sodium Content: ${diet.SodiumContent}`} />
+            <SingleItem
+              value={`Carbohydrate Content: ${diet.CarbohydrateContent}`}
+            />
+            <SingleItem value={`Fiber Content: ${diet.FiberContent}`} />
+            <SingleItem value={`Sugar Content: ${diet.SugarContent}`} />
+            <SingleItem value={`Protein Content: ${diet.ProteinContent}`} />
+          </List>
+        </Box>
+      </Box>
+      <Box>
+        <Typography variant="h6" component="h6">
           Ingredients
         </Typography>
+
         <Box>
           {diet?.RecipeIngredientParts.map((ingredient, index) => (
             <List
@@ -23,9 +60,7 @@ const DietDetails = ({ diet }) => {
               disablePadding
               sx={{ listStyleType: "disc", pl: 6 }}
             >
-              <ListItem sx={{ display: "list-item" }}>
-                <ListItemText primary={ingredient} />
-              </ListItem>
+              <SingleItem value={ingredient} />
             </List>
           ))}
         </Box>
@@ -42,9 +77,7 @@ const DietDetails = ({ diet }) => {
               disablePadding
               sx={{ listStyleType: "disc", pl: 6 }}
             >
-              <ListItem sx={{ display: "list-item" }}>
-                <ListItemText primary={recipe} />
-              </ListItem>
+              <SingleItem value={recipe} />
             </List>
           ))}
         </Box>
@@ -60,17 +93,9 @@ const DietDetails = ({ diet }) => {
             dense={true}
             disablePadding
           >
-            <ListItem sx={{ display: "list-item" }}>
-              <ListItemText primary={`Cook Time: ${diet.CookTime} min`} />
-            </ListItem>
-            <ListItem sx={{ display: "list-item" }}>
-              <ListItemText
-                primary={`Preparation Time: ${diet.PrepTime} min`}
-              />
-            </ListItem>
-            <ListItem sx={{ display: "list-item" }}>
-              <ListItemText primary={`Total Time: ${diet.TotalTime} min`} />
-            </ListItem>
+            <SingleItem value={`Cook Time: ${diet.CookTime} min`} />
+            <SingleItem value={`Preparation Time: ${diet.PrepTime} min`} />
+            <SingleItem value={`Total Time: ${diet.TotalTime} min`} />
           </List>
         </Box>
       </Box>

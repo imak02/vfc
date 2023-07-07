@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Grid,
   MenuItem,
   Paper,
   TextField,
@@ -227,9 +228,29 @@ const UserGoal = () => {
         </Box>
       </Paper>
 
-      <Paper>
+      <Paper sx={{ p: 2, my: 5 }}>
         <Box sx={{ my: 5 }}>
-          <DietAccordion dietData={dietRecommendation} />
+          <Grid container spacing={{ xs: 2, md: 3 }}>
+            <Grid item xs={12} lg={6} xl={4}>
+              <DietAccordion
+                title="Breakfast"
+                dietData={dietRecommendation?.breakfast}
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} xl={4}>
+              <DietAccordion
+                title="Lunch"
+                dietData={dietRecommendation?.lunch}
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} xl={4}>
+              <DietAccordion
+                title="Dinner"
+                dietData={dietRecommendation?.dinner}
+              />
+            </Grid>
+          </Grid>
+
           {/* <MyAccordion
             title="My Diet"
             headers={dietsType}

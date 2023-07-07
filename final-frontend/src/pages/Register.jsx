@@ -27,9 +27,7 @@ import {
   successToast,
 } from "../redux/slices/toastSlice";
 import { useMutation } from "@tanstack/react-query";
-import { DatePicker } from "@mui/x-date-pickers";
 import moment from "moment";
-import dayjs from "dayjs";
 
 const nameRegex = /^[a-zA-Z-' ]+$/;
 const userNameRegex = /^[a-z0-9_-]{3,15}$/;
@@ -38,8 +36,6 @@ const emailRegex =
 const phoneRegex = /^(\+977)?[0-9]{9,10}$/;
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-const today = dayjs();
 
 const validationSchema = Yup.object({
   first_name: Yup.string()

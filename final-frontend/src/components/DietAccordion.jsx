@@ -3,26 +3,16 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  FormLabel,
-} from "@mui/material";
-import DietList from "./DietList";
+import { Box } from "@mui/material";
 import DietDetails from "./DietDetails";
 
-const DietAccordion = ({ dietData }) => {
-  console.log(dietData);
+const DietAccordion = ({ title, dietData }) => {
   return (
     <Box>
       <Typography variant="h5" component="h3" fontWeight="bold" sx={{ my: 2 }}>
-        Breakfast
+        {title}
       </Typography>
-      {dietData?.breakfast?.map((diet) => (
+      {dietData?.map((diet) => (
         <Accordion key={diet.RecipeId} sx={{ mb: 2 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon fontSize="large" />}
