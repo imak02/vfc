@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import DietList from "./DietList";
 
-const MyAccordion = ({ title, headers, content }) => {
+const MyAccordion = ({ title, headers, content, dietData }) => {
+  console.log(dietData);
   return (
     <Box>
       <Typography variant="h5" component="h3" fontWeight="bold" sx={{ my: 2 }}>

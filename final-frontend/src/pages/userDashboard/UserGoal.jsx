@@ -17,6 +17,18 @@ import {
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
+import MyAccordion from "../../components/MyAccordion";
+import DietList from "../../components/DietList";
+import dietRecommendation from "../../data/dietRecommendation";
+import DietAccordion from "../../components/DietAccordion";
+
+const dietsType = [
+  { id: 1, title: "Breakfast" },
+  { id: 2, title: "Brunch" },
+  { id: 3, title: "Lunch" },
+  { id: 4, title: "Supper" },
+  { id: 5, title: "Dinner" },
+];
 
 const UserGoal = () => {
   const dispatch = useDispatch();
@@ -152,6 +164,17 @@ const UserGoal = () => {
           <Button type="submit" variant="contained">
             Submit
           </Button>
+        </Box>
+      </Paper>
+
+      <Paper>
+        <Box sx={{ my: 5 }}>
+          <DietAccordion dietData={dietRecommendation} />
+          {/* <MyAccordion
+            title="My Diet"
+            headers={dietsType}
+            dietData={dietRecommendation}
+          /> */}
         </Box>
       </Paper>
     </Box>
