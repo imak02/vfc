@@ -104,7 +104,7 @@ const EditBody = () => {
             >
               General Information
             </Typography>
-            <Box
+            {/* <Box
               sx={{
                 marginBottom: 2,
                 marginRight: { md: "1%" },
@@ -154,7 +154,7 @@ const EditBody = () => {
                 error={formik.touched.weight && Boolean(formik.errors.weight)}
                 helperText={formik.touched.weight && formik.errors.weight}
               />
-            </Box>
+            </Box> */}
 
             <Box
               sx={{
@@ -190,7 +190,8 @@ const EditBody = () => {
             <Box
               sx={{
                 marginBottom: 2,
-                width: { xs: "100%", lg: "25%" },
+                marginRight: { md: "1%" },
+                width: { xs: "100%", lg: "24%" },
                 display: "inline-block",
               }}
             >
@@ -535,7 +536,6 @@ const EditBody = () => {
               variant="contained"
               disabled={isLoading}
             >
-              
               {isLoading ? "Submitting..." : "Submit"}
             </Button>
           </Box>

@@ -60,6 +60,8 @@ const UserGoal = () => {
 
   const formik = useFormik({
     initialValues: {
+      height: "",
+      weight: "",
       activity: "",
       weightplan: "",
     },
@@ -77,12 +79,63 @@ const UserGoal = () => {
   return (
     <Box>
       <Paper>
-        <Box component="form" onSubmit={formik.handleSubmit}>
+        <Box component="form" onSubmit={formik.handleSubmit} sx={{ p: 2 }}>
           <Box
             sx={{
               marginBottom: 2,
-              marginLeft: { md: "1%" },
-              width: { xs: "100%", md: "29%" },
+              marginRight: { md: "1%" },
+              width: { xs: "100%", lg: "24%" },
+              display: "inline-block",
+            }}
+          >
+            <Typography variant="h6" component="h2">
+              Height
+            </Typography>
+            <TextField
+              color="primary"
+              id="height"
+              name="height"
+              type="number"
+              placeholder="Enter your height in inches"
+              fullWidth
+              value={formik.values.height}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              error={formik.touched.height && Boolean(formik.errors.height)}
+              helperText={formik.touched.height && formik.errors.height}
+            />
+          </Box>
+
+          <Box
+            sx={{
+              marginBottom: 2,
+              marginRight: { md: "1%" },
+              width: { xs: "100%", lg: "24%" },
+              display: "inline-block",
+            }}
+          >
+            <Typography variant="h6" component="h2">
+              Weight
+            </Typography>
+            <TextField
+              color="primary"
+              id="weight"
+              name="weight"
+              type="number"
+              placeholder="Enter your weight in kilograms"
+              fullWidth
+              value={formik.values.weight}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              error={formik.touched.weight && Boolean(formik.errors.weight)}
+              helperText={formik.touched.weight && formik.errors.weight}
+            />
+          </Box>
+          <Box
+            sx={{
+              marginBottom: 2,
+              marginRight: { md: "1%" },
+              width: { xs: "100%", lg: "24%" },
               display: "inline-block",
             }}
           >
@@ -120,8 +173,7 @@ const UserGoal = () => {
           <Box
             sx={{
               marginBottom: 2,
-              marginLeft: { md: "1%" },
-              width: { xs: "100%", md: "29%" },
+              width: { xs: "100%", lg: "25%" },
               display: "inline-block",
             }}
           >
@@ -161,9 +213,17 @@ const UserGoal = () => {
               ))}
             </TextField>
           </Box>
-          <Button type="submit" variant="contained">
-            Submit
-          </Button>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button type="submit" variant="contained" color="info">
+              {isLoading ? "Loading..." : "Submit"}
+            </Button>
+          </Box>
         </Box>
       </Paper>
 

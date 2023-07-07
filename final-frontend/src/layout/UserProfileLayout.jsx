@@ -54,7 +54,6 @@ function UserProfileLayout(props) {
 
   const dispatch = useDispatch();
 
-
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
   };
@@ -177,12 +176,14 @@ function UserProfileLayout(props) {
             {user?.first_name + " " + user?.last_name}
           </Typography>
           <Typography color="GrayText">
-            {user?.gender === "male" && "Male" }{user?.gender === "female" && "Female" }{user?.gender === "others" && "Others" }, {user?.profile?.dob && age}
+            {user?.gender === "male" && "Male"}
+            {user?.gender === "female" && "Female"}
+            {user?.gender === "others" && "Others"}, {user?.profile?.dob && age}
           </Typography>
         </Box>
       </Box>
 
-      <Box sx={{ my: 3, py: 3 }}>
+      {/* <Box sx={{ my: 3, py: 3 }}>
         <Divider />
         <Box
           sx={{
@@ -218,7 +219,7 @@ function UserProfileLayout(props) {
           </Box>
         </Box>
         <Divider />
-      </Box>
+      </Box> */}
       <List>
         {pageList.map((page) => (
           <ListItem key={page.id} disablePadding>
