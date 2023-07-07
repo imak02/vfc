@@ -34,9 +34,9 @@ import {
 import { login } from "../redux/slices/authSlice";
 
 const validationSchema = Yup.object({
-  username: Yup.string("Enter your email or username")
+  username: Yup.string("Enter your username")
     .min(2, "Username should be of minimum 2 characters length")
-    .required("Username/Email is required"),
+    .required("Username is required"),
   password: Yup.string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
@@ -103,7 +103,7 @@ export default function Login() {
         console.log(data);
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          navigate("/reset-password",{ state: { email }});
+          navigate("/reset-password", { state: { email } });
         }
       },
       onError: (error) => {
@@ -236,9 +236,9 @@ export default function Login() {
                   fullWidth
                   id="username"
                   name="username"
-                  color="focusInput"
+                  color="primary"
                   autoComplete="off"
-                  label="Username/Email"
+                  label="Username"
                   value={formik.values.username}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -254,7 +254,7 @@ export default function Login() {
                   id="password"
                   name="password"
                   label="Password"
-                  color="focusInput"
+                  color="primary"
                   type={showPassword ? "text" : "password"}
                   variant="outlined"
                   value={formik.values.password}
@@ -381,7 +381,7 @@ export default function Login() {
                     New Here? <Link to="/register">Signup</Link>
                   </Grid>
                 </Grid>
-                <Divider sx={{ mt: 2 }}>
+                {/* <Divider sx={{ mt: 2 }}>
                   {" "}
                   <Chip label="OR" />
                 </Divider>
@@ -394,7 +394,7 @@ export default function Login() {
                 >
                   <Google sx={{ mr: 1 }} />
                   Sign In with Google
-                </Button>
+                </Button> */}
               </Box>
             </Box>
           </Grid>

@@ -27,6 +27,9 @@ import {
   successToast,
 } from "../redux/slices/toastSlice";
 import { useMutation } from "@tanstack/react-query";
+import { DatePicker } from "@mui/x-date-pickers";
+import moment from "moment";
+import dayjs from "dayjs";
 
 const nameRegex = /^[a-zA-Z-' ]+$/;
 const userNameRegex = /^[a-z0-9_-]{3,15}$/;
@@ -35,6 +38,8 @@ const emailRegex =
 const phoneRegex = /^(\+977)?[0-9]{9,10}$/;
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+const today = dayjs();
 
 const validationSchema = Yup.object({
   first_name: Yup.string()
@@ -75,7 +80,9 @@ const validationSchema = Yup.object({
     "Both passwords do not match."
   ),
   gender: Yup.string().required("Select your gender"),
-  category: Yup.string().required("Select your role"),
+  // category: Yup.string().required("Select your role"),
+  dob: Yup.date().max(new Date(), "You can't be born in the future!"),
+
   terms: Yup.bool().required().oneOf([true], "*Terms must be accepted"),
 });
 
@@ -98,7 +105,6 @@ const Register = () => {
     event.preventDefault();
   };
 
-
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -109,7 +115,9 @@ const Register = () => {
       password: "",
       password2: "",
       gender: "",
-      category: "",
+      dob: "",
+
+      // category: "",
       terms: false,
     },
     validationSchema: validationSchema,
@@ -126,7 +134,7 @@ const Register = () => {
     },
   });
 
-const emailForValidation = formik?.values?.email;
+  const emailForValidation = formik?.values?.email;
 
   const { mutate, isLoading } = useMutation(
     (values) => axios.post("signup/", values),
@@ -137,7 +145,7 @@ const emailForValidation = formik?.values?.email;
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          navigate("/verify-user",{ state: { emailForValidation }});
+          navigate("/verify-user", { state: { emailForValidation } });
         }
       },
       onError: (error) => {
@@ -161,10 +169,10 @@ const emailForValidation = formik?.values?.email;
             : t.palette.grey[800],
         pt: 4,
         pb: 5,
-        minHeight:"100vh",
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center"
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Grid
@@ -208,7 +216,7 @@ const emailForValidation = formik?.values?.email;
                 size="small"
                 id="first_name"
                 name="first_name"
-                color="focusInput"
+                color="primary"
                 autoComplete="off"
                 label="First Name"
                 value={formik.values.first_name}
@@ -232,7 +240,7 @@ const emailForValidation = formik?.values?.email;
                 size="small"
                 id="last_name"
                 name="last_name"
-                color="focusInput"
+                color="primary"
                 autoComplete="off"
                 label="Last Name"
                 value={formik.values.last_name}
@@ -250,7 +258,7 @@ const emailForValidation = formik?.values?.email;
                 size="small"
                 id="username"
                 name="username"
-                color="focusInput"
+                color="primary"
                 autoComplete="off"
                 label="Username"
                 value={formik.values.username}
@@ -269,7 +277,7 @@ const emailForValidation = formik?.values?.email;
                 id="email"
                 type="email"
                 name="email"
-                color="focusInput"
+                color="primary"
                 autoComplete="off"
                 label="Email"
                 value={formik.values.email}
@@ -285,7 +293,7 @@ const emailForValidation = formik?.values?.email;
                 size="small"
                 id="phone"
                 name="phone"
-                color="focusInput"
+                color="primary"
                 autoComplete="off"
                 label="Phone Number"
                 value={formik.values.phone}
@@ -302,7 +310,7 @@ const emailForValidation = formik?.values?.email;
                 id="password"
                 name="password"
                 label="Password"
-                color="focusInput"
+                color="primary"
                 type={showPassword ? "text" : "password"}
                 variant="outlined"
                 value={formik.values.password}
@@ -339,7 +347,7 @@ const emailForValidation = formik?.values?.email;
                 id="password2"
                 name="password2"
                 label="Confirm Password"
-                color="focusInput"
+                color="primary"
                 type={showPassword2 ? "text" : "password"}
                 variant="outlined"
                 value={formik.values.password2}
@@ -371,9 +379,9 @@ const emailForValidation = formik?.values?.email;
               />
 
               <TextField
-                size="small"
                 id="gender"
                 name="gender"
+                size="small"
                 select
                 label="Gender"
                 value={formik.values.gender}
@@ -383,17 +391,14 @@ const emailForValidation = formik?.values?.email;
                 helperText={formik.touched.gender && formik.errors.gender}
                 sx={{ marginBottom: 2, marginRight: "1%", width: "49%" }}
               >
-                {["Male", "Female", "Others"].map((genderOption) => (
-                  <MenuItem
-                    key={genderOption}
-                    value={genderOption.toLowerCase()}
-                  >
+                {["Male", "Female", "Other"].map((genderOption) => (
+                  <MenuItem key={genderOption} value={genderOption}>
                     {genderOption}
                   </MenuItem>
                 ))}
               </TextField>
 
-              <TextField
+              {/* <TextField
                 size="small"
                 id="category"
                 name="category"
@@ -413,7 +418,33 @@ const emailForValidation = formik?.values?.email;
                     {userOption}
                   </MenuItem>
                 ))}
-              </TextField>
+              </TextField> */}
+
+              {/* <DatePicker
+                value={formik.values.dob}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                disableFuture
+                views={["year", "month", "day"]}
+                sx={{ marginBottom: 2, marginLeft: "1%", width: "49%" }}
+              /> */}
+
+              <TextField
+                size="small"
+                id="dob"
+                type="date"
+                name="dob"
+                color="primary"
+                autoComplete="off"
+                value={formik.values.dob}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                error={formik.touched.dob && Boolean(formik.errors.dob)}
+                helperText={
+                  (formik.touched.dob && formik.errors.dob) ?? "Date of Birth"
+                }
+                sx={{ marginBottom: 2, marginLeft: "1%", width: "49%" }}
+              />
 
               <Grid item xs>
                 <FormControl
@@ -458,7 +489,7 @@ const emailForValidation = formik?.values?.email;
                   Already a user? <Link to="/login">Login</Link>
                 </Grid>
               </Grid>
-              <Divider sx={{ mt: 2 }}>
+              {/* <Divider sx={{ mt: 2 }}>
                 {" "}
                 <Chip label="OR" />
               </Divider>
@@ -471,7 +502,7 @@ const emailForValidation = formik?.values?.email;
               >
                 <Google sx={{ mr: 1 }} />
                 Sign Up with Google
-              </Button>
+              </Button> */}
             </Box>
           </Box>
         </Grid>
