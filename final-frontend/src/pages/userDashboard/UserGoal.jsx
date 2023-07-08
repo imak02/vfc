@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import {
   errorToast,
   loadingToast,
@@ -20,22 +20,14 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import MyAccordion from "../../components/MyAccordion";
 import DietList from "../../components/DietList";
-import dietRecommendation from "../../data/dietRecommendation";
 import DietAccordion from "../../components/DietAccordion";
 
-const dietsType = [
-  { id: 1, title: "Breakfast" },
-  { id: 2, title: "Brunch" },
-  { id: 3, title: "Lunch" },
-  { id: 4, title: "Supper" },
-  { id: 5, title: "Dinner" },
-];
-
 const UserGoal = () => {
+  const [showRecommendation, setShowRecommendation] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { mutate, isLoading } = useMutation(
+  const { mutate, data,isLoading } = useMutation(
     (values) => axios.post("/diet/recommend/", values),
     {
       onMutate: () => {
@@ -44,6 +36,7 @@ const UserGoal = () => {
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           console.log(data);
+          setShowRecommendation(true);
           dispatch(successToast(data?.data?.message));
         }
       },
@@ -68,7 +61,7 @@ const UserGoal = () => {
     },
 
     onSubmit: async (values, { resetForm }) => {
-      // console.log(values);
+      setShowRecommendation(false);
       mutate(values, {
         onSuccess: () => {
           resetForm();
@@ -76,6 +69,8 @@ const UserGoal = () => {
       });
     },
   });
+
+  const dietRecommendation= data?.data;
 
   return (
     <Box>
@@ -228,7 +223,7 @@ const UserGoal = () => {
         </Box>
       </Paper>
 
-      <Paper sx={{ p: 2, my: 5 }}>
+    {showRecommendation &&   <Paper sx={{ p: 2, my: 5 }}>
         <Box sx={{ my: 5 }}>
           <Grid container spacing={{ xs: 2, md: 3 }}>
             <Grid item xs={12} lg={6} xl={4}>
@@ -257,7 +252,7 @@ const UserGoal = () => {
             dietData={dietRecommendation}
           /> */}
         </Box>
-      </Paper>
+      </Paper>}
     </Box>
   );
 };

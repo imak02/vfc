@@ -30,6 +30,8 @@ const CommentBox = ({ blogId, comments }) => {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user ?? "");
 
+  console.log(user)
+
 
   const { mutate, isLoading: isPosting } = useMutation(
     (values) => axios.post(`blog-comment-create/${blogId}/`, values),
@@ -120,6 +122,7 @@ const CommentBox = ({ blogId, comments }) => {
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar
+                  sx={{ bgcolor: "blueviolet" }}
                     alt={comment.user}
                     src={`http://localhost:8000${comment?.profilePicture}`}
                   />

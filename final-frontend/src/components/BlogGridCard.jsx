@@ -51,17 +51,16 @@ const BlogGridCard = ({blog}) => {
               }}
             >
               <Avatar
-                sx={{ bgcolor: "red" }}
+                sx={{ bgcolor: "blueviolet" }}
                 src={blog?.author?.profile?.profilePicture}
-                alt="John Cena"
-              >
-                {`${blog?.author?.first_name} ${blog?.author?.last_name}`}
-              </Avatar>
+                alt={blog?.author?.first_name}
+              />
+             
               <Typography variant="body1">{`${blog?.author?.first_name} ${blog?.author?.last_name}`}</Typography>
             </Box>
             {/* userLikedBlogs */}
             <Tooltip title="Like">
-              <Fab color="info" aria-label="like" size="small">
+              <Fab color="primary" aria-label="like" size="small">
                 <Badge color="error" badgeContent={blog?.likes_count}>
                   <Favorite fontSize="medium" />
                 </Badge>

@@ -140,11 +140,13 @@ const UserBlogs = () => {
                   <TableCell>{moment(new Date(blog.updated_to)).fromNow()}</TableCell>
                   <TableCell>
                     <Box sx={{ display: "flex", gap: 1 }}>
-                      <Tooltip title="Edit">
-                        <IconButton>
-                          <Edit color="info" />
-                        </IconButton>
-                      </Tooltip>
+                      <Link to={`/blog/edit/${blog.id}`} className="links">
+                        <Tooltip title="Edit">
+                          <IconButton>
+                            <Edit color="info" />
+                          </IconButton>
+                        </Tooltip>
+                      </Link>
                       <Tooltip title="Delete">
                         <IconButton>
                           <Delete color="error" />
@@ -187,7 +189,7 @@ const UserBlogs = () => {
             justifyContent: "center",
           }}
         >
-                  {userSavedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog.blog} />)}
+          {userSavedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog.blog} />)}
 
         </Box>
       </Paper>
