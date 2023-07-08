@@ -21,7 +21,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { Google, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
@@ -77,6 +77,7 @@ export default function Login() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -103,6 +104,7 @@ export default function Login() {
         console.log(data);
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
+
           navigate("/reset-password", { state: { email } });
         }
       },
@@ -124,6 +126,10 @@ export default function Login() {
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
           dispatch(login(data.data.token));
+
+          if (location?.state?.from) {
+            navigate(location?.state?.from);
+          }
           navigate("/");
         }
       },

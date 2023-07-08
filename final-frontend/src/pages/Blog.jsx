@@ -69,11 +69,8 @@ const Blog = () => {
   return (
     <Box>
       <Banner
-        title="What is fitness?"
-        description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nam
-            vitae, veniam, illum voluptates similique officia adipisci optio
-            nesciunt recusandae dolorum deleniti obcaecati nulla maxime est
-            aliquid assumenda. Quia, fugit?"
+        title="Benefits of regular exercise"
+        description="Regular exercise has numerous benefits, including improved cardiovascular health, increased strength and endurance, better mood and mental well-being, weight management, and reduced risk of chronic diseases such as heart disease, diabetes, and certain cancers."
         button="Learn More"
         btnIcon={<Info />}
         bgImage="/bg2.jpg"
@@ -85,7 +82,13 @@ const Blog = () => {
         </Typography>
       </Divider> */}
       {/* <CurvePath> */}
-      <Box sx={{ bgcolor: "lightgray", minHeight: "100vh" }}>
+      <Box
+        sx={{
+          bgcolor: (theme) =>
+            theme.palette.mode === "light" ? "lightgrey" : "darkgray",
+          minHeight: "100vh",
+        }}
+      >
         <Box
           sx={{
             display: { xl: "flex" },

@@ -26,11 +26,10 @@ const Quotes = () => {
                 fontWeight: "lighter",
               }}
             />
-            The only person you are destined to become is the person you decide
-            to be.
+            Exercise should be regarded as tribute to the heart.
           </Typography>
           <Typography variant="h6" textAlign="end" sx={{ mt: 3 }}>
-            - Eleana D'Cruz
+            - Gene Tunney
           </Typography>
         </Box>
       </Box>

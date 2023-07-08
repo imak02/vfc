@@ -1,6 +1,7 @@
 import {
   createBrowserRouter,
   Navigate,
+  Outlet,
   RouterProvider,
 } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -42,9 +43,15 @@ import VerifyUser from "./pages/VerifyUser";
 import UserGoal from "./pages/userDashboard/UserGoal";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  // const { isAuthenticated } = useSelector((state) => state.auth);
+  let isAuthenticated = false;
+  // return isAuthenticated ? (
+  //   <Outlet />
+  // ) : (
+  //   <Navigate to="/login" replace state={{ from: location }} />
+  // );
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
   return children;
 };
@@ -94,9 +101,9 @@ const router = createBrowserRouter([
       {
         path: "/profile/:id",
         element: (
-          //  <ProtectedRoute>
-          <Profile />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
         ),
       },
 
@@ -136,7 +143,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin/:id",
-    element: <UserProfileLayout />,
+    element: (
+      <ProtectedRoute>
+        <UserProfileLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <Error />,
     children: [
       {
@@ -155,7 +166,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/user/:id",
-    element: <UserProfileLayout />,
+    element: (
+      <ProtectedRoute>
+        <UserProfileLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <Error />,
     children: [
       {
