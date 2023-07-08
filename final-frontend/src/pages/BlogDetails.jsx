@@ -411,12 +411,11 @@ const BlogDetails = () => {
                       <Skeleton variant="circular" height={50} width={50} />
                     ) : (
                       <Avatar
-                        sx={{ bgcolor: "red" }}
+                      sx={{ bgcolor: "blueviolet" }}
+        
                         src={`${blog?.author?.profile?.profilePicture}`}
                         alt={blog?.author?.first_name}
-                      >
-                        {blog?.author?.first_name}
-                      </Avatar>
+                      />
                     )}
 
                     {blogResult?.isLoading ? (

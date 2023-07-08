@@ -17,7 +17,7 @@ import { Button, TextField } from "@mui/material";
 import { AddPhotoAlternate } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
 
 import {
@@ -45,17 +45,17 @@ const validationSchema = Yup.object({
     "Content is required"
   ),
   image: Yup.mixed()
-    .required("Image is required")
-    .test(
-      "fileSize",
-      "File size is limited to 1 Mb",
-      (value) => value && value.size <= FILE_SIZE
-    )
-    .test(
-      "fileFormat",
-      "Unsupported Format",
-      (value) => value && SUPPORTED_FORMATS.includes(value.type)
-    ),
+    .required("Image is required"),
+    // .test(
+    //   "fileSize",
+    //   "File size is limited to 1 Mb",
+    //   (value) => value && value.size <= FILE_SIZE
+    // )
+    // .test(
+    //   "fileFormat",
+    //   "Unsupported Format",
+    //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    // ),
   category: Yup.string("Select a category").required(
     "Please select a category"
   ),
@@ -146,7 +146,7 @@ export default function AddBlog() {
       sx={{
         backgroundColor: (t) =>
           t.palette.mode === "light"
-            ? t.palette.secondary.main
+            ? t.palette.grey[300]
             : t.palette.grey[700],
         minHeight: "100vh",
       }}
@@ -164,7 +164,7 @@ export default function AddBlog() {
             item
             xs={false}
             sm={false}
-            md={6}
+            lg={6}
             sx={{
               backgroundImage: (t) =>
                 t.palette.mode === "light"
@@ -183,7 +183,7 @@ export default function AddBlog() {
             item
             xs={12}
             sm={12}
-            md={6}
+            lg={6}
             component={Paper}
             elevation={0}
             square

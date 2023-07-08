@@ -135,11 +135,13 @@ const BlogCard = ({ blog }) => {
           <CardHeader
             avatar={
               <Avatar
+              sx={{ bgcolor: "blueviolet" }}
+
                 src={`${blog?.author?.profile?.profilePicture}`}
                 alt={blog?.author?.first_name}
-              >
-                {blog?.author?.first_name}
-              </Avatar>
+              />
+                
+              
             }
             action={
               <IconButton aria-label="settings">
@@ -236,13 +238,11 @@ const BlogCard = ({ blog }) => {
                   gap: 1,
                 }}
               >
-                <Avatar
-                  sx={{ bgcolor: "red" }}
-                  src={`${blog?.author?.profile?.profilePicture}`}
-                  alt={blog?.author?.first_name}
-                >
-                  {blog?.author?.first_name}
-                </Avatar>
+               <Avatar
+               sx={{ bgcolor: "blueviolet" }}
+                src={`${blog?.author?.profile?.profilePicture}`}
+                alt={blog?.author?.first_name}
+              />
                 <Typography variant="body1">
                   {`${blog.author.first_name} ${blog.author.last_name}`}
                 </Typography>

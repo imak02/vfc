@@ -3,6 +3,7 @@ import {
   Navigate,
   Outlet,
   RouterProvider,
+  useLocation,
 } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -43,8 +44,9 @@ import VerifyUser from "./pages/VerifyUser";
 import UserGoal from "./pages/userDashboard/UserGoal";
 
 const ProtectedRoute = ({ children }) => {
-  // const { isAuthenticated } = useSelector((state) => state.auth);
-  let isAuthenticated = false;
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const location = useLocation();
+  // let isAuthenticated = false;
   // return isAuthenticated ? (
   //   <Outlet />
   // ) : (
@@ -96,7 +98,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/create-blog",
-        element: <AddBlog />,
+        element: <ProtectedRoute><AddBlog /></ProtectedRoute> ,
       },
       {
         path: "/profile/:id",

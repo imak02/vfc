@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import axios from "axios";
-import { useMutation, useQuery,useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -30,7 +30,8 @@ const CommentBox = ({ blogId, comments }) => {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user ?? "");
 
-  const { mutate, isLoading:isPosting } = useMutation(
+
+  const { mutate, isLoading: isPosting } = useMutation(
     (values) => axios.post(`blog-comment-create/${blogId}/`, values),
     {
 
@@ -78,7 +79,8 @@ const CommentBox = ({ blogId, comments }) => {
           component="form"
           onSubmit={postComment}
         >
-          <Avatar alt={user?.first_name} src={user?.profile?.profilePicture} />
+          <Avatar sx={{ bgcolor: "blueviolet" }}  src={user?.profile?.profilePicture} alt={user?.first_name} />
+         
           <TextField
             id="comment"
             name="comment"
@@ -113,7 +115,7 @@ const CommentBox = ({ blogId, comments }) => {
         <List
           sx={{ width: "100%", bgcolor: "transparent", ml: { xs: -2, sm: 0 } }}
         >
-          {comments?.map((comment,index) => (
+          {comments?.map((comment, index) => (
             <Box key={index}>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
