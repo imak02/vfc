@@ -1,2 +1,0 @@
-Utils folder consists of some repeatedly used functions that are commonly used in the project. 
-It should contain only common js functions & objects like dropdown options, regex condition, data formatting, etc.
