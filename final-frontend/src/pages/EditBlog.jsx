@@ -51,11 +51,11 @@ const validationSchema = Yup.object({
   //     "File size is limited to 1 Mb",
   //     (value) => value && value.size <= FILE_SIZE
   //   )
-    // .test(
-    //   "fileFormat",
-    //   "Unsupported Format",
-    //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
-    // ),
+  // .test(
+  //   "fileFormat",
+  //   "Unsupported Format",
+  //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
+  // ),
   category: Yup.string("Select a category").required(
     "Please select a category"
   ),
@@ -81,7 +81,6 @@ export default function EditBlog() {
       onSuccess: (data) => {
         if (data.status === 200) {
           setImage(data?.data?.payload?.image);
-          
         }
       },
       onError: (error) => {
@@ -90,13 +89,13 @@ export default function EditBlog() {
     }
   );
 
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
+  // if (isLoading) {
+  //   return <span>Loading...</span>;
+  // }
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  // if (isError) {
+  //   return <span>Error: {error.message}</span>;
+  // }
 
   var toolbarOptions = [
     [{ header: [1, 2, false] }],
@@ -140,7 +139,7 @@ export default function EditBlog() {
         }
       },
     }
-  );  
+  );
   const blogData = data?.data?.payload;
 
   const formik = useFormik({

@@ -98,7 +98,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/create-blog",
-        element: <ProtectedRoute><AddBlog /></ProtectedRoute> ,
+        element: (
+          <ProtectedRoute>
+            <AddBlog />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/profile/:id",
@@ -201,7 +205,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/:id/diet",
-        element: <UserDiet />,
+        element: <UserGoal />,
       },
       {
         path: "/user/:id/goal",

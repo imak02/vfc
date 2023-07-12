@@ -169,7 +169,7 @@ function UserProfileLayout(props) {
           alt={user?.first_name}
           src={user?.profile?.profilePicture}
         />
-        
+
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
             {user?.first_name + " " + user?.last_name}

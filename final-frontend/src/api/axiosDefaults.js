@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 // axios.defaults.baseURL = import.meta.env.VITE_BACKEND_API;
-axios.defaults.baseURL = "http://localhost:8000/api/";
+axios.defaults.baseURL = "http://172.16.5.11:8000/api/";
 console.log(Cookies.get("token"));
 axios.defaults.headers.common["Authorization"] = `Token ${Cookies.get(
   "token"

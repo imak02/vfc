@@ -39,6 +39,7 @@ import {
   PersonAdd,
   PersonPin,
   Settings,
+  SportsGymnastics,
 } from "@mui/icons-material";
 import "./Navbar.scss";
 import { useEffect, useState } from "react";
@@ -51,7 +52,12 @@ import { useQuery } from "@tanstack/react-query";
 const pages = ["Home", "About", "Diet", "Blog"];
 const pageList = [
   { name: "Home", id: "home", icon: <Home />, destination: "/" },
-  { name: "About", id: "about", icon: <Info />, destination: "/about" },
+  {
+    name: "Exercise",
+    id: "exercise",
+    icon: <SportsGymnastics />,
+    destination: "/exercise",
+  },
   { name: "Diet", id: "diet", icon: <LunchDining />, destination: "/diet" },
   { name: "Blog", id: "blog", icon: <MenuBook />, destination: "/blog" },
 ];

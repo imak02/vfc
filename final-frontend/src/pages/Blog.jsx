@@ -114,7 +114,7 @@ const Blog = () => {
                 m: 2,
               }}
             >
-              <IconButton
+              {/* <IconButton
                 sx={{ p: "10px" }}
                 aria-label="menu"
                 id="category-button"
@@ -124,7 +124,7 @@ const Blog = () => {
                 onClick={handleClick}
               >
                 <MenuIcon />
-              </IconButton>
+              </IconButton> */}
 
               <Menu
                 id="category-menu"
@@ -180,7 +180,7 @@ const Blog = () => {
             </Box>
           </Box>
 
-          <Box
+          {/* <Box
             sx={{
               flex: 1,
               width: "100%",
@@ -230,7 +230,7 @@ const Blog = () => {
                 </ListItemButton>
               </List>
             </Paper>
-          </Box>
+          </Box> */}
 
           <Box sx={{ flex: 3 }}>
             <Box>
@@ -277,7 +277,7 @@ const Blog = () => {
               gap: 4,
             }}
           >
-            <Box>
+            {/* <Box>
               <Paper
                 component="form"
                 sx={{
@@ -299,7 +299,7 @@ const Blog = () => {
                   <Search />
                 </IconButton>
               </Paper>
-            </Box>
+            </Box> */}
             <Box>
               <Link to="/create-blog" className="links">
                 <Button

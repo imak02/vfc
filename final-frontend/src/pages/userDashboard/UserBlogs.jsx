@@ -20,12 +20,8 @@ import axios from "axios";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {
-  errorToast,
-} from "../../redux/slices/toastSlice";
+import { errorToast } from "../../redux/slices/toastSlice";
 import moment from "moment";
-
-
 
 import BlogGridCard from "../../components/BlogGridCard";
 import SearchBar from "../../components/SearchBar";
@@ -45,43 +41,51 @@ const rows = [
 const UserBlogs = () => {
   const dispatch = useDispatch();
 
-  const getCurrentUserBlogs = async () => await axios.get("user/created-blogs/");
-  const getCurrentUserLikedBlogs = async () => await axios.get("user/liked-blogs/");
-  const getCurrentUserSavedBlogs = async () => await axios.get("user/saved-blogs/");
+  const getCurrentUserBlogs = async () =>
+    await axios.get("user/created-blogs/");
+  const getCurrentUserLikedBlogs = async () =>
+    await axios.get("user/liked-blogs/");
+  const getCurrentUserSavedBlogs = async () =>
+    await axios.get("user/saved-blogs/");
 
-  const [userBlogsResult, userLikedBlogsResult, userSavedBlogsResult] = useQueries({
-    queries: [{
-      queryKey: ["currentUserBlogs"],
-      queryFn: getCurrentUserBlogs,
-      onSuccess: (data) => {
-        console.log(data);
-      },
-      onError: (error) => {
-        console.log(error);
-        dispatch(errorToast(error?.response?.data?.message));
-      },
-    }, {
-      queryKey: ["currentUserLikedBlogs"],
-      queryFn: getCurrentUserLikedBlogs,
-      onSuccess: (data) => {
-        console.log(data);
-      },
-      onError: (error) => {
-        console.log(error);
-        dispatch(errorToast(error?.response?.data?.message));
-      },
-    }, {
-      queryKey: ["currentUserSavedBlogs"],
-      queryFn: getCurrentUserSavedBlogs,
-      onSuccess: (data) => {
-        console.log(data);
-      },
-      onError: (error) => {
-        console.log(error);
-        dispatch(errorToast(error?.response?.data?.message));
-      },
-    }]
-  });
+  const [userBlogsResult, userLikedBlogsResult, userSavedBlogsResult] =
+    useQueries({
+      queries: [
+        {
+          queryKey: ["currentUserBlogs"],
+          queryFn: getCurrentUserBlogs,
+          onSuccess: (data) => {
+            console.log(data);
+          },
+          onError: (error) => {
+            console.log(error);
+            dispatch(errorToast(error?.response?.data?.message));
+          },
+        },
+        {
+          queryKey: ["currentUserLikedBlogs"],
+          queryFn: getCurrentUserLikedBlogs,
+          onSuccess: (data) => {
+            console.log(data);
+          },
+          onError: (error) => {
+            console.log(error);
+            dispatch(errorToast(error?.response?.data?.message));
+          },
+        },
+        {
+          queryKey: ["currentUserSavedBlogs"],
+          queryFn: getCurrentUserSavedBlogs,
+          onSuccess: (data) => {
+            console.log(data);
+          },
+          onError: (error) => {
+            console.log(error);
+            dispatch(errorToast(error?.response?.data?.message));
+          },
+        },
+      ],
+    });
 
   // const userBlogsResult = useQuery({
   //   queryKey: ["currentUserBlogs"],
@@ -122,40 +126,43 @@ const UserBlogs = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userBlogs?.map((blog) => <TableRow key={blog.id}>
-                  <TableCell component="td" scope="row">
-                    <Box
-                      component="img"
-                      height={100}
-                      width={100}
-                      alt="blog"
-                      src={blog.image}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ maxWidth: 500 }}>
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      {blog.title}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{moment(new Date(blog.updated_to)).fromNow()}</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <Link to={`/blog/edit/${blog.id}`} className="links">
-                        <Tooltip title="Edit">
+                {userBlogs?.map((blog) => (
+                  <TableRow key={blog.id}>
+                    <TableCell component="td" scope="row">
+                      <Box
+                        component="img"
+                        height={100}
+                        width={100}
+                        alt="blog"
+                        src={blog.image}
+                      />
+                    </TableCell>
+                    <TableCell sx={{ maxWidth: 500 }}>
+                      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                        {blog.title}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      {moment(new Date(blog.updated_to)).fromNow()}
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <Link to={`/blog/edit/${blog.id}`} className="links">
+                          <Tooltip title="Edit">
+                            <IconButton>
+                              <Edit color="info" />
+                            </IconButton>
+                          </Tooltip>
+                        </Link>
+                        <Tooltip title="Delete">
                           <IconButton>
-                            <Edit color="info" />
+                            <Delete color="error" />
                           </IconButton>
                         </Tooltip>
-                      </Link>
-                      <Tooltip title="Delete">
-                        <IconButton>
-                          <Delete color="error" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>)}
-
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -173,8 +180,9 @@ const UserBlogs = () => {
             justifyContent: "center",
           }}
         >
-          {userLikedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog.blog} />)}
-
+          {userLikedBlogs?.map((blog) => (
+            <BlogGridCard key={blog.blog.id} blog={blog.blog} />
+          ))}
         </Box>
       </Paper>
       <Paper sx={{ p: 2, my: 2 }} elevation={2}>
@@ -189,8 +197,9 @@ const UserBlogs = () => {
             justifyContent: "center",
           }}
         >
-          {userSavedBlogs?.map((blog) => <BlogGridCard key={blog.blog.id} blog={blog.blog} />)}
-
+          {userSavedBlogs?.map((blog) => (
+            <BlogGridCard key={blog.blog.id} blog={blog.blog} />
+          ))}
         </Box>
       </Paper>
     </Box>

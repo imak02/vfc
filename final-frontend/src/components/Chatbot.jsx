@@ -48,10 +48,9 @@ const Chatbot = () => {
     let sendData = { question: question };
     setThread((prev) => [...prev, { Question: question, Answer: <Typing /> }]);
 
+    setQuestion("");
     mutate(sendData, {
-      onSuccess: () => {
-        setQuestion("");
-      },
+      onSuccess: () => {},
     });
   };
 

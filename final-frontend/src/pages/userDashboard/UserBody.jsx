@@ -79,33 +79,25 @@ const UserBody = () => {
                   textAlign: "center",
                 }}
               >
-                <Box sx={{ flex: 1 }}>
+                {/* <Box sx={{ flex: 1 }}>
                   <Typography variant="h6" component="h3" color="blueviolet">
                     Height
                   </Typography>
-                  {/* {userBody?.height && ( */}
                   <Typography variant="h4" component="h3">
                     {userBody?.height ? `${userBody?.height} cm` : "... "}
-                    {/* <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-                      cm
-                    </Typography> */}
+                 
                   </Typography>
-                  {/* )} */}
                 </Box>
                 <Divider orientation="vertical" variant="middle" flexItem />
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="h6" component="h3" color="blueviolet">
                     Weight
                   </Typography>
-                  {/* {userBody?.height && ( */}
                   <Typography variant="h4" component="h3">
                     {userBody?.weight ? `${userBody?.weight} kg` : "..."}
-                    {/* <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-                      kg
-                    </Typography> */}
+                
                   </Typography>
-                  {/* )} */}
-                </Box>
+                </Box> */}
               </Box>
               <Divider />
 
@@ -222,8 +214,8 @@ const UserBody = () => {
                 Body Abnormalities
               </Typography>
               <Box>
-                {userBody?.abnormalities?.map((abnormality) => (
-                  <Typography>{abnormality}</Typography>
+                {userBody?.abnormalities?.map((abnormality, index) => (
+                  <Typography key={index}>{abnormality}</Typography>
                 ))}
               </Box>
             </Box>
@@ -259,12 +251,17 @@ const UserBody = () => {
                 my: 2,
               }}
             >
-              <Typography sx={{}} variant="h6" component="h6" fontWeight="bold">
+              <Typography
+                sx={{ mr: 10 }}
+                variant="h6"
+                component="h6"
+                fontWeight="bold"
+              >
                 Diseases
               </Typography>
               <Box>
-                {userBody?.diseases?.map((disease) => (
-                  <Typography>{disease}</Typography>
+                {userBody?.diseases?.map((disease, index) => (
+                  <Typography key={index}>{disease}</Typography>
                 ))}
               </Box>
             </Box>
@@ -280,12 +277,17 @@ const UserBody = () => {
                 my: 2,
               }}
             >
-              <Typography sx={{}} variant="h6" component="h6" fontWeight="bold">
+              <Typography
+                sx={{ mr: 10 }}
+                variant="h6"
+                component="h6"
+                fontWeight="bold"
+              >
                 Allergies
               </Typography>
               <Box>
-                {userBody?.allergies?.map((allergy) => (
-                  <Typography>{allergy}</Typography>
+                {userBody?.allergies?.map((allergy, index) => (
+                  <Typography key={index}>{allergy}</Typography>
                 ))}
               </Box>
             </Box>
@@ -303,12 +305,17 @@ const UserBody = () => {
                 my: 2,
               }}
             >
-              <Typography sx={{}} variant="h6" component="h6" fontWeight="bold">
+              <Typography
+                sx={{ mr: 10 }}
+                variant="h6"
+                component="h6"
+                fontWeight="bold"
+              >
                 Injuries
               </Typography>
               <Box>
-                {userBody?.injuries?.map((injury) => (
-                  <Typography>{injury}</Typography>
+                {userBody?.injuries?.map((injury, index) => (
+                  <Typography key={index}>{injury}</Typography>
                 ))}
               </Box>
             </Box>
