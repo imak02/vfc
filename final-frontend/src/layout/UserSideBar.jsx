@@ -45,7 +45,7 @@ const UserSideBar = () => {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const getCurrentUser = async () => await axios.get("user-profile/");
+  const getCurrentUser = async () => await axios.get("/user/current-user");
 
   const userResult = useQuery({
     queryKey: ["currentUser"],
@@ -53,7 +53,7 @@ const UserSideBar = () => {
     onSuccess: (data) => {
       console.log(data);
       if (data.status === 200) {
-        dispatch(setUser(data.data.payload));
+        dispatch(setUser(data?.data?.data));
       }
     },
     onError: (error) => {
@@ -68,7 +68,7 @@ const UserSideBar = () => {
   // var b = moment([2007, 0]);
   // a.diff(b, 'years');
 
-  const age = moment(new Date(user?.profile?.dob)).fromNow(true);
+  const age = moment(new Date(user?.dob)).fromNow(true);
 
   const userId = params.id;
   const pageList = [
@@ -138,7 +138,7 @@ const UserSideBar = () => {
           </Avatar>
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-              {user.first_name + " " + user.last_name}
+              {user.firstName + " " + user.lastName}
             </Typography>
             <Typography color="GrayText">
               {user.gender}, {age}

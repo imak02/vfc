@@ -34,8 +34,9 @@ import {
   successToast,
 } from "../../redux/slices/toastSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { logout } from "../../redux/slices/authSlice";
 
 const nameRegex = /^[a-zA-Z-' ]+$/;
 const userNameRegex = /^[a-z0-9_-]{3,15}$/;
@@ -44,24 +45,24 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const validationSchema = Yup.object({
-  first_name: Yup.string()
+  firstName: Yup.string()
     .min(2, "*Name must have at least 2 characters")
     .matches(nameRegex, "*Please enter a valid name")
     .max(100, "*Names can't be longer than 100 characters")
     .required("*First name is required"),
-  last_name: Yup.string()
+  lastName: Yup.string()
     .min(2, "*Name must have at least 2 characters")
     .matches(nameRegex, "*Please enter a valid name")
     .max(100, "*Names can't be longer than 100 characters")
     .required("*Last name is required"),
-  // username: Yup.string()
-  //   .min(3, "*Username must have 3-15 characters only")
-  //   .max(15, "*Username must have 5-15 characters only")
-  //   .matches(
-  //     userNameRegex,
-  //     "*Can contain any lower case character, digit or special symbol “_-” only"
-  //   )
-  //   .required("*Username is required"),
+  username: Yup.string()
+    .min(3, "*Username must have 3-15 characters only")
+    .max(15, "*Username must have 5-15 characters only")
+    .matches(
+      userNameRegex,
+      "*Can contain any lower case character, digit or special symbol “_-” only"
+    )
+    .required("*Username is required"),
   email: Yup.string()
     .email("*Must be a valid email address")
     .max(100, "*Email must be less than 100 characters")
@@ -75,62 +76,64 @@ const validationSchema = Yup.object({
 });
 
 const passwordValidationSchema = Yup.object({
-  old_password: Yup.string()
+  oldPassword: Yup.string()
     .min(8, "*Password must contain minimum of 8 characters")
     .matches(
       passwordRegex,
       "*Must contain at least one uppercase letter, one lowercase letter, one number and one special character"
     )
     .required("*Password required"),
-  password: Yup.string()
+  newPassword: Yup.string()
     .min(8, "*Password must contain minimum of 8 characters")
     .matches(
       passwordRegex,
       "*Must contain at least one uppercase letter, one lowercase letter, one number and one special character"
     )
     .required("*Password required"),
-  password2: Yup.string()
+  confirmPassword: Yup.string()
     .required("*Password required")
-    .oneOf([Yup.ref("password"), null], "Both passwords do not match."),
+    .oneOf([Yup.ref("newPassword"), null], "Both passwords do not match."),
 });
 
 const EditProfile = () => {
   const [profilePic, setProfilePic] = useState(null);
   const [changePassword, setChangePassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPassword2, setShowPassword2] = useState(false);
-  const [showPassword3, setShowPassword3] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showconfirmPassword, setShowconfirmPassword] = useState(false);
 
   const queryClient = useQueryClient();
 
   const user = useSelector((state) => state.auth.user ?? "");
 
-  useEffect(()=>{
-    setProfilePic(user?.profile?.profilePicture)
-  },[user]);
-
+  const profilePictureLink = `${axios.defaults.baseURL}${user?.profilePicture}`;
+  useEffect(() => {
+    setProfilePic(profilePictureLink);
+  }, [user]);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
   const userId = params.id;
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
+  const handleClickOldPassword = () => setShowOldPassword((show) => !show);
+  const handleMouseDownOldPassword = (event) => {
     event.preventDefault();
   };
 
-  const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
-  const handleMouseDownPassword2 = (event) => {
+  const handleClickNewPassword = () => setShowNewPassword((show) => !show);
+  const handleMouseDownNewPassword = (event) => {
     event.preventDefault();
   };
 
-  const handleClickShowPassword3 = () => setShowPassword3((show) => !show);
-  const handleMouseDownPassword3 = (event) => {
+  const handleClickShowconfirmPassword = () =>
+    setShowconfirmPassword((show) => !show);
+  const handleMouseDownconfirmPassword = (event) => {
     event.preventDefault();
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.put(`update-password/${userId}/`, values),
+    (values) => axios.put(`user/change-password`, values),
     {
       onMutate: () => {
         dispatch(loadingToast("Changing password..."));
@@ -153,7 +156,7 @@ const EditProfile = () => {
   );
 
   const { mutate: profileMutate } = useMutation(
-    (values) => axios.patch(`update-profile/${userId}/`, values),
+    (values) => axios.put(`user/update-profile/${userId}/`, values),
     {
       onMutate: () => {
         dispatch(loadingToast("Updating profile..."));
@@ -161,32 +164,7 @@ const EditProfile = () => {
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          queryClient.invalidateQueries({ queryKey: ['currentUser'] });
-        }
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          console.log(error.response.data);
-          dispatch(errorToast(error?.response?.data?.message));
-        } else {
-          console.log(error);
-          dispatch(errorToast(error?.response?.data?.message));
-        }
-      },
-    }
-  );
-
-  const { mutate: imageMutate } = useMutation(
-    (values) => axios.patch(`update-profile-picture/`, values),
-    {
-      onMutate: () => {
-        dispatch(loadingToast("Updating Profile Picture..."));
-      },
-      onSuccess: (data) => {
-        if (data.status === 200 || data.status === 201) {
-          dispatch(successToast(data?.data?.message));
-          queryClient.invalidateQueries({ queryKey: ['currentUser'] });
-
+          queryClient.invalidateQueries({ queryKey: ["currentUser"] });
         }
       },
       onError: (error) => {
@@ -203,31 +181,34 @@ const EditProfile = () => {
 
   const formik = useFormik({
     initialValues: {
-      first_name: user?.first_name ?? "",
-      last_name: user?.last_name ?? "",
+      firstName: user?.firstName ?? "",
+      lastName: user?.lastName ?? "",
       email: user?.email ?? "",
       phone: user?.phone ?? "",
-      dob: user?.profile?.dob ?? "",
-      country: user?.profile?.country ?? "",
-      address: user?.profile?.address ?? "",
+      username: user?.username ?? "",
+      country: user?.country ?? "",
+      address: user?.address ?? "",
+      profilePicture: "",
     },
     validationSchema: validationSchema,
     enableReinitialize: true,
 
     onSubmit: async (values, { resetForm }) => {
-      const profileObj = {
-        dob: values.dob,
-        country: values.country,
-        address: values.address,
-      };
-      const sendData = Object.assign({}, values);
-      delete sendData.dob;
-      delete sendData.country;
-      delete sendData.address;
-      sendData.profile = profileObj;
-      profileMutate(sendData, {
+      console.log("Submitting");
+      const formData = new FormData();
+      formData.set("profilePicture", values.profilePicture);
+      formData.set("firstName", values.firstName);
+      formData.set("lastName", values.lastName);
+      formData.set("email", values.email);
+      formData.set("phone", values.phone);
+      formData.set("username", values.username);
+      formData.set("country", values.country);
+      formData.set("address", values.address);
+
+      profileMutate(formData, {
         onSuccess: () => {
           resetForm();
+          navigate(`/user/${userId}/profile`);
         },
       });
     },
@@ -235,34 +216,20 @@ const EditProfile = () => {
 
   const formik2 = useFormik({
     initialValues: {
-      old_password: "",
-      password: "",
-      password2: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     },
     validationSchema: passwordValidationSchema,
 
     onSubmit: async (values, { resetForm }) => {
-      mutate(values, {
+      let data = Object.assign({}, values);
+      delete data.confirmPassword;
+
+      mutate(data, {
         onSuccess: () => {
           resetForm();
-        },
-      });
-    },
-  });
-
-  const formik3 = useFormik({
-    initialValues: {
-      profilePicture: "",
-    },
-    enableReinitialize: true,
-
-    onSubmit: async (values, { resetForm }) => {
-      const formData = new FormData();
-      formData.set("profilePicture", values.profilePicture);
-
-      imageMutate(formData, {
-        onSuccess: () => {
-          resetForm();
+          dispatch(logout());
         },
       });
     },
@@ -283,7 +250,7 @@ const EditProfile = () => {
       </Typography>
       <Divider />
 
-      <Box>
+      <Box component="form" onSubmit={formik.handleSubmit}>
         <Box
           sx={{
             mt: 1,
@@ -294,7 +261,7 @@ const EditProfile = () => {
             gap: { lg: 5 },
           }}
         >
-          <Box sx={{ flex: 2 }} component="form" onSubmit={formik.handleSubmit}>
+          <Box sx={{ flex: 2 }}>
             <Box
               sx={{
                 marginBottom: 2,
@@ -307,20 +274,18 @@ const EditProfile = () => {
                 First Name
               </Typography>
               <TextField
-                id="first_name"
-                name="first_name"
+                id="firstName"
+                name="firstName"
                 type="text"
                 placeholder="Enter your first name"
                 fullWidth
-                value={formik.values.first_name}
+                value={formik.values.firstName}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.first_name && Boolean(formik.errors.first_name)
+                  formik.touched.firstName && Boolean(formik.errors.firstName)
                 }
-                helperText={
-                  formik.touched.first_name && formik.errors.first_name
-                }
+                helperText={formik.touched.firstName && formik.errors.firstName}
               />
             </Box>
             <Box
@@ -336,18 +301,18 @@ const EditProfile = () => {
               </Typography>
               <TextField
                 color="primary"
-                id="last_name"
-                name="last_name"
+                id="lastName"
+                name="lastName"
                 type="text"
                 placeholder="Enter your last name"
                 fullWidth
-                value={formik.values.last_name}
+                value={formik.values.lastName}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.last_name && Boolean(formik.errors.last_name)
+                  formik.touched.lastName && Boolean(formik.errors.lastName)
                 }
-                helperText={formik.touched.last_name && formik.errors.last_name}
+                helperText={formik.touched.lastName && formik.errors.lastName}
               />
             </Box>
             <Box
@@ -381,20 +346,21 @@ const EditProfile = () => {
               }}
             >
               <Typography variant="h6" component="h2">
-                Date of Birth
+                Username
               </Typography>
               <TextField
-                color="primary"
-                id="dob"
-                name="dob"
-                type="date"
-                placeholder="DD/MM/YYYY"
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Enter your Username"
                 fullWidth
-                value={formik.values.dob}
+                value={formik.values.username}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                error={formik.touched.dob && Boolean(formik.errors.dob)}
-                helperText={formik.touched.dob && formik.errors.dob}
+                error={
+                  formik.touched.username && Boolean(formik.errors.username)
+                }
+                helperText={formik.touched.username && formik.errors.username}
               />
             </Box>
 
@@ -518,25 +484,8 @@ const EditProfile = () => {
                 helperText={formik.touched.address && formik.errors.address}
               />
             </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                gap: 3,
-                justifyContent: "flex-end",
-                my: 2,
-              }}
-            >
-              <Button variant="contained" color="primary" type="submit">
-                Save Changes
-              </Button>
-            </Box>
           </Box>
-          <Box
-            sx={{ flex: 1 }}
-            component="form"
-            onSubmit={formik3.handleSubmit}
-          >
+          <Box sx={{ flex: 1 }}>
             <Box
               sx={{
                 marginBottom: 2,
@@ -559,6 +508,7 @@ const EditProfile = () => {
                       width: 215,
                       height: 215,
                       my: 3,
+                      bgcolor: "blueviolet",
                     }}
                   />
                   <Fab
@@ -576,7 +526,7 @@ const EditProfile = () => {
                       name="profilePicture"
                       type="file"
                       onChange={(event) => {
-                        formik3.setFieldValue(
+                        formik.setFieldValue(
                           "profilePicture",
                           event.currentTarget.files[0]
                         );
@@ -585,7 +535,8 @@ const EditProfile = () => {
                         );
                       }}
                       error={
-                        formik3.touched.profilePicture && Boolean(formik3.errors.profilePicture)
+                        formik.touched.profilePicture &&
+                        Boolean(formik.errors.profilePicture)
                       }
                       sx={{ mb: 2, display: "none" }}
                     />
@@ -593,14 +544,20 @@ const EditProfile = () => {
                 </Badge>
               </Box>
             </Box>
-            <Box
-              sx={{ display: "flex", justifyContent: "center", ml: -5, mb: 5 }}
-            >
-              <Button variant="contained" color="success" type="submit">
-                Change Profile Picture
-              </Button>
-            </Box>
           </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 5,
+            mr: 4,
+            justifyContent: "flex-end",
+            my: 2,
+          }}
+        >
+          <Button variant="contained" color="primary" type="submit">
+            Save Changes
+          </Button>
         </Box>
       </Box>
 
@@ -644,31 +601,31 @@ const EditProfile = () => {
 
                 <TextField
                   fullWidth
-                  id="old_password"
-                  name="old_password"
+                  id="oldPassword"
+                  name="oldPassword"
                   color="primary"
                   placeholder="Enter your old password"
-                  type={showPassword ? "text" : "password"}
-                  value={formik2.values.old_password}
+                  type={showOldPassword ? "text" : "password"}
+                  value={formik2.values.oldPassword}
                   onBlur={formik2.handleBlur}
                   onChange={formik2.handleChange}
                   error={
-                    formik2.touched.old_password &&
-                    Boolean(formik2.errors.old_password)
+                    formik2.touched.oldPassword &&
+                    Boolean(formik2.errors.oldPassword)
                   }
                   helperText={
-                    formik2.touched.old_password && formik2.errors.old_password
+                    formik2.touched.oldPassword && formik2.errors.oldPassword
                   }
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
+                          onClick={handleClickOldPassword}
+                          onMouseDown={handleMouseDownOldPassword}
                           edge="end"
                         >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                          {showOldPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -689,30 +646,31 @@ const EditProfile = () => {
 
                 <TextField
                   fullWidth
-                  id="password"
-                  name="password"
+                  id="newPassword"
+                  name="newPassword"
                   color="primary"
                   placeholder="Enter your new password"
-                  type={showPassword ? "text" : "password"}
-                  value={formik2.values.password}
+                  type={showNewPassword ? "text" : "password"}
+                  value={formik2.values.newPassword}
                   onBlur={formik2.handleBlur}
                   onChange={formik2.handleChange}
                   error={
-                    formik2.touched.password && Boolean(formik2.errors.password)
+                    formik2.touched.newPassword &&
+                    Boolean(formik2.errors.newPassword)
                   }
                   helperText={
-                    formik2.touched.password && formik2.errors.password
+                    formik2.touched.newPassword && formik2.errors.newPassword
                   }
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword2}
-                          onMouseDown={handleMouseDownPassword2}
+                          onClick={handleClickNewPassword}
+                          onMouseDown={handleMouseDownNewPassword}
                           edge="end"
                         >
-                          {showPassword2 ? <VisibilityOff /> : <Visibility />}
+                          {showNewPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -733,31 +691,36 @@ const EditProfile = () => {
 
                 <TextField
                   fullWidth
-                  id="password2"
-                  name="password2"
+                  id="confirmPassword"
+                  name="confirmPassword"
                   color="primary"
                   placeholder="Confirm your new password"
-                  type={showPassword ? "text" : "password"}
-                  value={formik2.values.password2}
+                  type={showconfirmPassword ? "text" : "password"}
+                  value={formik2.values.confirmPassword}
                   onBlur={formik2.handleBlur}
                   onChange={formik2.handleChange}
                   error={
-                    formik2.touched.password2 &&
-                    Boolean(formik2.errors.password2)
+                    formik2.touched.confirmPassword &&
+                    Boolean(formik2.errors.confirmPassword)
                   }
                   helperText={
-                    formik2.touched.password2 && formik2.errors.password2
+                    formik2.touched.confirmPassword &&
+                    formik2.errors.confirmPassword
                   }
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword3}
-                          onMouseDown={handleMouseDownPassword3}
+                          onClick={handleClickShowconfirmPassword}
+                          onMouseDown={handleMouseDownconfirmPassword}
                           edge="end"
                         >
-                          {showPassword3 ? <VisibilityOff /> : <Visibility />}
+                          {showconfirmPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
                         </IconButton>
                       </InputAdornment>
                     ),

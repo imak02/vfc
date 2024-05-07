@@ -58,7 +58,7 @@ function UserProfileLayout(props) {
     setMobileOpen((prev) => !prev);
   };
 
-  const getCurrentUser = async () => await axios.get("user-profile/");
+  const getCurrentUser = async () => await axios.get("/user/current-user");
 
   const userResult = useQuery({
     queryKey: ["currentUser"],
@@ -66,7 +66,7 @@ function UserProfileLayout(props) {
     onSuccess: (data) => {
       console.log(data);
       if (data.status === 200) {
-        dispatch(setUser(data.data.payload));
+        dispatch(setUser(data?.data?.data));
       }
     },
     onError: (error) => {
@@ -75,11 +75,14 @@ function UserProfileLayout(props) {
   });
 
   const user = useSelector((state) => state.auth.user ?? "");
-  const age = moment(new Date(user?.profile?.dob)).fromNow(true);
+  const age = moment(new Date(user?.dob)).fromNow(true);
 
   const params = useParams();
 
+  console.log(params);
+
   const userId = params.id;
+  const profilePictureLink = `${axios.defaults.baseURL}${user?.profilePicture}`;
 
   const themeMode = useSelector((state) => state.themeMode.value);
 
@@ -166,18 +169,18 @@ function UserProfileLayout(props) {
       >
         <Avatar
           sx={{ bgcolor: "blueviolet", width: 80, height: 80 }}
-          alt={user?.first_name}
-          src={user?.profile?.profilePicture}
+          alt={user?.firstName}
+          src={profilePictureLink}
         />
 
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
-            {user?.first_name + " " + user?.last_name}
+            {user?.firstName + " " + user?.lastName}
           </Typography>
           <Typography color="GrayText">
-            {user?.gender === "male" && "Male"}
-            {user?.gender === "female" && "Female"}
-            {user?.gender === "others" && "Others"}, {user?.profile?.dob && age}
+            {user?.gender === "MALE" && "Male"}
+            {user?.gender === "FEMALE" && "Female"}
+            {user?.gender === "OTHER" && "Other"}, {user?.dob && age}
           </Typography>
         </Box>
       </Box>

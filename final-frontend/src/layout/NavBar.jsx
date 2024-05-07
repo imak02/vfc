@@ -99,7 +99,7 @@ function NavBar() {
 
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
 
-  const getCurrentUser = async () => await axios.get("user-profile/");
+  const getCurrentUser = async () => await axios.get("/user/current-user");
 
   const userResult = useQuery({
     queryKey: ["currentUser"],
@@ -107,7 +107,7 @@ function NavBar() {
     onSuccess: (data) => {
       console.log(data);
       if (data.status === 200) {
-        dispatch(setUser(data.data.payload));
+        dispatch(setUser(data?.data?.data));
       }
     },
     onError: (error) => {
@@ -116,7 +116,11 @@ function NavBar() {
     enabled: !!isLoggedIn,
   });
 
+  console.log(userResult.data);
+
   const user = useSelector((state) => state.auth.user ?? "");
+  const profilePictureLink = `${axios.defaults.baseURL}${user?.profilePicture}`;
+
   const themeMode = useSelector((state) => state.themeMode.value);
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -137,6 +141,22 @@ function NavBar() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          justifyContent: "center",
+          alignItems: "center",
+          p: 4,
+        }}
+      >
+        <Link to="/" className="links logo__link">
+          <Box sx={{ display: "flex" }}>
+            <Box className="logo__img">
+              <Box component="img" src="/logo.png" height={30} />
+            </Box>
+          </Box>
+        </Link>
+      </Box>
       <List>
         {pageList.map((page, index) => (
           <ListItem key={page.id} disablePadding>
@@ -150,7 +170,7 @@ function NavBar() {
         ))}
       </List>
       <Divider />
-      <List>
+      {/* <List>
         {["All mail", "Trash", "Spam"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
@@ -161,7 +181,7 @@ function NavBar() {
             </ListItemButton>
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </Box>
   );
 
@@ -326,8 +346,8 @@ function NavBar() {
                   <Tooltip arrow title="Profile Settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar
-                        alt={user.first_name}
-                        src={user?.profile?.profilePicture}
+                        alt={user.firstName}
+                        src={profilePictureLink}
                         sx={{ bgcolor: "orange", color: "black" }}
                       />
                     </IconButton>
@@ -372,18 +392,15 @@ function NavBar() {
                       },
                     }}
                   >
-                    <Link to={`/user/${user.id}`} className="links">
+                    <Link to={`/user/${user._id}`} className="links">
                       <MenuItem onClick={handleCloseUserMenu}>
-                        <Avatar
-                          alt={user.first_name}
-                          src={user?.profile?.profilePicture}
-                        />
-                        {user.first_name + " " + user.last_name}
+                        <Avatar alt={user.firstName} src={profilePictureLink} />
+                        {user.firstName + " " + user.lastName}
                       </MenuItem>
                     </Link>
 
                     <Divider />
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    {/* <MenuItem onClick={handleCloseUserMenu}>
                       <ListItemIcon>
                         <PersonAdd fontSize="small" />
                       </ListItemIcon>
@@ -394,7 +411,7 @@ function NavBar() {
                         <Settings fontSize="small" />
                       </ListItemIcon>
                       Settings
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem
                       onClick={() => {
                         dispatch(logout());

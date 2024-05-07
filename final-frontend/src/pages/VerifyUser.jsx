@@ -23,23 +23,19 @@ import { useMutation } from "@tanstack/react-query";
 
 const validationSchema = Yup.object({
   otp: Yup.string()
-    .min(4, "Otp must contain at least four digits")
-    .max(4, "Otp can contain at most four digits")
+    .min(6, "Otp must contain at least six digits")
+    .max(6, "Otp can contain at most six digits")
     .required("Otp is required"),
-
 });
 
 const VerifyUser = () => {
-
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const email = location?.state?.emailForValidation;
 
-
-
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("verify/", values),
+    (values) => axios.post("/user/verify", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Verifying..."));
@@ -67,7 +63,6 @@ const VerifyUser = () => {
     initialValues: {
       email: email,
       otp: "",
-
     },
     validationSchema: validationSchema,
     enableReinitialize: true,
@@ -104,7 +99,8 @@ const VerifyUser = () => {
         </Box>
         <Typography variant="h6">Email Verification</Typography>
         <Typography variant="body2">
-          Please enter the otp you have received via email to continue verification process.
+          Please enter the otp you have received via email to continue
+          verification process.
         </Typography>
         <Box
           component="form"

@@ -38,12 +38,12 @@ const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const validationSchema = Yup.object({
-  first_name: Yup.string()
+  firstName: Yup.string()
     .min(2, "*Name must have at least 2 characters")
     .matches(nameRegex, "*Please enter a valid name")
     .max(100, "*Names can't be longer than 100 characters")
     .required("*First name is required"),
-  last_name: Yup.string()
+  lastName: Yup.string()
     .min(2, "*Name must have at least 2 characters")
     .matches(nameRegex, "*Please enter a valid name")
     .max(100, "*Names can't be longer than 100 characters")
@@ -103,8 +103,8 @@ const Register = () => {
 
   const formik = useFormik({
     initialValues: {
-      first_name: "",
-      last_name: "",
+      firstName: "",
+      lastName: "",
       username: "",
       email: "",
       phone: "",
@@ -133,7 +133,7 @@ const Register = () => {
   const emailForValidation = formik?.values?.email;
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("signup/", values),
+    (values) => axios.post("/user/register", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Registering user..."));
@@ -210,20 +210,18 @@ const Register = () => {
               <TextField
                 fullWidth
                 size="small"
-                id="first_name"
-                name="first_name"
+                id="firstName"
+                name="firstName"
                 color="primary"
                 autoComplete="off"
                 label="First Name"
-                value={formik.values.first_name}
+                value={formik.values.firstName}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.first_name && Boolean(formik.errors.first_name)
+                  formik.touched.firstName && Boolean(formik.errors.firstName)
                 }
-                helperText={
-                  formik.touched.first_name && formik.errors.first_name
-                }
+                helperText={formik.touched.firstName && formik.errors.firstName}
                 sx={{
                   marginBottom: 2,
                   marginRight: "1%",
@@ -234,18 +232,18 @@ const Register = () => {
               <TextField
                 fullWidth
                 size="small"
-                id="last_name"
-                name="last_name"
+                id="lastName"
+                name="lastName"
                 color="primary"
                 autoComplete="off"
                 label="Last Name"
-                value={formik.values.last_name}
+                value={formik.values.lastName}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.last_name && Boolean(formik.errors.last_name)
+                  formik.touched.lastName && Boolean(formik.errors.lastName)
                 }
-                helperText={formik.touched.last_name && formik.errors.last_name}
+                helperText={formik.touched.lastName && formik.errors.lastName}
                 sx={{ marginBottom: 2, marginLeft: "1%", width: { md: "49%" } }}
               />
 
@@ -387,7 +385,7 @@ const Register = () => {
                 helperText={formik.touched.gender && formik.errors.gender}
                 sx={{ marginBottom: 2, marginRight: "1%", width: "49%" }}
               >
-                {["Male", "Female", "Other"].map((genderOption) => (
+                {["MALE", "FEMALE", "OTHER"].map((genderOption) => (
                   <MenuItem key={genderOption} value={genderOption}>
                     {genderOption}
                   </MenuItem>

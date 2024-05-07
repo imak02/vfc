@@ -27,10 +27,10 @@ const passwordRegex =
 
 const validationSchema = Yup.object({
   otp: Yup.string()
-    .min(4, "Otp must contain at least four digits")
-    .max(4, "Otp can contain at most four digits")
+    .min(6, "Otp must contain at least six digits")
+    .max(6, "Otp can contain at most six digits")
     .required("Otp is required"),
-  new_password: Yup.string()
+  password: Yup.string()
     .min(8, "*Password must contain minimum of 8 characters")
     .matches(
       passwordRegex,
@@ -38,7 +38,7 @@ const validationSchema = Yup.object({
     )
     .required("*Password required"),
   confirm_password: Yup.string().oneOf(
-    [Yup.ref("new_password"), null],
+    [Yup.ref("password"), null],
     "Both passwords do not match."
   ),
 });
@@ -65,7 +65,7 @@ const ResetPassword = () => {
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("reset-password/", values),
+    (values) => axios.post("user/reset-password", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Resetting Password..."));
@@ -77,13 +77,8 @@ const ResetPassword = () => {
         }
       },
       onError: (error) => {
-        if (error instanceof AxiosError) {
-          console.log(error.response.data);
-          dispatch(errorToast(error?.response?.data?.message));
-        } else {
-          console.log(error);
-          dispatch(errorToast(error?.response?.data?.message));
-        }
+        console.log(error);
+        dispatch(errorToast(error?.response?.data?.message));
       },
     }
   );
@@ -92,7 +87,7 @@ const ResetPassword = () => {
     initialValues: {
       email: email,
       otp: "",
-      new_password: "",
+      password: "",
       confirm_password: "",
     },
     validationSchema: validationSchema,
@@ -160,20 +155,16 @@ const ResetPassword = () => {
             fullWidth
             size="small"
             type={showPassword ? "text" : "password"}
-            id="new_password"
-            name="new_password"
+            id="password"
+            name="password"
             color="focusInput"
             autoComplete="off"
             label="New Password"
-            value={formik.values.new_password}
+            value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched.new_password && Boolean(formik.errors.new_password)
-            }
-            helperText={
-              formik.touched.new_password && formik.errors.new_password
-            }
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
             sx={{ marginY: 2 }}
             InputProps={{
               endAdornment: (

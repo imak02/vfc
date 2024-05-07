@@ -34,9 +34,9 @@ import {
 import { login } from "../redux/slices/authSlice";
 
 const validationSchema = Yup.object({
-  username: Yup.string("Enter your username")
+  user: Yup.string("Enter your username")
     .min(2, "Username should be of minimum 2 characters length")
-    .required("Username is required"),
+    .required("Username/Email is required"),
   password: Yup.string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
@@ -58,13 +58,13 @@ export default function Login() {
   //       resetForm();
   //     },
   //   });
-  //   // try {
-  //   //   const response = await axios.post("forgot-password/", { email });
-  //   //   console.log(response);
-  //   //   navigate("/reset-password", { state: { email } });
-  //   // } catch (error) {
-  //   //   dispatch(errorToast(error?.response?.data?.error));
-  //   // }
+  // try {
+  //   const response = await axios.post("forgot-password/", { email });
+  //   console.log(response);
+  //   navigate("/reset-password", { state: { email } });
+  // } catch (error) {
+  //   dispatch(errorToast(error?.response?.data?.error));
+  // }
   // };
 
   const handleOpen = () => {
@@ -85,17 +85,8 @@ export default function Login() {
     event.preventDefault();
   };
 
-  const sendOTP = () => {
-    let sendData = { email: email };
-    emailMutate(sendData, {
-      onSuccess: () => {
-        resetForm();
-      },
-    });
-  };
-
   const { mutate: emailMutate, isLoading: isSubmitting } = useMutation(
-    (values) => axios.post("forgot-password/", values),
+    (values) => axios.post("user/forgot-password", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Sending OTP..."));
@@ -110,13 +101,23 @@ export default function Login() {
       },
       onError: (error) => {
         console.log(error);
-        dispatch(errorToast(error?.response?.data?.error));
+        dispatch(errorToast(error?.response?.data?.message));
       },
     }
   );
 
+  const sendOTP = (event) => {
+    event.preventDefault();
+    let sendData = { email: email };
+    emailMutate(sendData, {
+      onSuccess: () => {
+        resetForm();
+      },
+    });
+  };
+
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("login/", values),
+    (values) => axios.post("/user/login", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Logging in..."));
@@ -125,23 +126,22 @@ export default function Login() {
         console.log(data);
         if (data.status === 200 || data.status === 201) {
           dispatch(successToast(data?.data?.message));
-          dispatch(login(data.data.token));
+          dispatch(login(data?.data?.data?.token));
 
           if (location?.state?.from) {
             navigate(location?.state?.from);
           } else {
             navigate("/");
           }
-
         }
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
           console.log(error.response.data);
-          dispatch(errorToast(error?.response?.data?.error));
+          dispatch(errorToast(error?.response?.data?.message));
         } else {
           console.log(error);
-          dispatch(errorToast(error?.response?.data?.error));
+          dispatch(errorToast(error?.response?.data?.message));
         }
       },
     }
@@ -149,13 +149,14 @@ export default function Login() {
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      user: "",
       password: "",
       remember: false,
     },
     validationSchema: validationSchema,
 
     onSubmit: async (values, { resetForm }) => {
+      console.log("Hello");
       let sendData = Object.assign({}, values);
       delete sendData.remember;
       mutate(sendData, {
@@ -185,7 +186,6 @@ export default function Login() {
           container
           component="main"
           sx={{
-            // height: "90vh",
             paddingY: { md: 10 },
           }}
         >
@@ -242,18 +242,16 @@ export default function Login() {
               >
                 <TextField
                   fullWidth
-                  id="username"
-                  name="username"
+                  id="user"
+                  name="user"
                   color="primary"
                   autoComplete="off"
-                  label="Username"
-                  value={formik.values.username}
+                  label="Username/Email"
+                  value={formik.values.user}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  error={
-                    formik.touched.username && Boolean(formik.errors.username)
-                  }
-                  helperText={formik.touched.username && formik.errors.username}
+                  error={formik.touched.user && Boolean(formik.errors.user)}
+                  helperText={formik.touched.user && formik.errors.user}
                   sx={{ marginY: 2 }}
                 />
 

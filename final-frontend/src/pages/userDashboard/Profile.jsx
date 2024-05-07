@@ -1,5 +1,6 @@
 import { ManageAccounts } from "@mui/icons-material";
 import {
+  Avatar,
   Box,
   Divider,
   Paper,
@@ -11,6 +12,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -42,10 +44,11 @@ const InfoBox = ({ name, value }) => {
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user ?? "");
-  console.log(user);
+  const profilePictureLink = `${axios.defaults.baseURL}${user?.profilePicture}`;
 
   const params = useParams();
   const userId = params.id;
+  const birthday = new Date(user?.dob).toDateString();
   return (
     <Box>
       <Typography
@@ -68,18 +71,32 @@ const Profile = () => {
           sx={{
             flex: 1,
             mb: { xs: 3, md: 2 },
-            objectFit: "cover",
           }}
         >
-          <Box
+          {/* <Box
             sx={{ borderRadius: 2 }}
             component="img"
             src={user?.profile?.profilePicture}
             alt="Profile"
             height="100%"
             width="100%"
-          />
+          /> */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+            }}
+          >
+            <Avatar
+              sx={{ bgcolor: "blueviolet", width: 400, height: 400 }}
+              alt={user?.firstName}
+              src={profilePictureLink}
+            />
+          </Box>
         </Box>
+
         <Box sx={{ flex: 1 }}>
           <Box
             sx={{
@@ -94,7 +111,7 @@ const Profile = () => {
                 component="h2"
                 sx={{ fontWeight: "bold", color: "blueviolet" }}
               >
-                {user?.first_name+" "+user?.last_name}
+                {user?.firstName + " " + user?.lastName}
               </Typography>
               <Typography
                 color="GrayText"
@@ -119,8 +136,8 @@ const Profile = () => {
               Basic info
             </Typography>
             <InfoBox name="Gender" value={user?.gender} />
-            <InfoBox name="Birthday" value={user?.profile?.dob} />
-            <InfoBox name="Role" value={user?.category} />
+            <InfoBox name="Birthday" value={birthday} />
+            {/* <InfoBox name="Role" value={user?.category} */}
           </Box>
 
           <Box sx={{ border: "1px solid black", borderRadius: 2, p: 1, my: 2 }}>
@@ -135,8 +152,8 @@ const Profile = () => {
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
               Address info
             </Typography>
-            <InfoBox name="Country" value={user?.profile?.country} />
-            <InfoBox name="City" value={user?.profile?.address} />
+            <InfoBox name="Country" value={user?.country} />
+            <InfoBox name="City" value={user?.address} />
           </Box>
         </Box>
       </Paper>
