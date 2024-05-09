@@ -27,7 +27,6 @@ import {
   successToast,
 } from "../redux/slices/toastSlice";
 import { useMutation } from "@tanstack/react-query";
-import { jwtDecode } from "jwt-decode";
 
 const nameRegex = /^[a-zA-Z-' ]+$/;
 const userNameRegex = /^[a-z0-9_-]{3,15}$/;
