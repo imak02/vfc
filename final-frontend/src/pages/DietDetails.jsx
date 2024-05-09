@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -42,10 +43,6 @@ const DietDetails = () => {
     getDietDetails
   );
 
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
-
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
@@ -54,85 +51,99 @@ const DietDetails = () => {
 
   return (
     <Container sx={{ p: 2 }}>
-      <Card>
-        <CardMedia
-          component="img"
-          height="500"
-          image={food.image}
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="h3"
-            sx={{ fontWeight: "bold" }}
-          >
-            {data.data.description}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {food.description}
-          </Typography>
-
-          <Box
-            sx={{
-              my: 5,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+      {isLoading ? (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "80vh",
+          }}
+        >
+          <Skeleton variant="rectangular" width={210} height={60} />
+          <Skeleton variant="rounded" width={210} height={60} />
+        </Box>
+      ) : (
+        <Card>
+          <CardMedia
+            component="img"
+            height="500"
+            image={food.image}
+            alt="green iguana"
+          />
+          <CardContent>
             <Typography
-              textAlign="center"
+              gutterBottom
               variant="h5"
-              component="h5"
-              sx={{ fontWeight: "bold", my: 2 }}
+              component="h3"
+              sx={{ fontWeight: "bold" }}
             >
-              Nutritional Contents of {food.name}
+              {data.data.description}
             </Typography>
-            <TableContainer
-              component={Paper}
+            <Typography variant="body2" color="text.secondary">
+              {food.description}
+            </Typography>
+
+            <Box
               sx={{
-                my: 2,
-                width: 600,
+                my: 5,
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      <Typography>Name</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography>Amount(per 100gm)</Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {foodNutrients.map((nutrient) => (
+              <Typography
+                textAlign="center"
+                variant="h5"
+                component="h5"
+                sx={{ fontWeight: "bold", my: 2 }}
+              >
+                Nutritional Contents of {food.name}
+              </Typography>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  my: 2,
+                  width: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Table>
+                  <TableHead>
                     <TableRow>
                       <TableCell>
-                        <Typography>{nutrient.nutrient.name}</Typography>
+                        <Typography>Name</Typography>
                       </TableCell>
                       <TableCell>
-                        {" "}
-                        <Typography>
-                          {nutrient.amount}
-                          {nutrient.nutrient.unitName}
-                        </Typography>
+                        <Typography>Amount(per 100gm)</Typography>
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-        </CardContent>
-      </Card>
+                  </TableHead>
+                  <TableBody>
+                    {foodNutrients.map((nutrient) => (
+                      <TableRow>
+                        <TableCell>
+                          <Typography>{nutrient.nutrient.name}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          {" "}
+                          <Typography>
+                            {nutrient.amount}
+                            {nutrient.nutrient.unitName}
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </CardContent>
+        </Card>
+      )}
     </Container>
   );
 };

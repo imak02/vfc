@@ -52,18 +52,18 @@ const BlogCard = ({ blog }) => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
-  const blogId = blog?.id;
+  const blogId = blog?._id;
 
+  const blogImageLink = `${axios.defaults.baseURL}${blog?.image}`;
+  const profilePictureLink = `${axios.defaults.baseURL}${blog?.author?.profilePicture}`;
 
   const { mutate: likeMutate } = useMutation(
-    () => axios.post(`blog-like-create/${blogId}/`),
+    () => axios.post(`blog/${blogId}/like`),
     {
-
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
-          queryClient.invalidateQueries({ queryKey: ['blogs'] });
+          queryClient.invalidateQueries({ queryKey: ["blogs"] });
           console.log(data);
-
         }
       },
       onError: (error) => {
@@ -79,15 +79,13 @@ const BlogCard = ({ blog }) => {
   );
 
   const { mutate: saveMutate } = useMutation(
-    () => axios.post(`blog-save-create/${blogId}/`),
+    () => axios.post(`blog/${blogId}/save`),
     {
-
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           console.log(data);
 
-          queryClient.invalidateQueries({ queryKey: ['blogs'] });
-
+          queryClient.invalidateQueries({ queryKey: ["blogs"] });
         }
       },
       onError: (error) => {
@@ -102,24 +100,22 @@ const BlogCard = ({ blog }) => {
     }
   );
 
-
-
-  const fetchComments = async () => await axios.get(`blog/${blogId}/comments/`);
+  const fetchComments = async () => await axios.get(`comment/${blogId}`);
 
   const commentResult = useQuery({
-    queryKey: ['fetchComments', blogId], queryFn: fetchComments, onSuccess: (data) => {
+    queryKey: ["fetchComments", blogId],
+    queryFn: fetchComments,
+    onSuccess: (data) => {
       if (data.status === 200) {
-        console.log(data.data);
+        console.log(data.data.data);
       }
     },
     onError: (error) => {
-      dispatch(errorToast(error?.response?.data?.error));
+      dispatch(errorToast(error?.response?.data?.message));
     },
-  },);
+  });
 
-
-
-  const comments = commentResult?.data?.data;
+  const comments = commentResult?.data?.data?.data;
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
@@ -135,20 +131,17 @@ const BlogCard = ({ blog }) => {
           <CardHeader
             avatar={
               <Avatar
-              sx={{ bgcolor: "blueviolet" }}
-
-                src={`${blog?.author?.profile?.profilePicture}`}
-                alt={blog?.author?.first_name}
+                sx={{ bgcolor: "blueviolet" }}
+                src={profilePictureLink}
+                alt={blog?.author?.firstName}
               />
-                
-              
             }
             action={
               <IconButton aria-label="settings">
                 <MoreVert />
               </IconButton>
             }
-            title={`${blog?.author?.first_name} ${blog?.author?.last_name}`}
+            title={`${blog?.author?.firstName} ${blog?.author?.lastName}`}
             subheader={moment(blog?.created_at).fromNow()}
             sx={{ display: { xs: "flex", md: "none" } }}
           />
@@ -191,7 +184,12 @@ const BlogCard = ({ blog }) => {
               }}
               gap={3}
             >
-              <Box component="img" src={blog.image} height={200} width={300} />
+              <Box
+                component="img"
+                src={blogImageLink}
+                height={200}
+                width={300}
+              />
               <Typography
                 variant="body1"
                 alignSelf="flex-start"
@@ -206,7 +204,7 @@ const BlogCard = ({ blog }) => {
                   : blog.description}
                 <>
                   <br />
-                  <Link to={`/blog/${blog.id}`} className="links">
+                  <Link to={`/blog/${blog?._id}`} className="links">
                     <Button
                       endIcon={<OpenInNew />}
                       size="small"
@@ -238,19 +236,26 @@ const BlogCard = ({ blog }) => {
                   gap: 1,
                 }}
               >
-               <Avatar
-               sx={{ bgcolor: "blueviolet" }}
-                src={`${blog?.author?.profile?.profilePicture}`}
-                alt={blog?.author?.first_name}
-              />
+                <Avatar
+                  sx={{ bgcolor: "blueviolet" }}
+                  src={profilePictureLink}
+                  alt={blog?.author?.firstName}
+                />
                 <Typography variant="body1">
-                  {`${blog.author.first_name} ${blog.author.last_name}`}
+                  {`${blog.author.firstName} ${blog.author.lastName}`}
                 </Typography>
               </Box>
               <Box display="flex" gap={2}>
                 <Tooltip title="Like">
-                  <Fab color="primary" aria-label="like" size="small" onClick={() => { likeMutate() }}>
-                    <Badge color="error" badgeContent={blog?.likes_count}>
+                  <Fab
+                    color="primary"
+                    aria-label="like"
+                    size="small"
+                    onClick={() => {
+                      likeMutate();
+                    }}
+                  >
+                    <Badge color="error" badgeContent={blog?.likes?.length}>
                       <Favorite fontSize="medium" />
                     </Badge>
                   </Fab>
@@ -265,7 +270,7 @@ const BlogCard = ({ blog }) => {
                       setShowComments((prev) => !prev);
                     }}
                   >
-                    <Badge color="error" badgeContent={blog?.comments_count}>
+                    <Badge color="error" badgeContent={blog?.comments?.length}>
                       <Comment fontSize="medium" />
                     </Badge>
                   </Fab>
@@ -280,8 +285,15 @@ const BlogCard = ({ blog }) => {
                 </Tooltip> */}
 
                 <Tooltip title="Save">
-                  <Fab color="primary" aria-label="save" size="small" onClick={() => { saveMutate() }}>
-                    <Badge color="error" badgeContent={blog?.saves_count}>
+                  <Fab
+                    color="primary"
+                    aria-label="save"
+                    size="small"
+                    onClick={() => {
+                      saveMutate();
+                    }}
+                  >
+                    <Badge color="error" badgeContent={blog?.saves?.length}>
                       <BookmarkAdd fontSize="medium" />
                     </Badge>
                   </Fab>

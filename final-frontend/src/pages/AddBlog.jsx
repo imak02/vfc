@@ -44,18 +44,17 @@ const validationSchema = Yup.object({
   content: Yup.string("Enter a short descriptive paragraph").required(
     "Content is required"
   ),
-  image: Yup.mixed()
-    .required("Image is required"),
-    // .test(
-    //   "fileSize",
-    //   "File size is limited to 1 Mb",
-    //   (value) => value && value.size <= FILE_SIZE
-    // )
-    // .test(
-    //   "fileFormat",
-    //   "Unsupported Format",
-    //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
-    // ),
+  image: Yup.mixed().required("Image is required"),
+  // .test(
+  //   "fileSize",
+  //   "File size is limited to 1 Mb",
+  //   (value) => value && value.size <= FILE_SIZE
+  // )
+  // .test(
+  //   "fileFormat",
+  //   "Unsupported Format",
+  //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
+  // ),
   category: Yup.string("Select a category").required(
     "Please select a category"
   ),
@@ -90,7 +89,7 @@ export default function AddBlog() {
   };
 
   const { mutate, isLoading } = useMutation(
-    (values) => axios.post("add-blog/", values),
+    (values) => axios.post("blog/new", values),
     {
       onMutate: () => {
         dispatch(loadingToast("Posting..."));

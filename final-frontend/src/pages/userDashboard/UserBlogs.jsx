@@ -15,12 +15,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { errorToast } from "../../redux/slices/toastSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { errorToast, successToast } from "../../redux/slices/toastSlice";
 import moment from "moment";
 
 import BlogGridCard from "../../components/BlogGridCard";
@@ -41,12 +41,15 @@ const rows = [
 const UserBlogs = () => {
   const dispatch = useDispatch();
 
+  const user = useSelector((state) => state.auth.user ?? "");
+  const userId = user?._id;
+
+  const queryClient = useQueryClient();
+
   const getCurrentUserBlogs = async () =>
-    await axios.get("user/created-blogs/");
-  const getCurrentUserLikedBlogs = async () =>
-    await axios.get("user/liked-blogs/");
-  const getCurrentUserSavedBlogs = async () =>
-    await axios.get("user/saved-blogs/");
+    await axios.get(`blog/author/${userId}`);
+  const getCurrentUserLikedBlogs = async () => await axios.get("blog/liked");
+  const getCurrentUserSavedBlogs = async () => await axios.get("blog/saved");
 
   const [userBlogsResult, userLikedBlogsResult, userSavedBlogsResult] =
     useQueries({
@@ -61,6 +64,7 @@ const UserBlogs = () => {
             console.log(error);
             dispatch(errorToast(error?.response?.data?.message));
           },
+          enabled: !!userId,
         },
         {
           queryKey: ["currentUserLikedBlogs"],
@@ -99,9 +103,18 @@ const UserBlogs = () => {
   //   },
   // });
 
-  const userBlogs = userBlogsResult?.data?.data;
-  const userLikedBlogs = userLikedBlogsResult?.data?.data;
-  const userSavedBlogs = userSavedBlogsResult?.data?.data;
+  const userBlogs = userBlogsResult?.data?.data?.data;
+  const userLikedBlogs = userLikedBlogsResult?.data?.data?.data;
+  const userSavedBlogs = userSavedBlogsResult?.data?.data?.data;
+
+  const handleBlogDelete = async (blogId) => {
+    const response = await axios.delete(`blog/${blogId}`);
+    if (response.status === 200) {
+      dispatch(successToast(response?.data?.message));
+      queryClient.invalidateQueries("currentUserBlogs");
+    }
+    console.log(response);
+  };
 
   return (
     <Box>
@@ -127,27 +140,27 @@ const UserBlogs = () => {
               </TableHead>
               <TableBody>
                 {userBlogs?.map((blog) => (
-                  <TableRow key={blog.id}>
+                  <TableRow key={blog?._id}>
                     <TableCell component="td" scope="row">
                       <Box
                         component="img"
                         height={100}
                         width={100}
                         alt="blog"
-                        src={blog.image}
+                        src={`${axios.defaults.baseURL}${blog?.image}`}
                       />
                     </TableCell>
                     <TableCell sx={{ maxWidth: 500 }}>
                       <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                        {blog.title}
+                        {blog?.title}
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      {moment(new Date(blog.updated_to)).fromNow()}
+                      {moment(new Date(blog?.updatedAt)).fromNow()}
                     </TableCell>
                     <TableCell>
                       <Box sx={{ display: "flex", gap: 1 }}>
-                        <Link to={`/blog/edit/${blog.id}`} className="links">
+                        <Link to={`/blog/edit/${blog?._id}`} className="links">
                           <Tooltip title="Edit">
                             <IconButton>
                               <Edit color="info" />
@@ -155,7 +168,11 @@ const UserBlogs = () => {
                           </Tooltip>
                         </Link>
                         <Tooltip title="Delete">
-                          <IconButton>
+                          <IconButton
+                            onClick={() => {
+                              handleBlogDelete(blog?._id);
+                            }}
+                          >
                             <Delete color="error" />
                           </IconButton>
                         </Tooltip>
@@ -181,7 +198,7 @@ const UserBlogs = () => {
           }}
         >
           {userLikedBlogs?.map((blog) => (
-            <BlogGridCard key={blog.blog.id} blog={blog.blog} />
+            <BlogGridCard key={blog?._id} blog={blog} />
           ))}
         </Box>
       </Paper>
@@ -198,7 +215,7 @@ const UserBlogs = () => {
           }}
         >
           {userSavedBlogs?.map((blog) => (
-            <BlogGridCard key={blog.blog.id} blog={blog.blog} />
+            <BlogGridCard key={blog?.id} blog={blog} />
           ))}
         </Box>
       </Paper>

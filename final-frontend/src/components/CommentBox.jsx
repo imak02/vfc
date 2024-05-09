@@ -18,7 +18,6 @@ import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 
-
 import React, { useState } from "react";
 import { errorToast } from "../redux/slices/toastSlice";
 
@@ -30,18 +29,15 @@ const CommentBox = ({ blogId, comments }) => {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user ?? "");
 
-  console.log(user)
-
+  const profilePictureLink = `${axios.defaults.baseURL}${user?.profilePicture}`;
 
   const { mutate, isLoading: isPosting } = useMutation(
-    (values) => axios.post(`blog-comment-create/${blogId}/`, values),
+    (values) => axios.post(`comment/${blogId}`, values),
     {
-
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           console.log(data);
-          queryClient.invalidateQueries({ queryKey: ['fetchComments'] });
-
+          queryClient.invalidateQueries({ queryKey: ["fetchComments"] });
         }
       },
       onError: (error) => {
@@ -58,7 +54,7 @@ const CommentBox = ({ blogId, comments }) => {
 
   const postComment = async (e) => {
     e.preventDefault();
-    let commentData = { comment: comment }
+    let commentData = { comment: comment };
     mutate(commentData, {
       onSuccess: () => {
         setComment("");
@@ -71,7 +67,7 @@ const CommentBox = ({ blogId, comments }) => {
     // } catch (error) {
     //   console.log(error);
     // }
-  }
+  };
 
   return (
     <Box>
@@ -81,15 +77,18 @@ const CommentBox = ({ blogId, comments }) => {
           component="form"
           onSubmit={postComment}
         >
-          <Avatar sx={{ bgcolor: "blueviolet" }}  src={user?.profile?.profilePicture} alt={user?.first_name} />
-         
+          <Avatar
+            sx={{ bgcolor: "blueviolet" }}
+            src={profilePictureLink}
+            alt={user?.firstName}
+          />
+
           <TextField
             id="comment"
             name="comment"
             fullWidth
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-
             variant="outlined"
             placeholder="Add your comment"
             InputProps={{
@@ -122,13 +121,13 @@ const CommentBox = ({ blogId, comments }) => {
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar
-                  sx={{ bgcolor: "blueviolet" }}
-                    alt={comment.user}
-                    src={`http://localhost:8000${comment?.profilePicture}`}
+                    sx={{ bgcolor: "blueviolet" }}
+                    alt={comment?.commenter?.firstName}
+                    src={`${axios.defaults.baseURL}${comment?.commenter?.profilePicture}`}
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={comment?.user}
+                  primary={`${comment?.commenter?.firstName} ${comment?.commenter?.lastName}`}
                   secondary={
                     <React.Fragment>
                       {moment(comment?.created_at).format("Do MMMM YYYY")}

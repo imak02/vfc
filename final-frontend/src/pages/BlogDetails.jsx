@@ -36,12 +36,16 @@ import moment from "moment";
 import CommentBox from "../components/CommentBox";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import BlogGridCard from "../components/BlogGridCard";
-import { useQueries, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useQueries,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
-import { errorToast } from "../redux/slices/toastSlice";
+import { errorToast, successToast } from "../redux/slices/toastSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ErrorAlert from "../components/ErrorAlert";
-
 
 // const blog = {
 //   _id: "1234579",
@@ -68,13 +72,14 @@ const BlogDetails = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-
   const params = useParams();
   const blogId = params.blogId;
 
   const handleBlogDelete = async () => {
-    const response = await axios.delete(`blog-details/${blogId}/`);
+    const response = await axios.delete(`blog/${blogId}`);
     if (response.status === 200) {
+      dispatch(successToast(response?.data?.message));
+
       navigate("/blog");
     }
     console.log(response);
@@ -87,14 +92,12 @@ const BlogDetails = () => {
   // }
 
   const { mutate: likeMutate } = useMutation(
-    () => axios.post(`blog-like-create/${blogId}/`),
+    () => axios.post(`blog/${blogId}/like`),
     {
-
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
-          queryClient.invalidateQueries({ queryKey: ['fetchLikes'] });
+          queryClient.invalidateQueries({ queryKey: ["fetchBlog"] });
           console.log(data);
-
         }
       },
       onError: (error) => {
@@ -110,15 +113,13 @@ const BlogDetails = () => {
   );
 
   const { mutate: saveMutate } = useMutation(
-    () => axios.post(`blog-save-create/${blogId}/`),
+    () => axios.post(`blog/${blogId}/save`),
     {
-
       onSuccess: (data) => {
         if (data.status === 200 || data.status === 201) {
           console.log(data);
 
-          // queryClient.invalidateQueries({ queryKey: ['fetchSaves'] });
-
+          queryClient.invalidateQueries({ queryKey: ["fetchBlog"] });
         }
       },
       onError: (error) => {
@@ -133,47 +134,16 @@ const BlogDetails = () => {
     }
   );
 
-  const fetchBlog = async () => await axios.get(`blog-details/${blogId}/`);
-  const fetchBlogLikes = async () => await axios.get(`blog/${blogId}/likes`);
-  const fetchComments = async () => await axios.get(`blog/${blogId}/comments/`);
-  const fetchBlogSaves = async () => await axios.get(`blog/${blogId}/saves-count/`);
+  const fetchBlog = async () => await axios.get(`blog/${blogId}/`);
+  const fetchComments = async () => await axios.get(`comment/${blogId}`);
 
-  const [blogResult, likeResult, commentResult, saveResult] = useQueries({
+  const [blogResult, commentResult] = useQueries({
     queries: [
       {
-        queryKey: ['fetchBlog', blogId], queryFn: fetchBlog, onSuccess: (data) => {
+        queryKey: ["fetchBlog", blogId],
+        queryFn: fetchBlog,
+        onSuccess: (data) => {
           if (data.status === 200) {
-            console.log(data.data);
-          }
-        },
-        onError: (error) => {
-          dispatch(errorToast(error?.response?.data?.error));
-        },
-      },
-      {
-        queryKey: ['fetchLikes', blogId], queryFn: fetchBlogLikes, onSuccess: (data) => {
-          if (data.status === 200) {
-            console.log(data.data);
-          }
-        },
-        onError: (error) => {
-          dispatch(errorToast(error?.response?.data?.error));
-        },
-      },
-      {
-        queryKey: ['fetchComments', blogId], queryFn: fetchComments, onSuccess: (data) => {
-          if (data.status === 200) {
-            console.log(data.data);
-          }
-        },
-        onError: (error) => {
-          dispatch(errorToast(error?.response?.data?.error));
-        },
-      },
-      {
-        queryKey: ['fetchSaves', blogId], queryFn: fetchBlogSaves, onSuccess: (data) => {
-          if (data.status === 200) {
-            console.log(data.data);
           }
         },
         onError: (error) => {
@@ -181,7 +151,19 @@ const BlogDetails = () => {
         },
       },
 
-    ]
+      {
+        queryKey: ["fetchComments", blogId],
+        queryFn: fetchComments,
+        onSuccess: (data) => {
+          if (data.status === 200) {
+            console.log(data.data);
+          }
+        },
+        onError: (error) => {
+          dispatch(errorToast(error?.response?.data?.message));
+        },
+      },
+    ],
   });
 
   // const { data, isLoading, isError, error } = useQuery(blogUserId
@@ -199,33 +181,37 @@ const BlogDetails = () => {
   //   }
   // );
 
-  const blog = blogResult?.data?.data?.payload;
-  const blogUserId = blog?.author?.id;
-  const localUserId = localUser?.id;
-  const comments = commentResult?.data?.data;
-  const likesCount = likeResult?.data?.data.likes_count;
-  const savesCount = saveResult?.data?.data.saves_count;
+  const blog = blogResult?.data?.data?.data;
 
-  const fetchSameAuthorBlogs = async () => await axios.get(`/blog/author/${blogUserId}/blogs/`);
+  // console.log(localUser);
 
+  const blogImageLink = `${axios.defaults.baseURL}${blog?.image}`;
+  const profilePictureLink = `${axios.defaults.baseURL}${blog?.author?.profilePicture}`;
+
+  const blogUserId = blog?.author?._id;
+  const localUserId = localUser?._id;
+  const comments = commentResult?.data?.data?.data;
+  const likesCount = blog?.likes?.length;
+  const savesCount = blog?.saves?.length;
+
+  const fetchSameAuthorBlogs = async () =>
+    await axios.get(`blog/author/${blogUserId}`);
 
   const authorBlogResult = useQuery({
-    queryKey: ['fetchAuthorBlogs', blogId], queryFn: fetchSameAuthorBlogs, onSuccess: (data) => {
+    queryKey: ["fetchAuthorBlogs", blogId],
+    queryFn: fetchSameAuthorBlogs,
+    onSuccess: (data) => {
       if (data.status === 200) {
         console.log(data.data);
       }
     },
     onError: (error) => {
-      dispatch(errorToast(error?.response?.data?.error));
+      dispatch(errorToast(error?.response?.data?.message));
     },
     enabled: !!blogUserId,
-  },);
+  });
 
-  const authorOtherBlogs = authorBlogResult?.data?.data;
-
-
-  console.log(authorOtherBlogs);
-
+  const authorOtherBlogs = authorBlogResult?.data?.data?.data;
 
   return (
     <Box>
@@ -349,7 +335,7 @@ const BlogDetails = () => {
                       width: "100%",
                       objectFit: "cover",
                     }}
-                    src={blog?.image}
+                    src={blogImageLink}
                     alt="blog"
                   />
                 )}
@@ -411,10 +397,9 @@ const BlogDetails = () => {
                       <Skeleton variant="circular" height={50} width={50} />
                     ) : (
                       <Avatar
-                      sx={{ bgcolor: "blueviolet" }}
-        
-                        src={`${blog?.author?.profile?.profilePicture}`}
-                        alt={blog?.author?.first_name}
+                        sx={{ bgcolor: "blueviolet" }}
+                        src={profilePictureLink}
+                        alt={blog?.author?.firstName}
                       />
                     )}
 
@@ -422,7 +407,7 @@ const BlogDetails = () => {
                       <Skeleton variant="text" width={200} />
                     ) : (
                       <Typography variant="body1">
-                        {`${blog?.author?.first_name} ${blog?.author?.last_name}`}
+                        {`${blog?.author?.firstName} ${blog?.author?.lastName}`}
                       </Typography>
                     )}
                   </Box>
@@ -435,7 +420,14 @@ const BlogDetails = () => {
                   ) : (
                     <Box display="flex" gap={2}>
                       <Tooltip title="Like">
-                        <Fab color="primary" aria-label="like" size="small" onClick={() => { likeMutate() }}>
+                        <Fab
+                          color="primary"
+                          aria-label="like"
+                          size="small"
+                          onClick={() => {
+                            likeMutate();
+                          }}
+                        >
                           <Badge color="error" badgeContent={likesCount}>
                             <Favorite fontSize="medium" />
                           </Badge>
@@ -466,7 +458,14 @@ const BlogDetails = () => {
                       </Tooltip> */}
 
                       <Tooltip title="Save">
-                        <Fab color="primary" aria-label="save" size="small" onClick={() => { saveMutate() }}>
+                        <Fab
+                          color="primary"
+                          aria-label="save"
+                          size="small"
+                          onClick={() => {
+                            saveMutate();
+                          }}
+                        >
                           <Badge color="error" badgeContent={savesCount}>
                             <BookmarkAdd fontSize="medium" />
                           </Badge>
@@ -543,8 +542,9 @@ const BlogDetails = () => {
               justifyContent: "center",
             }}
           >
-            {authorOtherBlogs?.map((blog) => <BlogGridCard key={blog.id} blog={blog} />)}
-
+            {authorOtherBlogs?.map((blog) => (
+              <BlogGridCard key={blog._id} blog={blog} />
+            ))}
           </Box>
         </Box>
       </Box>

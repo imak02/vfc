@@ -10,7 +10,7 @@ import {
   Input,
   MenuItem,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, TextField } from "@mui/material";
@@ -72,7 +72,7 @@ export default function EditBlog() {
   const params = useParams();
   const blogId = params.blogId;
 
-  const fetchBlog = async () => await axios.get(`blog-details/${blogId}/`);
+  const fetchBlog = async () => await axios.get(`blog/${blogId}`);
 
   const { data, isLoading, isError, error } = useQuery(
     ["fetchblog", blogId],
@@ -80,14 +80,21 @@ export default function EditBlog() {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          setImage(data?.data?.payload?.image);
+          // const blogImageLink = `${axios.defaults.baseURL}${data?.data?.data?.image}`;
+          // setImage(blogImageLink);
         }
       },
       onError: (error) => {
-        dispatch(errorToast(error?.response?.data?.error));
+        dispatch(errorToast(error?.response?.data?.message));
       },
     }
   );
+
+  const blogImageLink = `${axios.defaults.baseURL}${data?.data?.data?.image}`;
+
+  useEffect(() => {
+    setImage(blogImageLink);
+  }, [blogImageLink]);
 
   // if (isLoading) {
   //   return <span>Loading...</span>;
@@ -118,7 +125,7 @@ export default function EditBlog() {
   };
 
   const { mutate, isLoading: isSubmitting } = useMutation(
-    (values) => axios.patch(`blog-details/${blogId}/`, values),
+    (values) => axios.put(`blog/${blogId}`, values),
     {
       onMutate: () => {
         dispatch(loadingToast("Posting..."));
@@ -140,7 +147,7 @@ export default function EditBlog() {
       },
     }
   );
-  const blogData = data?.data?.payload;
+  const blogData = data?.data?.data;
 
   const formik = useFormik({
     initialValues: {
@@ -175,7 +182,7 @@ export default function EditBlog() {
       sx={{
         backgroundColor: (t) =>
           t.palette.mode === "light"
-            ? t.palette.secondary.main
+            ? t.palette.grey[200]
             : t.palette.grey[700],
         minHeight: "100vh",
       }}

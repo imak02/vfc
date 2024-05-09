@@ -13,7 +13,7 @@ import {
   FormHelperText,
   MenuItem,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
@@ -27,7 +27,7 @@ import {
   successToast,
 } from "../redux/slices/toastSlice";
 import { useMutation } from "@tanstack/react-query";
-import moment from "moment";
+import { jwtDecode } from "jwt-decode";
 
 const nameRegex = /^[a-zA-Z-' ]+$/;
 const userNameRegex = /^[a-z0-9_-]{3,15}$/;
@@ -85,6 +85,26 @@ const validationSchema = Yup.object({
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+
+  // function handleCredentialResponse(response) {
+  //   console.log("Encoded JWT ID Token:" + response.credential);
+  //   const decoded = jwtDecode(response.credential);
+  //   console.log(decoded);
+  // }
+
+  // useEffect(() => {
+  //   google.accounts.id.initialize({
+  //     client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+  //     use_fedcm_for_prompt: true,
+  //     callback: handleCredentialResponse,
+  //   });
+
+  //   google.accounts.id.renderButton(
+  //     document.getElementById("buttonDiv"),
+  //     { theme: "outline", size: "large" } // customization attributes
+  //   );
+  //   // google.accounts.id.prompt();
+  // }, []);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -487,7 +507,18 @@ const Register = () => {
                 {" "}
                 <Chip label="OR" />
               </Divider>
-              <Button
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mt: 2,
+                }}
+              >
+                <div id="buttonDiv"></div>
+              </Box> */}
+              {/* <Button
                 type="submit"
                 fullWidth
                 color="secondary"
